@@ -1,0 +1,28 @@
+@import url('https://api.fontshare.com/v2/css?f[]=switzer@400,500&display=swap');
+@import "tailwindcss";
+
+:root {
+  --color-ink:     #1A1A1A;
+  --color-surface: #FFFFFF;
+  --color-subtle:  #F5F5F5;
+  --color-muted:   #999999;
+  --color-accent:  #0072E5;
+}
+
+@theme inline {
+  --font-geist: var(--font-geist-sans);
+}
+
+.hover-ink:hover {
+  color: #1A1A1A !important;
+}
+
+html,
+body {
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scrollbar-gutter: stable;
+}

@@ -32,7 +32,9 @@ _Author: Martta Xu_
 
 **Navbar (sticky)**
 
-- Logo "Martta XU" → `/`
+Layout: `display: flex; justify-content: space-between; align-items: center; align-self: stretch;`
+
+- Logo: `horse.svg` icon mark (32×32) + "Martta XU" text → `/`
 - Resume → external PDF (Google Drive, new tab)
 - About → `/about`
 - Tools → `/tools`
@@ -52,16 +54,24 @@ _Author: Martta Xu_
 **Wireframes:** `images/UI reference`
 
 **Hero**
-The entry point. Two-column layout: the headline occupies the left column; the right column is intentional negative space.
+The entry point. Two-column layout: the headline occupies the left column; the right column is intentional negative space. Body-sized and editorial — intentionally understated, not a large display headline.
 
 Headline:
 
 > "I design access. I studied complicated things because I believe they should be easier for everyone. Previously made wealth management approachable at Datalign, fractional real estate intuitive at ARK7, and built strategy at Sanofi, JLL, and PwC — always asking: why does this have to be so hard to use?"
 
-Company names link to their official sites (new tab).
+Company names link to their official sites (new tab). Link color is `#1A1A1A` — not the accent color. Underline on hover is the only interaction affordance.
 
 **Project Grid**
-The work. Each card shows a thumbnail, project title, and a one-line description. The grid is multi-column on desktop, single column on tablet. Cards are sourced from `src/data/projects.json`.
+The work. Thumbnail-first layout. Each project is a full-width vertical block, stacked vertically.
+
+Each block contains:
+
+1. **Image strip** — 3 project screenshots side-by-side
+2. **Project name**
+3. **One-line description**, 4px below the name
+
+Data sourced from `src/data/projects.json`. Each entry requires: `id`, `title`, `description`, `images` (array of 3 URLs).
 
 ---
 
@@ -101,10 +111,11 @@ An AI assistant accessible from anywhere via the navbar. The goal is to help rec
 
 **UI & Behavior**
 
-- Slides in from the right as an overlay drawer. Does not push page content.
+- Slides in from the right as a **push sidebar**. The main content column shrinks to accommodate it — the sidebar does not overlay content.
 - Closeable via × button, clicking outside, or pressing `Escape`.
 - Accessible: focus moves into drawer on open, returns to trigger on close.
 - On first open, shows a brief intro and 3 default prompt chips. Once a conversation starts, chips disappear.
+- Input placeholder: "Ask her anything".
 
 **Intro message (on first open):**
 
@@ -113,8 +124,8 @@ An AI assistant accessible from anywhere via the navbar. The goal is to help rec
 **Default prompt chips:**
 
 1. What is your design process?
-2. How does your engineering and business background make you a better designer?
-3. Are you open to relocating?
+2. When will you be available?
+3. How do you vibe code?
 
 ---
 
