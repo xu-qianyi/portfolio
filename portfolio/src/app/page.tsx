@@ -1,43 +1,13 @@
-"use client";
-
-import { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import projects from "@/data/projects.json";
 
-const COMPANIES: Record<string, string> = {
-  Datalign: "https://datalign.com",
-  ARK7: "https://ark7.com",
-  Sanofi: "https://sanofi.com",
-  JLL: "https://jll.com",
-  PwC: "https://pwc.com",
-};
-
-type HeadlinePart =
-  | { text: string; company?: undefined }
-  | { company: string; text?: undefined };
-
-const HEADLINE: HeadlinePart[] = [
-  { text: "I design access. I studied complicated things because I believe they should be easier for everyone. Previously made wealth management approachable at " },
-  { company: "Datalign" },
-  { text: ", fractional real estate intuitive at " },
-  { company: "ARK7" },
-  { text: ", and built strategy at " },
-  { company: "Sanofi" },
-  { text: ", " },
-  { company: "JLL" },
-  { text: ", and " },
-  { company: "PwC" },
-  { text: " — always asking: why does this have to be so hard to use?" },
-];
-
 const HERO_TEXT: React.CSSProperties = {
-  fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-  fontSize: "16px",
-  fontWeight: 400,
+  fontFamily: "var(--font-crimson-pro), 'Crimson Pro', Georgia, serif",
+  fontSize: "48px",
+  fontWeight: 500,
   color: "#1A1A1A",
-  lineHeight: "normal",
-  letterSpacing: "0.32px",
+  lineHeight: "52px",
+  letterSpacing: "0.96px",
   margin: 0,
 };
 
@@ -57,38 +27,12 @@ const PROJECT_DESC: React.CSSProperties = {
   margin: 0,
 };
 
-function CompanyLink({ name, href }: { name: string; href: string }) {
-  const [hovered, setHovered] = useState(false);
-  return (
-    <Link
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        color: "#1A1A1A",
-        textDecoration: hovered ? "underline" : "none",
-        textUnderlineOffset: "3px",
-        transition: "text-decoration 200ms ease",
-      }}
-    >
-      {name}
-    </Link>
-  );
-}
 
 function ProjectCard({ project }: { project: (typeof projects)[number] }) {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
-      {/* Image strip */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr",
-          gap: "24px",
-        }}
-      >
+      {/* Image strip — 3 cols ≥1350px, single col below */}
+      <div className="grid grid-cols-1 min-[1350px]:grid-cols-3 gap-[24px]">
         {project.images.map((src, i) => (
           <div
             key={i}
@@ -116,7 +60,7 @@ function ProjectCard({ project }: { project: (typeof projects)[number] }) {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "4px",
+          gap: "2px",
           marginTop: "24px",
         }}
       >
@@ -133,27 +77,17 @@ export default function Home() {
       {/* Hero */}
       <section
         style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          columnGap: "32px",
+          display: "inline-grid",
+          padding: "64px 72px",
           rowGap: "80px",
-          padding: "72px",
+          columnGap: "16px",
+          alignSelf: "stretch",
+          gridTemplateRows: "repeat(1, fit-content(100%))",
+          gridTemplateColumns: "minmax(0, 2fr) minmax(0, 1fr)",
         }}
       >
         <p style={HERO_TEXT}>
-          {HEADLINE.map((part, i) => {
-            if (part.company !== undefined) {
-              const company = part.company;
-              return (
-                <CompanyLink
-                  key={i}
-                  name={company}
-                  href={COMPANIES[company] ?? "#"}
-                />
-              );
-            }
-            return <span key={i}>{part.text}</span>;
-          })}
+          Martta is a product designer who stands at the intersection of design, business, and engineering.
         </p>
         {/* Intentional negative space */}
         <div aria-hidden="true" />

@@ -40,7 +40,7 @@ These are hard constraints. If a decision pushes toward any of these, it's the w
 
 **Rules:**
 
-- Accent appears on: the "In Their Eyes" text highlight and the Ask Martta button only.
+- Accent appears on: the "In Their Eyes" text highlight and the ASK Martta button hover state only.
 - Link hover color is `#1A1A1A` — not accent. Underline on hover is the only affordance for inline links.
 - Accent never appears as: decorative backgrounds, section dividers, illustration color, nav hover states.
 - When in doubt, use `--color-ink` at reduced opacity rather than reaching for a new color.
@@ -49,11 +49,12 @@ These are hard constraints. If a decision pushes toward any of these, it's the w
 
 ## 4. Typography
 
-**Switzer** — UI, headlines, navigation, card titles, footer. Anything the user reads as interface.
+**Crimson Pro** — Hero headline. Serif weight for editorial presence.
+**Switzer** — UI, navigation, card titles, footer. Anything the user reads as interface.
 **Geist Sans** — Body prose, captions. Anything the user reads as content.
 
 ```
-Hero text:            Geist, 16px, weight 400, color #1A1A1A, letter-spacing 0.32px
+Hero text:            Crimson Pro, 48px, weight 500, line-height 52px, letter-spacing 0.96px, color #1A1A1A
 Project title:        Switzer, 16px, weight 500, color #1A1A1A
 Project description:  Switzer, 16px, weight 400, color rgba(26,26,26,0.5)
 Section heading:      Switzer, 1.25rem, weight 500, line-height 1.3
@@ -78,7 +79,7 @@ Footer:               Switzer, 16px, weight 500, color rgba(26,26,26,0.5)
 ```
 Page horizontal pad:   72px on each side — no max-width cap, content fills the viewport width
 Navbar padding:        20px 72px
-Hero padding:          72px horizontal
+Hero padding:          64px vertical, 72px horizontal; column-gap 16px; grid 2fr / 1fr
 Project section pad:   72px horizontal, 80px bottom; 60px gap between projects; 24px gap between images
 Footer padding:        32px vertical, 72px horizontal
 Section gap:           5rem–7rem vertical
@@ -86,7 +87,7 @@ Section gap:           5rem–7rem vertical
 
 **Border color:** `rgba(26,26,26,0.1)` for footer and nav borders (not `#E5E5E5`).
 
-**Breakpoint:** 1200px. Below it: single column, graceful mobile layout.
+**Breakpoint:** 1350px. Below it: project image strip collapses to single column. Graceful mobile layout.
 
 **Rules:** Never crowd cards — reduce columns before reducing padding. Negative space is a design element; the hero's empty right column is intentional.
 
@@ -99,8 +100,8 @@ Section gap:           5rem–7rem vertical
 ```
 Default duration:     400ms
 Default ease:         cubic-bezier(0.4, 0, 0.2, 1)   /* Material "standard" — smooth deceleration */
-Hover transitions:    200ms ease
-Drawer slide-in:      450ms cubic-bezier(0.32, 0.72, 0, 1)
+Hover transitions:    300ms cubic-bezier(0.4, 0, 0.2, 1)
+Drawer slide-in:      Spring (stiffness 260, damping 28, mass 0.9)
 Drawer width:         380px; background: #f9f9fb
 Profile card fade:    350ms ease, slight translateY(8px) → translateY(0)
 ```
@@ -116,7 +117,7 @@ Profile card fade:    350ms ease, slight translateY(8px) → translateY(0)
 
 ## 7. Component Voice
 
-**Project Cards (thumbnail-first layout):** Each project is a full-width vertical block. Top: a horizontal strip of 3 screenshot images (height 339px, gap 24px between images, border `1px solid rgba(204,209,218,0.2)`). Below the images (24px margin-top): project name (Switzer, 16px, weight 500, `#1A1A1A`) then a one-line description (Switzer, 16px, weight 400, `rgba(26,26,26,0.5)`), with 4px between them. Projects stack vertically with 60px gap. No hairline borders between projects.
+**Project Cards (thumbnail-first layout):** Each project is a full-width vertical block. Top: 3 screenshot images in a row (height 339px, gap 24px, border `1px solid rgba(204,209,218,0.2)`); below 1350px the strip collapses to single column. Below the images (24px margin-top): project name (Switzer, 16px, weight 500, `#1A1A1A`) then a one-line description (Switzer, 16px, weight 400, `rgba(26,26,26,0.5)`), with **2px** between them. Projects stack vertically with 60px gap. No hairline borders between projects.
 
 **Tools Cards:** Slightly more playful than project cards (this is where "vibe coding" lives), but still contained within the grid's discipline.
 
@@ -124,7 +125,7 @@ Profile card fade:    350ms ease, slight translateY(8px) → translateY(0)
 
 **Ask Martta Drawer:** Functional and calm. Background: `#f9f9fb`. Width: 380px. Chat bubbles are minimal. Prompt chips are pill-shaped with `border-radius: 0 4px 4px 4px` (no top-left rounding) and Switzer Regular 16px. Placeholder: "Ask her anything". This is a tool, not a personality showcase.
 
-**Navigation:** Invisible until needed. Sticky but unobtrusive — it should never compete with the work below it. Logo: `horse.svg` icon mark (32×32, `currentColor`) + "Martta XU" text. ASK Martta button uses `gemini-line.svg` (24×24). Nav links use pill-shaped containers: `px-12px py-4px rounded-full`.
+**Navigation:** Invisible until needed. Sticky but unobtrusive — it should never compete with the work below it. Logo: `horse.svg` icon mark (32×32, `currentColor`) + "Martta XU" text. Nav links use pill-shaped containers: `padding: 8px`; default color `rgba(26,26,26,0.5)`, hover `#1A1A1A`. ASK Martta button uses `gemini-line.svg` (24×24); default: grey, no background; hover: fixed `border-radius: 4px`, background `#ECF3F8`, text and icon `#1087E6`, transition `300ms cubic-bezier(0.4, 0, 0.2, 1)`.
 
 **Hero inline links (company names):** Color `#1A1A1A` — blends with body text. Underline on hover is the only interaction affordance. No accent color.
 

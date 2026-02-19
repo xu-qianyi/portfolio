@@ -262,9 +262,11 @@ export default function AskMarttaDrawer({
                 style={{
                   marginTop: "12px",
                   fontFamily: "'Switzer', sans-serif",
-                  fontSize: "12px",
-                  lineHeight: "1.5",
-                  color: "var(--color-muted)",
+                  fontSize: "13px",
+                  fontStyle: "normal",
+                  fontWeight: 400,
+                  lineHeight: "14px",
+                  color: "rgba(26, 26, 26, 0.50)",
                 }}
               >
                 Martta AI can make mistakes and occasionally hallucinate. For

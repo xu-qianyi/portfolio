@@ -26,7 +26,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
             initial={{ width: 0 }}
             animate={{ width: 380 }}
             exit={{ width: 0 }}
-            transition={{ duration: 0.45, ease: [0.32, 0.72, 0, 1] }}
+            transition={{ type: "spring", stiffness: 260, damping: 28, mass: 0.9 }}
             style={{ flexShrink: 0, overflow: "hidden", position: "sticky", top: 0, height: "100vh" }}
           >
             <AskMarttaDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />

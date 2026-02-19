@@ -38,7 +38,7 @@ Layout: `display: flex; justify-content: space-between; align-items: center; ali
 - Resume → external PDF (Google Drive, new tab)
 - About → `/about`
 - Tools → `/tools`
-- ✦ ASK Martta → opens the Ask Martta drawer (primary action, right-aligned)
+- ✦ ASK Martta → opens the Ask Martta drawer (primary action, right-aligned). Default state: grey, no background (`rgba(26,26,26,0.5)`) — same as other nav links. Hover state: `border-radius: 4px`, background `#ECF3F8`, text and icon `#1087E6`.
 
 **Footer**
 
@@ -54,22 +54,22 @@ Layout: `display: flex; justify-content: space-between; align-items: center; ali
 **Wireframes:** `images/UI reference`
 
 **Hero**
-The entry point. Two-column layout: the headline occupies the left column; the right column is intentional negative space. Body-sized and editorial — intentionally understated, not a large display headline.
+The entry point. Two-column layout (`minmax(0, 2fr) / minmax(0, 1fr)`): the headline occupies the left column; the right column is intentional negative space. Large editorial serif — presence without loudness.
 
 Headline:
 
-> "I design access. I studied complicated things because I believe they should be easier for everyone. Previously made wealth management approachable at Datalign, fractional real estate intuitive at ARK7, and built strategy at Sanofi, JLL, and PwC — always asking: why does this have to be so hard to use?"
+> "Martta is a product designer who stands at the intersection of design, business, and engineering."
 
-Company names link to their official sites (new tab). Link color is `#1A1A1A` — not the accent color. Underline on hover is the only interaction affordance.
+Styled in Crimson Pro Medium, 48px, line-height 52px, letter-spacing 0.96px. Hero padding: 64px vertical, 72px horizontal, column-gap 16px.
 
 **Project Grid**
 The work. Thumbnail-first layout. Each project is a full-width vertical block, stacked vertically.
 
 Each block contains:
 
-1. **Image strip** — 3 project screenshots side-by-side
+1. **Image strip** — 3 project screenshots side-by-side (≥1350px); single column below 1350px
 2. **Project name**
-3. **One-line description**, 4px below the name
+3. **One-line description**, 2px below the name
 
 Data sourced from `src/data/projects.json`. Each entry requires: `id`, `title`, `description`, `images` (array of 3 URLs).
 

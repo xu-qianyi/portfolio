@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 
 interface NavbarProps {
@@ -20,11 +21,13 @@ const NAV_LINK: React.CSSProperties = {
 const PILL: React.CSSProperties = {
   display: "inline-flex",
   alignItems: "center",
-  padding: "4px 12px",
+  padding: "8px",
   borderRadius: "9999px",
 };
 
 export default function Navbar({ onAskMartta }: NavbarProps) {
+  const [askHovered, setAskHovered] = useState(false);
+
   return (
     <header
       style={{
@@ -95,15 +98,19 @@ export default function Navbar({ onAskMartta }: NavbarProps) {
           </Link>
           <button
             onClick={onAskMartta}
+            onMouseEnter={() => setAskHovered(true)}
+            onMouseLeave={() => setAskHovered(false)}
             style={{
               ...NAV_LINK,
               ...PILL,
-              background: "none",
+              background: askHovered ? "#ECF3F8" : "none",
+              borderRadius: "4px",
+              color: askHovered ? "#1087E6" : "rgba(26,26,26,0.5)",
               border: "none",
               cursor: "pointer",
               gap: "6px",
+              transition: "color 300ms cubic-bezier(0.4, 0, 0.2, 1), background 300ms cubic-bezier(0.4, 0, 0.2, 1)",
             }}
-            className="hover-ink"
             aria-haspopup="dialog"
           >
             <svg
