@@ -12,7 +12,7 @@ export interface ChatMessage {
 export type ChatStatus = "idle" | "loading" | "error";
 
 const INTRO_MESSAGE =
-  "Hi! I'm a clone of Martta. How can I help you explore Martta's work today? Here are some questions people like to ask her about.";
+  "Hi! I'm Martta's AI assistant. How can I help you explore Martta's work today? Here are some questions people like to ask her about.";
 
 const MOCK_REPLY =
   "That's a great question. I'd love to talk about that — feel free to ask anything else, or reach out directly on LinkedIn.";

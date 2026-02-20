@@ -118,7 +118,7 @@ An AI assistant accessible from anywhere via the navbar. The goal is to help rec
 
 **Intro message (on first open):**
 
-> "Hi! I'm Martta's AI assistant. How can I help you explore Martta's work today? Here are some questions people like to ask her about."
+> "Hi! I'm a clone of Martta. How can I help you explore Martta's work today? Here are some questions people like to ask her about."
 
 **Default prompt suggestions:**
 
