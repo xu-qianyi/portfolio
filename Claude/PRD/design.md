@@ -64,11 +64,7 @@ Nav:                  Switzer, 16px, weight 500, color rgba(26,26,26,0.5), lette
 Footer:               Switzer, 16px, weight 500, color rgba(26,26,26,0.5)
 ```
 
-**Rules:**
-
-- Never use bold weight for emphasis within body text. Use a new sentence instead.
-- Never center-align body text. Left-aligned only.
-- Heading hierarchy should be felt, not announced — avoid H1/H2/H3 visual jumps that feel like a document.
+**Rules:** Never bold for emphasis — use a new sentence. Never center body text. Heading hierarchy felt, not announced.
 
 ---
 
@@ -128,6 +124,8 @@ Profile card fade:    350ms ease, slight translateY(8px) → translateY(0)
 **Navigation:** Invisible until needed. Sticky but unobtrusive — it should never compete with the work below it. Logo: `horse.svg` icon mark (32×32, `currentColor`) + "Martta XU" text. Nav links use pill-shaped containers: `padding: 8px`; default color `rgba(26,26,26,0.5)`, hover `#1A1A1A`. ASK Martta button uses `gemini-line.svg` (24×24); default: grey, no background; hover: fixed `border-radius: 4px`, background `#ECF3F8`, text and icon `#1087E6`, transition `300ms cubic-bezier(0.4, 0, 0.2, 1)`.
 
 **Hero inline links (company names):** Color `#1A1A1A` — blends with body text. Underline on hover is the only interaction affordance. No accent color.
+
+**404 Page:** Hero headline typography; "This page can't be found"; large semi-transparent "404" bg (`rgba(26,26,26,0.06)`); no button; white.
 
 ---
 

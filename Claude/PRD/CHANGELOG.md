@@ -5,6 +5,19 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 ---
 
+## [2026-02-19 · Session F] — 404 page simplification
+
+### Changed
+
+- **404 page** — removed "Go back home" button; text "This page can't be found" now uses Hero headline typography (Crimson Pro 48px, weight 500, line-height 52px, letter-spacing 0.96px); large semi-transparent "404" background retained
+
+### Docs
+
+- **design.md** — added 404 Page spec to Component Voice (§7)
+- **master PRD.md** — updated §4.5 404 Page to match implementation (no button, Hero typography)
+
+---
+
 ## [2026-02-19 · Session E] — Chat drawer refinements + docs sync
 
 ### Changed

@@ -4,7 +4,7 @@ _Version: 2.1_
 _Last updated: February 2026_
 _Author: Martta Xu_
 
-> For all visual and interaction decisions, refer to `design.md`. No design spec belongs in this file.
+> For all visual and interaction decisions, refer to `design.md`.
 
 ---
 
@@ -51,16 +51,23 @@ _Author: Martta Xu_
 
 **Wireframes:** `images/UI reference`
 
-**Hero** — See `design.md` for layout and typography.
+**Hero**
+The entry point. Two-column layout (`minmax(0, 2fr) / minmax(0, 1fr)`): the headline occupies the left column; the right column is intentional negative space. Large editorial serif — presence without loudness.
 
-The entry point. Two-column layout: headline on the left; right column is intentional negative space.
-
-Headline copy:
+Headline:
 
 > "Martta is a product designer who stands at the intersection of design, business, and engineering."
 
+See `design.md §4 & §5` for hero typography and layout spec.
+
 **Project Grid**
-The work. Thumbnail-first layout. Each project is a full-width vertical block, stacked vertically. Each block: image strip (3 screenshots), project name, one-line description. See `design.md §7` for breakpoint and spacing.
+The work. Thumbnail-first layout. Each project is a full-width vertical block, stacked vertically.
+
+Each block contains:
+
+1. **Image strip** — 3 project screenshots side-by-side (≥1350px); single column below 1350px
+2. **Project name**
+3. **One-line description** directly below the name
 
 Data sourced from `src/data/projects.json`. Each entry requires: `id`, `title`, `description`, `images` (array of 3 URLs).
 
@@ -100,12 +107,12 @@ An AI assistant accessible from anywhere via the navbar. The goal is to help rec
 
 ---
 
-**UI & Behavior** — See `design.md` for all visual spec (header, bubbles, typography, input, disclaimer).
+**UI & Behavior**
 
-- Slides in from the right as a **push sidebar**. Main content column shrinks; sidebar does not overlay.
+- Slides in from the right as a **push sidebar**. The main content column shrinks to accommodate it — the sidebar does not overlay content.
 - Closeable via × button, clicking outside, or pressing `Escape`.
 - Accessible: focus moves into drawer on open, returns to trigger on close.
-- On first open: intro message + default prompt suggestions. Once a conversation starts, suggestions disappear.
+- On first open, shows a brief intro and 3 default prompt chips. Once a conversation starts, chips disappear.
 - Input placeholder: "Ask her anything".
 
 **Intro message (on first open):**
@@ -154,7 +161,11 @@ If asked something outside the knowledge base (salary expectations, confidential
 
 It never fabricates, never guesses, and never breaks character.
 
-**Disclaimer (persistent, below the chat input):** See `design.md` for styling. Copy: "AI assistant can make mistakes and hallucinate. For anything important, please verify directly with Martta." Always visible — not a one-time dismissible banner.
+**Disclaimer (persistent, below the chat input):**
+
+> "AI can make mistakes and hallucinate. For anything important, please verify directly with Martta."
+
+Styled in `--color-muted`, small type. Always visible — not a one-time dismissible banner.
 
 ---
 
@@ -170,7 +181,7 @@ It never fabricates, never guesses, and never breaks character.
 
 A custom not-found page. Should feel intentional, not broken — consistent with the site's visual identity.
 
-**Content:** A short, dry line in Martta's voice (e.g. "This page doesn't exist. But good design should be easy to find.") + a single link back to `/`.
+**Content:** "This page can't be found" — styled with Hero headline typography (see `design.md §4 & §7`). Large semi-transparent "404" as background decoration. No CTA button.
 
 **No elaborate illustration or animation.** Restraint applies here too.
 
@@ -184,13 +195,13 @@ A custom not-found page. Should feel intentional, not broken — consistent with
 
 ## 6. Technical Stack
 
-|           |                                                                  |
-| --------- | ---------------------------------------------------------------- |
-| Framework | Next.js 14+ (App Router)                                         |
-| Styling   | Tailwind CSS                                                     |
-| Animation | Framer Motion                                                    |
-| Fonts     | See `design.md` §4                                               |
-| Viewport  | Tablet + desktop + mobile. See `design.md` for breakpoints.      |
+|           |                                                                                             |
+| --------- | ------------------------------------------------------------------------------------------- |
+| Framework | Next.js 14+ (App Router)                                                                    |
+| Styling   | Tailwind CSS                                                                                |
+| Animation | Framer Motion                                                                               |
+| Fonts     | Switzer (UI), Geist Sans (body)                                                             |
+| Viewport  | Tablet + desktop + mobile. A simplified, graceful mobile layout. Large breakpoint = 1200px. |
 
 ---
 
