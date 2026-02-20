@@ -4,7 +4,7 @@ _Version: 2.1_
 _Last updated: February 2026_
 _Author: Martta Xu_
 
-> For all visual and interaction decisions, refer to `design.md`.
+> For all visual and interaction decisions, refer to `design.md`. No design spec belongs in this file.
 
 ---
 
@@ -30,15 +30,13 @@ _Author: Martta Xu_
 
 ## 3. Global Shell
 
-**Navbar (sticky)**
+**Navbar (sticky)** — See `design.md` for layout and visual spec.
 
-Layout: `display: flex; justify-content: space-between; align-items: center; align-self: stretch;`
-
-- Logo: `horse.svg` icon mark (32×32) + "Martta XU" text → `/`
+- Logo: horse icon + "Martta XU" text → `/`
 - Resume → external PDF (Google Drive, new tab)
 - About → `/about`
 - Tools → `/tools`
-- ✦ ASK Martta → opens the Ask Martta drawer (primary action, right-aligned). Default state: grey, no background (`rgba(26,26,26,0.5)`) — same as other nav links. Hover state: `border-radius: 4px`, background `#ECF3F8`, text and icon `#1087E6`.
+- ASK Martta → opens the Ask Martta drawer (primary action, right-aligned).
 
 **Footer**
 
@@ -53,23 +51,16 @@ Layout: `display: flex; justify-content: space-between; align-items: center; ali
 
 **Wireframes:** `images/UI reference`
 
-**Hero**
-The entry point. Two-column layout (`minmax(0, 2fr) / minmax(0, 1fr)`): the headline occupies the left column; the right column is intentional negative space. Large editorial serif — presence without loudness.
+**Hero** — See `design.md` for layout and typography.
 
-Headline:
+The entry point. Two-column layout: headline on the left; right column is intentional negative space.
+
+Headline copy:
 
 > "Martta is a product designer who stands at the intersection of design, business, and engineering."
 
-Styled in Crimson Pro Medium, 48px, line-height 52px, letter-spacing 0.96px. Hero padding: 64px vertical, 72px horizontal, column-gap 16px.
-
 **Project Grid**
-The work. Thumbnail-first layout. Each project is a full-width vertical block, stacked vertically.
-
-Each block contains:
-
-1. **Image strip** — 3 project screenshots side-by-side (≥1350px); single column below 1350px
-2. **Project name**
-3. **One-line description**, 2px below the name
+The work. Thumbnail-first layout. Each project is a full-width vertical block, stacked vertically. Each block: image strip (3 screenshots), project name, one-line description. See `design.md` for breakpoint and spacing.
 
 Data sourced from `src/data/projects.json`. Each entry requires: `id`, `title`, `description`, `images` (array of 3 URLs).
 
@@ -109,23 +100,23 @@ An AI assistant accessible from anywhere via the navbar. The goal is to help rec
 
 ---
 
-**UI & Behavior**
+**UI & Behavior** — See `design.md` for all visual spec (header, bubbles, typography, input, disclaimer).
 
-- Slides in from the right as a **push sidebar**. The main content column shrinks to accommodate it — the sidebar does not overlay content.
+- Slides in from the right as a **push sidebar**. Main content column shrinks; sidebar does not overlay.
 - Closeable via × button, clicking outside, or pressing `Escape`.
 - Accessible: focus moves into drawer on open, returns to trigger on close.
-- On first open, shows a brief intro and 3 default prompt chips. Once a conversation starts, chips disappear.
+- On first open: intro message + default prompt suggestions. Once a conversation starts, suggestions disappear.
 - Input placeholder: "Ask her anything".
 
 **Intro message (on first open):**
 
-> "Hi, I'm Martta AI. Ask me anything about my work, process, or background — I'm here to help you figure out if we'd be a good fit."
+> "Hi! I'm Martta's AI assistant. How can I help you explore Martta's work today? Here are some questions people like to ask her about."
 
-**Default prompt chips:**
+**Default prompt suggestions (content):**
 
-1. What is your design process?
-2. When will you be available?
-3. How do you vibe code?
+1. Tell me about yourself.
+2. What is your favorite thing in the world?
+3. What is your design process?
 
 ---
 
@@ -163,11 +154,7 @@ If asked something outside the knowledge base (salary expectations, confidential
 
 It never fabricates, never guesses, and never breaks character.
 
-**Disclaimer (persistent, below the chat input):**
-
-> "Martta AI can make mistakes and occasionally hallucinate. For anything important, please verify directly with Martta."
-
-Styled in `--color-muted`, small type. Always visible — not a one-time dismissible banner.
+**Disclaimer (persistent, below the chat input):** See `design.md` for styling. Copy: "AI assistant can make mistakes and hallucinate. For anything important, please verify directly with Martta." Always visible — not a one-time dismissible banner.
 
 ---
 
@@ -197,13 +184,13 @@ A custom not-found page. Should feel intentional, not broken — consistent with
 
 ## 6. Technical Stack
 
-|           |                                                                                             |
-| --------- | ------------------------------------------------------------------------------------------- |
-| Framework | Next.js 14+ (App Router)                                                                    |
-| Styling   | Tailwind CSS                                                                                |
-| Animation | Framer Motion                                                                               |
-| Fonts     | Switzer (UI), Geist Sans (body)                                                             |
-| Viewport  | Tablet + desktop + mobile. A simplified, graceful mobile layout. Large breakpoint = 1200px. |
+|           |                                                                  |
+| --------- | ---------------------------------------------------------------- |
+| Framework | Next.js 14+ (App Router)                                         |
+| Styling   | Tailwind CSS                                                     |
+| Animation | Framer Motion                                                    |
+| Fonts     | See `design.md` §4                                               |
+| Viewport  | Tablet + desktop + mobile. See `design.md` for breakpoints.      |
 
 ---
 

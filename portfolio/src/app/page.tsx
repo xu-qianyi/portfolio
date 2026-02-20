@@ -12,8 +12,8 @@ const HERO_TEXT: React.CSSProperties = {
 };
 
 const PROJECT_TITLE: React.CSSProperties = {
-  fontFamily: "'Switzer', sans-serif",
-  fontSize: "16px",
+  fontFamily: "var(--font-crimson-pro), 'Crimson Pro', Georgia, serif",
+  fontSize: "20px",
   fontWeight: 500,
   color: "#1A1A1A",
   margin: 0,
@@ -60,7 +60,7 @@ function ProjectCard({ project }: { project: (typeof projects)[number] }) {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "2px",
+          gap: 0,
           marginTop: "24px",
         }}
       >
