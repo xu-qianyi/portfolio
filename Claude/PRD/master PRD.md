@@ -30,9 +30,9 @@ _Author: Martta Xu_
 
 ## 3. Global Shell
 
-**Navbar (sticky)** — See `design.md` for layout and visual spec.
+**Navbar (sticky)** — See `design.md §7` for visual and layout spec.
 
-- Logo: horse icon + "Martta XU" text → `/`
+- Logo: `horse.svg` icon mark (32×32) + "Martta XU" text → `/`
 - Resume → external PDF (Google Drive, new tab)
 - About → `/about`
 - Tools → `/tools`
@@ -60,7 +60,7 @@ Headline copy:
 > "Martta is a product designer who stands at the intersection of design, business, and engineering."
 
 **Project Grid**
-The work. Thumbnail-first layout. Each project is a full-width vertical block, stacked vertically. Each block: image strip (3 screenshots), project name, one-line description. See `design.md` for breakpoint and spacing.
+The work. Thumbnail-first layout. Each project is a full-width vertical block, stacked vertically. Each block: image strip (3 screenshots), project name, one-line description. See `design.md §7` for breakpoint and spacing.
 
 Data sourced from `src/data/projects.json`. Each entry requires: `id`, `title`, `description`, `images` (array of 3 URLs).
 
@@ -112,7 +112,7 @@ An AI assistant accessible from anywhere via the navbar. The goal is to help rec
 
 > "Hi! I'm Martta's AI assistant. How can I help you explore Martta's work today? Here are some questions people like to ask her about."
 
-**Default prompt suggestions (content):**
+**Default prompt suggestions:**
 
 1. Tell me about yourself.
 2. What is your favorite thing in the world?

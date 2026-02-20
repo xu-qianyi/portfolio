@@ -5,6 +5,34 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 ---
 
+## [2026-02-19 · Session E] — Chat drawer refinements + docs sync
+
+### Changed
+
+- **Project title font** — Switzer 16px → Crimson Pro 20px weight 500; title/description gap 2px → 0
+- **Prompt chips → text links** — replaced pill chips with text-link prompts; icon `corner-down-left-line.svg` at 6px gap; 6px vertical clickable area; color `#717171`, hover/focus `#1087E6` + `rgba(236,243,248,0.5)` 16px row highlight
+- **Chat message animation** — messages enter with opacity 0→1, translateY 8→0, 350ms easeOut (Framer Motion)
+- **Intro message** — updated to "Hi! I'm Martta's AI assistant…"; prompts updated to "Tell me about yourself.", "What is your favorite thing in the world?", "What is your design process?"
+- **User bubble border** — added `1px solid rgba(26,26,26,0.12)`; no border-top on input area separator
+- **Message gap** — 24px → 32px between messages; bottom section padding 24px → 32px
+- **Chat text** — font-size 16px → 15px; line-height 150% → 160%
+- **Send button** — icon switched to `arrow-up-line.svg`; muted until user types, then `#1A1A1A`
+- **Disclaimer** — "AI can make mistakes and hallucinate. For anything important, please verify directly with Martta."; 12px gap below input
+- **`useMarttaChat` hook** — chat logic extracted from drawer into `src/hooks/useMarttaChat.ts` for clean API integration later
+
+### Fixed
+
+- **Close button hover** — `#1087E6` hover effect was incorrectly applying to ×; scoped to prompt text links only
+- **Input border-radius** — all four corners now `4px` (previously top-left was 0)
+- **Prompt hover background height** — fixed to 16px using absolute positioning
+
+### Docs
+
+- **design.md** — updated project title spec (Crimson Pro 20px, gap 0), prompt color spec, chat animation spec; kept at 150 lines
+- **master PRD.md** — removed embedded design specs (navbar CSS, hero typography) → redirected to `design.md`; updated intro message and default prompt copy to match code
+
+---
+
 ## [2026-02-19 · Session D · b67fd53] — Polish pass (spacing, typography, interactions)
 
 ### Changed
