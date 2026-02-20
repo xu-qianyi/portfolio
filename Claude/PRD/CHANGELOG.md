@@ -1,13 +1,14 @@
-# CHANGELOG.md
+# [CHANGELOG.md](http://CHANGELOG.md)
 
 All changes listed newest-first. One section per work session.
-Format: `[YYYY-MM-DD · Session X]` — machine-readable date + session label.
+Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date + session label + git commit hash(if any).
 
 ---
 
-## [2026-02-19 · Session D] — Polish pass (spacing, typography, interactions)
+## [2026-02-19 · Session D · b67fd53] — Polish pass (spacing, typography, interactions)
 
 ### Changed
+
 - **Hero layout** — grid: `minmax(0, 2fr) / minmax(0, 1fr)`, padding `64px 72px`, column-gap `16px`, `inline-grid` + `align-self: stretch`
 - **Hero font** — replaced Geist body text with Crimson Pro Medium 48px / 52px line-height / 0.96px letter-spacing
 - **Hero copy** — "Martta is a product designer who stands at the intersection of design, business, and engineering."
@@ -18,24 +19,28 @@ Format: `[YYYY-MM-DD · Session X]` — machine-readable date + session label.
 - **Image strip breakpoint** — custom CSS class replaced with Tailwind `min-[1350px]:grid-cols-3` to avoid Tailwind v4 layer conflicts; behavior unchanged (3-col ≥1350px, 1-col below)
 
 ### Added
+
 - **Crimson Pro** — loaded via `next/font/google` (weight 500), exposed as `--font-crimson-pro` CSS variable
 
 ---
 
-## [2026-02-19 · Session C] — Bug fixes (hover + slogan)
+## [2026-02-19 · Session C · b67fd53] — Bug fixes (hover + slogan)
 
 ### Fixed
+
 - **ASK Martta hover** — replaced CSS class approach (broken against inline styles) with React `useState`; hover now correctly shows `#ECF3F8` background, `border-radius: 4px`, `#1087E6` text/icon
 - **Hero slogan** — updated to "Martta is a product designer who stands at the intersection of design, business, and engineering." (Crimson Pro Medium, 48px, line-height 52px, letter-spacing 0.96px)
 
 ### Added
+
 - **Crimson Pro** — loaded via `next/font/google` (weight 500), exposed as `--font-crimson-pro` CSS variable
 
 ---
 
-## [2026-02-19 · Session B] — Figma review sync
+## [2026-02-19 · Session B · b67fd53] — Figma review sync
 
 ### Changed
+
 - **Breakpoint** — 1200px → 1350px; project image strip switches from 3-col to 1-col below 1350px
 - **ASK Martta button** — default: grey, no background (same as nav links); hover: `border-radius: 4px`, background `#ECF3F8`, text/icon `#1087E6`
 - **Drawer animation** — fixed-duration ease → spring (`stiffness: 260`, `damping: 28`, `mass: 0.9`) for softer open/close feel
@@ -43,9 +48,10 @@ Format: `[YYYY-MM-DD · Session X]` — machine-readable date + session label.
 
 ---
 
-## [2026-02-19 · Session A] — Phase 1 build
+## [2026-02-19 · Session A · 287ac45] — Phase 1 build
 
 ### Changed
+
 - **Logo size** — Navbar horse icon: 18×18 → 32×32px
 - **ASK Martta icon** — replaced `✦` Unicode with `gemini-line.svg` (24×24, `currentColor`)
 - **Hero font weight** — Geist weight 500 → 400 (Regular), matching Figma spec
@@ -57,4 +63,6 @@ Format: `[YYYY-MM-DD · Session X]` — machine-readable date + session label.
 - **Ask Martta drawer** — changed from fixed overlay to **push sidebar**: main content column (`flex: 1`) shrinks; sidebar animates `width: 0 → 380px` via Framer Motion; no backdrop
 
 ### Removed
+
 - JLL and PwC entries from `projects.json`
+

@@ -123,7 +123,7 @@ Profile card fade:    350ms ease, slight translateY(8px) → translateY(0)
 
 **"In Their Eyes" Testimonials:** The interaction is the feature. Profile cards appear and disappear quietly — they should feel discovered, not announced.
 
-**Ask Martta Drawer:** Functional and calm. Background: `#f9f9fb`. Width: 380px. Chat bubbles are minimal. Prompt chips are pill-shaped with `border-radius: 0 4px 4px 4px` (no top-left rounding) and Switzer Regular 16px. Placeholder: "Ask her anything". This is a tool, not a personality showcase.
+**Ask Martta Drawer:** `#F9F9FB`, 380px. Header: flex, 380×80px, `padding: 20px 24px`, "Martta Cloned". Prompts: text links + `corner-down-left-line.svg`, 6px gap, 6px vertical padding. User bubble: `max-width: 270px`, `padding: 12px`, `border-radius: 4px 4px 0 4px`, `border: 1px solid rgba(26,26,26,0.12)`, `#FFF`. Assistant: no bubble, no max-width. Text: Switzer 15px/400, `line-height: 160%`, `#1A1A1A`. Send: `arrow-up-line.svg`, muted→`#1A1A1A` when input has content. Input: `padding: 12px`, `gap: 12px`, `border-radius: 4px`, `#FFF`. Disclaimer: Switzer 13px, `rgba(26,26,26,0.5)`, `line-height: 14px`; 12px below input; section bottom 32px. Messages gap 32px. Placeholder: "Ask her anything".
 
 **Navigation:** Invisible until needed. Sticky but unobtrusive — it should never compete with the work below it. Logo: `horse.svg` icon mark (32×32, `currentColor`) + "Martta XU" text. Nav links use pill-shaped containers: `padding: 8px`; default color `rgba(26,26,26,0.5)`, hover `#1A1A1A`. ASK Martta button uses `gemini-line.svg` (24×24); default: grey, no background; hover: fixed `border-radius: 4px`, background `#ECF3F8`, text and icon `#1087E6`, transition `300ms cubic-bezier(0.4, 0, 0.2, 1)`.
 
@@ -146,7 +146,6 @@ Profile card fade:    350ms ease, slight translateY(8px) → translateY(0)
 When a design decision is made during development, update this file as follows:
 
 1. **Refine, don't append.** If a new rule makes an old one redundant, replace it.
-2. **Keep it under 150 lines.** If it grows past that, something needs to be cut or merged.
-3. **Log the decision reason in `CHANGELOG.md`**, not here. This file is principles, not history.
+2. Log decision reason in `CHANGELOG.md`, not here. All codes should be in code block, not in text
 
-Good update prompt for AI: *"We just decided [X]. Update design.md to reflect this, remove anything now redundant, and keep the file under 150 lines."*
+Good update prompt: *"We decided [X]. Update design.md, remove redundancy, keep under 150 lines."*

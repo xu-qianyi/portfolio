@@ -165,7 +165,7 @@ It never fabricates, never guesses, and never breaks character.
 
 **Disclaimer (persistent, below the chat input):**
 
-> "Martta AI can make mistakes and occasionally hallucinate. For anything important, please verify directly with Martta."
+> "AI can make mistakes and hallucinate. For anything important, please verify directly with Martta."
 
 Styled in `--color-muted`, small type. Always visible — not a one-time dismissible banner.
 

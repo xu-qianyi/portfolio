@@ -23,7 +23,7 @@ export default function Footer() {
           padding: "32px 72px",
         }}
       >
-        <p style={FOOT_TEXT}>© 2026 Martta Xu</p>
+        <p style={FOOT_TEXT}>© 2026 made by Martta + Cursor + Claude Code + Figma MCP </p>
         <a
           href="https://linkedin.com/in/marttaxu"
           target="_blank"

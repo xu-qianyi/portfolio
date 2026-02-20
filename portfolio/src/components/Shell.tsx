@@ -12,7 +12,12 @@ export default function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div style={{ display: "flex", minHeight: "100vh", alignItems: "stretch" }}>
       {/* Main content column — shrinks when sidebar opens */}
-      <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+      <div
+        onClick={() => {
+          if (drawerOpen) setDrawerOpen(false);
+        }}
+        style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}
+      >
         <Navbar onAskMartta={() => setDrawerOpen(true)} />
         <main style={{ flex: 1 }}>{children}</main>
         <Footer />
