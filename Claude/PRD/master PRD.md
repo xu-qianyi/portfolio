@@ -181,7 +181,7 @@ Styled in `--color-muted`, small type. Always visible — not a one-time dismiss
 
 A custom not-found page. Should feel intentional, not broken — consistent with the site's visual identity.
 
-**Content:** A short, dry line in Martta's voice (e.g. "This page doesn't exist. But good design should be easy to find.") + a single link back to `/`.
+**Content:** "This page can't be found" — styled with Hero headline typography (see `design.md §4 & §7`). Large semi-transparent "404" as background decoration. No CTA button.
 
 **No elaborate illustration or animation.** Restraint applies here too.
 
