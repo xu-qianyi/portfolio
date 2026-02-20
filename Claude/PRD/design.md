@@ -35,7 +35,7 @@ These are hard constraints. If a decision pushes toward any of these, it's the w
 --color-surface:   #FFFFFF   /* Page background */
 --color-subtle:    #F5F5F5   /* Card backgrounds, subtle dividers */
 --color-muted:     #999999   /* Captions, meta text, footer */
---color-accent:    #0072E5   /* Interaction only: highlights, the Ask Martta button */
+--color-accent:    #003966   /* Interaction only: highlights, the Ask Martta button */
 ```
 
 **Rules:**
@@ -49,8 +49,8 @@ These are hard constraints. If a decision pushes toward any of these, it's the w
 
 ## 4. Typography
 
-**Crimson Pro** — Hero headline. Serif weight for editorial presence.
-**Switzer** — UI, navigation, card titles, footer. Anything the user reads as interface.
+**Crimson Pro** — Hero headline, navigation. Serif weight for editorial presence.
+**Switzer** — UI, card titles, footer. Anything the user reads as interface.
 **Geist Sans** — Body prose, captions. Anything the user reads as content.
 
 ```
@@ -60,11 +60,15 @@ Project description:  Switzer, 16px, weight 400, color rgba(26,26,26,0.5)
 Section heading:      Switzer, 1.25rem, weight 500, line-height 1.3
 Body / narrative:     Geist, 1rem, weight 400, line-height 1.7
 Caption / meta:       Geist, 0.875rem, weight 400, color --color-muted
-Nav:                  Switzer, 16px, weight 500, color rgba(26,26,26,0.5), letter-spacing 0.32px
+Nav:                  Crimson Pro, 18px, weight 500, color #1a1a1a, letter-spacing 0.32px; Resume/About/Tools hover: 50% opacity
 Footer:               Switzer, 16px, weight 500, color rgba(26,26,26,0.5)
 ```
 
-**Rules:** Never bold for emphasis — use a new sentence. Never center body text. Heading hierarchy felt, not announced.
+**Rules:**
+
+- Never use bold weight for emphasis within body text. Use a new sentence instead.
+- Never center-align body text. Left-aligned only.
+- Heading hierarchy should be felt, not announced — avoid H1/H2/H3 visual jumps that feel like a document.
 
 ---
 
@@ -113,19 +117,49 @@ Profile card fade:    350ms ease, slight translateY(8px) → translateY(0)
 
 ## 7. Component Voice
 
-**Project Cards (thumbnail-first layout):** Each project is a full-width vertical block. Top: 3 screenshot images in a row (height 339px, gap 24px, border `1px solid rgba(204,209,218,0.2)`); below 1350px the strip collapses to single column. Below the images (24px margin-top): project name (Crimson Pro, 20px, weight 500, `#1A1A1A`) then a one-line description (Switzer, 16px, weight 400, `rgba(26,26,26,0.5)`), with **0px** between them. Projects stack vertically with 60px gap. No hairline borders between projects.
+**Project Cards (thumbnail-first layout):** Full-width vertical blocks; image strip then title + description.
 
-**Tools Cards:** Slightly more playful than project cards (this is where "vibe coding" lives), but still contained within the grid's discipline.
+```
+Image strip:           3 cols, height 339px, gap 24px, border 1px solid rgba(204,209,218,0.2); <1350px → single column
+Margin below images:    24px
+Project name:           Crimson Pro, 20px, weight 500, #1A1A1A
+Description:            Switzer, 16px, weight 400, rgba(26,26,26,0.5); 0px gap from title
+Stack gap:              60px between projects; no hairline borders
+```
 
-**"In Their Eyes" Testimonials:** The interaction is the feature. Profile cards appear and disappear quietly — they should feel discovered, not announced.
+**Tools Cards:** Slightly more playful than project cards (vibe coding), still within grid discipline.
 
-**Ask Martta Drawer:** `#F9F9FB`, 380px. Header: flex, 380×80px, `padding: 20px 24px`, "Martta Cloned". Prompts: text links + `corner-down-left-line.svg`, 6px gap, 6px vertical padding, color `#717171`, hover/focus → `#1087E6` text + `rgba(236,243,248,0.5)` 16px-tall row highlight. User bubble: `max-width: 270px`, `padding: 12px`, `border-radius: 4px 4px 0 4px`, `border: 1px solid rgba(26,26,26,0.12)`, `#FFF`. Assistant: no bubble, no max-width. Text: Switzer 15px/400, `line-height: 160%`, `#1A1A1A`. Chat message entrance: opacity 0→1, translateY 8→0, 350ms easeOut. Send: `arrow-up-line.svg`, muted→`#1A1A1A` when input has content. Input: `padding: 12px`, `gap: 12px`, `border-radius: 4px`, `#FFF`. Disclaimer: Switzer 13px, `rgba(26,26,26,0.5)`, `line-height: 14px`; 12px below input; section bottom 32px. Messages gap 32px. Placeholder: "Ask her anything".
+**"In Their Eyes" Testimonials:** Profile cards appear/disappear quietly — felt discovered, not announced.
 
-**Navigation:** Invisible until needed. Sticky but unobtrusive — it should never compete with the work below it. Logo: `horse.svg` icon mark (32×32, `currentColor`) + "Martta XU" text. Nav links use pill-shaped containers: `padding: 8px`; default color `rgba(26,26,26,0.5)`, hover `#1A1A1A`. ASK Martta button uses `gemini-line.svg` (24×24); default: grey, no background; hover: fixed `border-radius: 4px`, background `#ECF3F8`, text and icon `#1087E6`, transition `300ms cubic-bezier(0.4, 0, 0.2, 1)`.
+**Ask Martta Drawer:** Push sidebar; all specs below.
 
-**Hero inline links (company names):** Color `#1A1A1A` — blends with body text. Underline on hover is the only interaction affordance. No accent color.
+```
+Container:              width 380px, background #F9F9FB
+Header:                 flex, 380×76px, padding 20px 24px, "Martta Cloned", border-bottom rgba(26,26,26,0.1)
+Prompts:                text links + corner-down-left-line.svg, 6px gap, 6px vertical padding; color #717171, hover/focus #003966 + rgba(236,243,248,0.5) 16px row
+User bubble:            max-width 270px, padding 12px, border-radius 4px 4px 0 4px, border 1px solid rgba(26,26,26,0.12), #FFF
+Assistant:              no bubble, no max-width; Switzer 15px/400, line-height 160%, #1A1A1A
+Message entrance:      opacity 0→1, translateY 8→0, 350ms easeOut
+Send:                   arrow-up-line.svg; muted until input has content, then #1A1A1A
+Input:                  padding 12px, gap 12px, border-radius 4px, #FFF; placeholder "Ask her anything"
+Disclaimer:             Switzer 13px, rgba(26,26,26,0.5), line-height 14px; 12px below input; section bottom 32px
+Messages gap:           32px
+```
 
-**404 Page:** Hero headline typography; "This page can't be found"; large semi-transparent "404" bg (`rgba(26,26,26,0.06)`); no button; white.
+**Navigation:** Sticky, unobtrusive. Logo + links + ASK button.
+
+```
+Logo:                  许谦益之印_红色.svg 28×28 + "Martta XU"; Crimson Pro 18px, color #1a1a1a
+Pill links:            Resume, About, Tools; padding 8px; Crimson Pro 18px, #1a1a1a; hover 50% opacity
+ASK Martta:            icon only, gemini-line.svg 20×20; default #1a1a1a; hover border-radius 4px, bg #ECF3F8, icon #003966; transition 300ms cubic-bezier(0.4,0,0.2,1); aria-label "Ask Martta"
+```
+
+**Hero inline links (company names):** Blend with body; underline on hover only. No accent.
+
+```
+Color:                  #1A1A1A
+Hover:                  underline only
+```
 
 ---
 
@@ -146,4 +180,3 @@ When a design decision is made during development, update this file as follows:
 1. **Refine, don't append.** If a new rule makes an old one redundant, replace it.
 2. Log decision reason in `CHANGELOG.md`, not here. All codes should be in code block, not in text
 
-Good update prompt: *"We decided [X]. Update design.md, remove redundancy, keep under 150 lines."*

@@ -9,9 +9,12 @@ Perform comprehensive code review. Be thorough but concise.
 **TypeScript** - No `any` types, proper interfaces, no @ts-ignore
 **Production Readiness** - No debug statements, no TODOs, no hardcoded secrets
 **React/Hooks** - Effects have cleanup, dependencies complete, no infinite loops
-**Performance** - No unnecessary re-renders, expensive calcs memoized
+**Performance** - No unnecessary re-renders, expensive calcs memoized,
 **Security** - Auth checked, inputs validated, RLS policies in place
 **Architecture** - Follows existing patterns, code in correct directory
+**Code quality / DRY** - Reusable logic in shared utilities or hooks; no repetition; composable small functions over monolithic ones; readability over cleverness
+
+
 
 ## Output Format
 
@@ -37,3 +40,4 @@ Perform comprehensive code review. Be thorough but concise.
 - **HIGH** - Bugs, performance issues, bad UX
 - **MEDIUM** - Code quality, maintainability
 - **LOW** - Style, minor improvements
+

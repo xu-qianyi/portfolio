@@ -6,37 +6,41 @@ A different team lead within the company has reviewed the current code/implement
 
 Findings from peer review:
 
-### **✅ Looks Good**
-
-- 没有 console.log、TODO、@ts-ignore、any，TypeScript 基本干净。
-- useEffect 的事件监听有 cleanup（Escape 键监听已正确移除）。
-- Drawer 结构和状态分层是对的：UI 在 AskMarttaDrawer，会话状态在 useMarttaChat。
-- 发送按钮的可用状态由输入内容驱动（空输入禁用）是合理的。
-- 用户气泡边框/圆角/max-width 已按当前约定落地，整体可维护。
-
 ### **⚠️ Issues Found**
 
-- **[HIGH]** portfolio/src/components/AskMarttaDrawer.tsx:340 - Disclaimer 文案与最新你确认的版本不一致。
-- 当前是：AI can make mistakes and hallucinate...
-- 你之前确认的是：AI assistant can make mistakes and hallucinate...
-- Fix: 用当前版本，修改 PRD, 避免 PRD/实现不一致。
-- **[MEDIUM]** portfolio/src/components/AskMarttaDrawer.tsx:194-196 - Prompt hover 只处理了 mouse enter/leave，键盘 focus 没有对应视觉反馈。
-- Fix: 给 prompt 增加 onFocus/onBlur（或 focus-visible 样式）复用同一 hover 色和背景逻辑。
-- **MEDIUM** AskMarttaDrawer.tsx:32 — setTimeout for focus has no cleanup. If the drawer unmounts before 60ms, the timeout fires on an unmounted component.
+- **[MEDIUM]** portfolio/src/app/globals.css:9 - Accent token is still #0072E5, while current design/docs and implemented hover states use #003966. This can cause visual drift when --color-accent is used later.
 
-- Fix: store the timer in a ref and clear it in the effect's cleanup: return () => clearTimeout(timer).
+- Fix: Set --color-accent to #003966.
 
-- **MEDIUM** AskMarttaDrawer.tsx:132–178 — Message list uses array index i as key. When mock reply is appended, React may reuse DOM nodes incorrectly causing animation flicker.
+- **[MEDIUM]** portfolio/src/hooks/useMarttaChat.ts:14-16 - Intro message copy is out of sync with PRD/design intent ("I'm a clone of Martta" vs the approved assistant phrasing).
 
-- Fix: use a stable unique ID per message. Add id: crypto.randomUUID() to ChatMessage in useMarttaChat.ts and use it as the key.
+- Fix: Align INTRO_MESSAGE with the canonical product copy in PRD.
 
-- **MEDIUM** useMarttaChat.ts:35–38 — The try/catch block catches no real async error because the mock reply is a synchronous assignment. When the real API call is added, errors won't be caught correctly unless await is in place.
+- **[MEDIUM]** portfolio/src/hooks/useMarttaChat.ts:44-46 + portfolio/src/components/AskMarttaDrawer.tsx - Error state is set but never surfaced to users; failures silently degrade UX.
 
-- Fix: wrap the future API call in an async function that awaits, so the catch will actually fire.
+- Fix: Render a small inline error state in the drawer when status === "error" (and optionally allow retry).
 
-- **MEDIUM** Shell.tsx:16–18 — Clicking anywhere in the main content column closes the drawer. This includes clicks on nav links, project cards, and interactive content — which may feel surprising to users.
+- **[LOW]** portfolio/src/components/Navbar.tsx:76-113 - Repeated Resume/About/Tools link blocks duplicate logic and event handlers, reducing DRY/composability.
 
-- Fix: only close on clicks that don't originate from interactive elements, or use a dedicated overlay/backdrop instead.
+- Fix: Extract a small reusable nav-pill renderer (array map or tiny component) to centralize hover behavior and styling.
+
+### **✅ Looks Good**
+
+- No console.log, TODO, @ts-ignore, or any usage found in reviewed app files.
+
+- React effects in AskMarttaDrawer include cleanup and reasonable dependency arrays.
+
+- External link security is handled correctly (rel="noopener noreferrer").
+
+- No linter errors reported in reviewed source paths.
 
 ---
+
+### **📊 Summary**
+
+- Files reviewed: **5** (Navbar.tsx, AskMarttaDrawer.tsx, useMarttaChat.ts, globals.css, plus repo-wide pattern scan)
+
+- Critical issues: **0**
+
+- Warnings: **4** (3 medium, 1 low)
 

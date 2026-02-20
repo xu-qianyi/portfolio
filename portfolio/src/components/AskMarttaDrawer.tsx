@@ -17,7 +17,7 @@ export default function AskMarttaDrawer({
   open: boolean;
   onClose: () => void;
 }) {
-  const { messages, started, sendMessage } = useMarttaChat();
+  const { messages, started, status, sendMessage } = useMarttaChat();
   const [input, setInput] = useState("");
   const [closeHovered, setCloseHovered] = useState(false);
   const [hoveredPromptIndex, setHoveredPromptIndex] = useState<number | null>(null);
@@ -71,7 +71,7 @@ export default function AskMarttaDrawer({
               style={{
                 display: "flex",
                 width: "380px",
-                height: "80px",
+                height: "76px",
                 alignItems: "center",
                 justifyContent: "space-between",
                 padding: "20px 24px",
@@ -206,7 +206,7 @@ export default function AskMarttaDrawer({
                         fontStyle: "italic",
                         fontWeight: 500,
                         lineHeight: "160%",
-                        color: hoveredPromptIndex === index ? "#1087E6" : "#717171",
+                        color: hoveredPromptIndex === index ? "#003966" : "#717171",
                         cursor: "pointer",
                         transition: "color 200ms ease",
                         textAlign: "left",
@@ -325,6 +325,23 @@ export default function AskMarttaDrawer({
                   />
                 </button>
               </form>
+
+              {status === "error" && (
+                <p
+                  role="status"
+                  style={{
+                    marginTop: "12px",
+                    marginBottom: 0,
+                    fontFamily: "'Switzer', sans-serif",
+                    fontSize: "13px",
+                    fontWeight: 400,
+                    lineHeight: "14px",
+                    color: "#003966",
+                  }}
+                >
+                  Something went wrong. Please try again.
+                </p>
+              )}
 
               <p
                 style={{

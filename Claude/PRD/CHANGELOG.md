@@ -1,20 +1,24 @@
 # [CHANGELOG.md](http://CHANGELOG.md)
 
-All changes listed newest-first. One section per work session.
+All changes listed newest-first. One section per work session. Do not include the changes made to **[design.md](http://design.md) and master PRD.md**  
 Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date + session label + git commit hash(if any).
 
 ---
 
-## [2026-02-19 · Session F] — 404 page simplification
+## [2026-02-20] — Navigation, accent, drawer header + PRD sync
 
 ### Changed
 
-- **404 page** — removed "Go back home" button; text "This page can't be found" now uses Hero headline typography (Crimson Pro 48px, weight 500, line-height 52px, letter-spacing 0.96px); large semi-transparent "404" background retained
+- **Accent color** — `#1087E6` → `#003966` everywhere (ASK Martta hover, prompt link hover); `--color-accent` and design spec updated
+- **Nav logo** — `horse.svg` (32×32) → `许谦益之印_红色.svg` (28×28)
+- **Nav typography** — Switzer 16px → Crimson Pro 18px; color `#1a1a1a`; Resume/About/Tools hover: 50% opacity (implemented via React state for reliable hover)
+- **ASK Martta button** — text removed, icon only; `gemini-line.svg` 24×24 → 20×20; `aria-label="Ask Martta"`
+- **Ask Martta drawer header** — height 80px → 76px, `padding: 20px 24px` unchanged
 
 ### Docs
 
-- **design.md** — added 404 Page spec to Component Voice (§7)
-- **master PRD.md** — updated §4.5 404 Page to match implementation (no button, Hero typography)
+- **design.md** — accent `#003966`; Nav spec (Crimson Pro 18px, logo seal 28×28, pill hover 50% opacity, ASK icon-only 20×20); drawer header 380×76px
+- **master PRD.md** — Navbar bullets updated to match (logo asset, typography, ASK icon-only)
 
 ---
 
@@ -23,7 +27,7 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 ### Changed
 
 - **Project title font** — Switzer 16px → Crimson Pro 20px weight 500; title/description gap 2px → 0
-- **Prompt chips → text links** — replaced pill chips with text-link prompts; icon `corner-down-left-line.svg` at 6px gap; 6px vertical clickable area; color `#717171`, hover/focus `#1087E6` + `rgba(236,243,248,0.5)` 16px row highlight
+- **Prompt chips → text links** — replaced pill chips with text-link prompts; icon `corner-down-left-line.svg` at 6px gap; 6px vertical clickable area; color `#717171`, hover/focus `#003966` + `rgba(236,243,248,0.5)` 16px row highlight
 - **Chat message animation** — messages enter with opacity 0→1, translateY 8→0, 350ms easeOut (Framer Motion)
 - **Intro message** — updated to "Hi! I'm Martta's AI assistant…"; prompts updated to "Tell me about yourself.", "What is your favorite thing in the world?", "What is your design process?"
 - **User bubble border** — added `1px solid rgba(26,26,26,0.12)`; no border-top on input area separator
@@ -31,11 +35,11 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 - **Chat text** — font-size 16px → 15px; line-height 150% → 160%
 - **Send button** — icon switched to `arrow-up-line.svg`; muted until user types, then `#1A1A1A`
 - **Disclaimer** — "AI can make mistakes and hallucinate. For anything important, please verify directly with Martta."; 12px gap below input
-- **`useMarttaChat` hook** — chat logic extracted from drawer into `src/hooks/useMarttaChat.ts` for clean API integration later
+- `**useMarttaChat` hook** — chat logic extracted from drawer into `src/hooks/useMarttaChat.ts` for clean API integration later
 
 ### Fixed
 
-- **Close button hover** — `#1087E6` hover effect was incorrectly applying to ×; scoped to prompt text links only
+- **Close button hover** — `#003966` hover effect was incorrectly applying to ×; scoped to prompt text links only
 - **Input border-radius** — all four corners now `4px` (previously top-left was 0)
 - **Prompt hover background height** — fixed to 16px using absolute positioning
 
@@ -69,7 +73,7 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 ### Fixed
 
-- **ASK Martta hover** — replaced CSS class approach (broken against inline styles) with React `useState`; hover now correctly shows `#ECF3F8` background, `border-radius: 4px`, `#1087E6` text/icon
+- **ASK Martta hover** — replaced CSS class approach (broken against inline styles) with React `useState`; hover now correctly shows `#ECF3F8` background, `border-radius: 4px`, `#003966` text/icon
 - **Hero slogan** — updated to "Martta is a product designer who stands at the intersection of design, business, and engineering." (Crimson Pro Medium, 48px, line-height 52px, letter-spacing 0.96px)
 
 ### Added
@@ -83,7 +87,7 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 ### Changed
 
 - **Breakpoint** — 1200px → 1350px; project image strip switches from 3-col to 1-col below 1350px
-- **ASK Martta button** — default: grey, no background (same as nav links); hover: `border-radius: 4px`, background `#ECF3F8`, text/icon `#1087E6`
+- **ASK Martta button** — default: grey, no background (same as nav links); hover: `border-radius: 4px`, background `#ECF3F8`, text/icon `#003966`
 - **Drawer animation** — fixed-duration ease → spring (`stiffness: 260`, `damping: 28`, `mass: 0.9`) for softer open/close feel
 - **Disclaimer (Ask Martta)** — 12px `--color-muted` → Switzer 13px, weight 400, line-height 14px, `rgba(26,26,26,0.50)`
 

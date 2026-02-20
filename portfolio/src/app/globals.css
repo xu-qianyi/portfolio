@@ -6,7 +6,7 @@
   --color-surface: #FFFFFF;
   --color-subtle:  #F5F5F5;
   --color-muted:   #999999;
-  --color-accent:  #0072E5;
+  --color-accent:  #003966;
 }
 
 @theme inline {
@@ -16,7 +16,6 @@
 .hover-ink:hover {
   color: #1A1A1A !important;
 }
-
 
 html,
 body {

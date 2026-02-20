@@ -1,10 +1,10 @@
 # PRD.md — Martta Xu Portfolio (2026)
 
-_Version: 2.1_
-_Last updated: February 2026_
-_Author: Martta Xu_
+*Version: 2.1*
+*Last updated: February 2026*
+*Author: Martta Xu*
 
-> For all visual and interaction decisions, refer to `design.md`.
+> For all visual and interaction decisions, refer to `design.md`. No design spec belongs in this file.
 
 ---
 
@@ -32,11 +32,11 @@ _Author: Martta Xu_
 
 **Navbar (sticky)** — See `design.md §7` for visual and layout spec.
 
-- Logo: `horse.svg` icon mark (32×32) + "Martta XU" text → `/`
+- Logo: `许谦益之印_红色.svg` (28×28) + "Martta XU" text → `/`; nav typography Crimson Pro, 18px, color `#1a1a1a`; Resume/About/Tools hover: 50% opacity.
 - Resume → external PDF (Google Drive, new tab)
 - About → `/about`
 - Tools → `/tools`
-- ASK Martta → opens the Ask Martta drawer (primary action, right-aligned).
+- ASK Martta → icon only (`gemini-line.svg` 20×20), opens the Ask Martta drawer (primary action, right-aligned); `aria-label="Ask Martta"`.
 
 **Footer**
 
@@ -51,23 +51,16 @@ _Author: Martta Xu_
 
 **Wireframes:** `images/UI reference`
 
-**Hero**
-The entry point. Two-column layout (`minmax(0, 2fr) / minmax(0, 1fr)`): the headline occupies the left column; the right column is intentional negative space. Large editorial serif — presence without loudness.
+**Hero** — See `design.md` for layout and typography.
 
-Headline:
+The entry point. Two-column layout: headline on the left; right column is intentional negative space.
+
+Headline copy:
 
 > "Martta is a product designer who stands at the intersection of design, business, and engineering."
 
-See `design.md §4 & §5` for hero typography and layout spec.
-
 **Project Grid**
-The work. Thumbnail-first layout. Each project is a full-width vertical block, stacked vertically.
-
-Each block contains:
-
-1. **Image strip** — 3 project screenshots side-by-side (≥1350px); single column below 1350px
-2. **Project name**
-3. **One-line description** directly below the name
+The work. Thumbnail-first layout. Each project is a full-width vertical block, stacked vertically. Each block: image strip (3 screenshots), project name, one-line description. See `design.md §7` for breakpoint and spacing.
 
 Data sourced from `src/data/projects.json`. Each entry requires: `id`, `title`, `description`, `images` (array of 3 URLs).
 
@@ -89,6 +82,14 @@ Data sourced from `src/data/testimonials.json`.
 
 A first-person essay in Martta's own voice. Prose only. No bullet points, no headers. This section answers: who is she beyond the work?
 
+**Copy:**
+
+> I used to think access was a business problem. You set the right price, you open the right market, the right people get in. I was good at that logic. Winner of global business competition, ACCA certified, management and strategy consulting experience, a product management internship at top language-learning startup in China - I understood how products get built and why companies do what they do.
+>
+> But at that startup I watched something happen up close: great strategy, mediocre product. The gap between the deck and the screen. That's where people get lost.
+>
+> I went back to school to close that gap. I learned design and engineering together because I needed both hands. One to understand the person, one to build the thing.
+
 ---
 
 ### 4.3 Tools (`/tools`)
@@ -107,12 +108,12 @@ An AI assistant accessible from anywhere via the navbar. The goal is to help rec
 
 ---
 
-**UI & Behavior**
+**UI & Behavior** — See `design.md` for all visual spec (header, bubbles, typography, input, disclaimer).
 
-- Slides in from the right as a **push sidebar**. The main content column shrinks to accommodate it — the sidebar does not overlay content.
+- Slides in from the right as a **push sidebar**. Main content column shrinks; sidebar does not overlay.
 - Closeable via × button, clicking outside, or pressing `Escape`.
 - Accessible: focus moves into drawer on open, returns to trigger on close.
-- On first open, shows a brief intro and 3 default prompt chips. Once a conversation starts, chips disappear.
+- On first open: intro message + default prompt suggestions. Once a conversation starts, suggestions disappear.
 - Input placeholder: "Ask her anything".
 
 **Intro message (on first open):**
@@ -141,6 +142,7 @@ Ask Martta is grounded in a single source-of-truth file: `src/data/martta-knowle
 
 This file contains everything the AI is allowed to know and say:
 
+
 | Section         | Content                                            |
 | --------------- | -------------------------------------------------- |
 | Resume          | Work history, roles, companies, dates              |
@@ -149,6 +151,7 @@ This file contains everything the AI is allowed to know and say:
 | Personal story  | Background, career path, motivations               |
 | Design opinions | Her point of view on craft, process, accessibility |
 | FAQs            | Pre-written answers to common recruiter questions  |
+
 
 This file is the only thing that needs updating when Martta's story evolves. The AI prompt references it as context on every request.
 
@@ -161,11 +164,7 @@ If asked something outside the knowledge base (salary expectations, confidential
 
 It never fabricates, never guesses, and never breaks character.
 
-**Disclaimer (persistent, below the chat input):**
-
-> "AI can make mistakes and hallucinate. For anything important, please verify directly with Martta."
-
-Styled in `--color-muted`, small type. Always visible — not a one-time dismissible banner.
+**Disclaimer (persistent, below the chat input):** See `design.md` for styling. Copy: "AI assistant can make mistakes and hallucinate. For anything important, please verify directly with Martta." Always visible — not a one-time dismissible banner.
 
 ---
 
@@ -181,7 +180,7 @@ Styled in `--color-muted`, small type. Always visible — not a one-time dismiss
 
 A custom not-found page. Should feel intentional, not broken — consistent with the site's visual identity.
 
-**Content:** "This page can't be found" — styled with Hero headline typography (see `design.md §4 & §7`). Large semi-transparent "404" as background decoration. No CTA button.
+**Content:** A short, dry line in Martta's voice (e.g. "This page doesn't exist. But good design should be easy to find.") + a single link back to `/`.
 
 **No elaborate illustration or animation.** Restraint applies here too.
 
@@ -195,13 +194,15 @@ A custom not-found page. Should feel intentional, not broken — consistent with
 
 ## 6. Technical Stack
 
-|           |                                                                                             |
-| --------- | ------------------------------------------------------------------------------------------- |
-| Framework | Next.js 14+ (App Router)                                                                    |
-| Styling   | Tailwind CSS                                                                                |
-| Animation | Framer Motion                                                                               |
-| Fonts     | Switzer (UI), Geist Sans (body)                                                             |
-| Viewport  | Tablet + desktop + mobile. A simplified, graceful mobile layout. Large breakpoint = 1200px. |
+
+|           |                                                             |
+| --------- | ----------------------------------------------------------- |
+| Framework | Next.js 14+ (App Router)                                    |
+| Styling   | Tailwind CSS                                                |
+| Animation | Framer Motion                                               |
+| Fonts     | See `design.md` §4                                          |
+| Viewport  | Tablet + desktop + mobile. See `design.md` for breakpoints. |
+
 
 ---
 

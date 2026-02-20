@@ -2,20 +2,21 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface NavbarProps {
   onAskMartta: () => void;
 }
 
 const NAV_LINK: React.CSSProperties = {
-  fontFamily: "'Switzer', sans-serif",
-  fontSize: "16px",
+  fontFamily: "var(--font-crimson-pro), 'Crimson Pro', Georgia, serif",
+  fontSize: "18px",
   fontWeight: 500,
-  color: "rgba(26,26,26,0.5)",
+  color: "#1a1a1a",
   letterSpacing: "0.32px",
   lineHeight: "normal",
   textDecoration: "none",
-  transition: "color 200ms ease",
+  transition: "color 200ms ease, opacity 200ms ease",
 };
 
 const PILL: React.CSSProperties = {
@@ -25,8 +26,23 @@ const PILL: React.CSSProperties = {
   borderRadius: "9999px",
 };
 
+type PillId = "resume" | "about" | "tools" | null;
+type NavItemId = Exclude<PillId, null>;
+
+const NAV_ITEMS: Array<{
+  id: NavItemId;
+  label: string;
+  href: string;
+  external?: boolean;
+}> = [
+  { id: "resume", label: "Resume", href: "https://drive.google.com", external: true },
+  { id: "about", label: "About", href: "/about" },
+  { id: "tools", label: "Tools", href: "/tools" },
+];
+
 export default function Navbar({ onAskMartta }: NavbarProps) {
   const [askHovered, setAskHovered] = useState(false);
+  const [pillHovered, setPillHovered] = useState<PillId>(null);
 
   return (
     <header
@@ -56,46 +72,36 @@ export default function Navbar({ onAskMartta }: NavbarProps) {
             alignItems: "center",
             gap: "8px",
           }}
-          className="hover-ink"
         >
-          {/* horse.svg icon mark */}
-          <svg
-            width="32"
-            height="32"
-            viewBox="0 0 256 256"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path d="M136,100a12,12,0,1,1-12-12A12,12,0,0,1,136,100Zm96,29.48A104.29,104.29,0,0,1,130.1,232l-2.17,0a103.32,103.32,0,0,1-69.26-26A8,8,0,1,1,69.34,194a84.71,84.71,0,0,0,20.1,13.37L116,170.84c-22.78-9.83-47.47-5.65-61.4-3.29A31.84,31.84,0,0,1,23.3,154.72l-.3-.43-13.78-22a8,8,0,0,1,2.59-11.05L112,59.53V32a8,8,0,0,1,8-8h8A104,104,0,0,1,232,129.48Zm-16-.22A88,88,0,0,0,128,40V64a8,8,0,0,1-3.81,6.81L27.06,130.59l9.36,15A15.92,15.92,0,0,0,52,151.77c16-2.7,48.77-8.24,78.07,8.18A40.06,40.06,0,0,0,168,120a8,8,0,0,1,16,0,56.07,56.07,0,0,1-51.8,55.83l-27.11,37.28A90.89,90.89,0,0,0,129.78,216,88.29,88.29,0,0,0,216,129.26Z" />
-          </svg>
+          <Image
+            src="/许谦益之印_红色.svg"
+            alt=""
+            width={28}
+            height={28}
+            aria-hidden
+          />
           Martta XU
         </Link>
 
         {/* Right nav links */}
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <Link
-            href="https://drive.google.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ ...NAV_LINK, ...PILL }}
-            className="hover-ink"
-          >
-            Resume
-          </Link>
-          <Link
-            href="/about"
-            style={{ ...NAV_LINK, ...PILL }}
-            className="hover-ink"
-          >
-            About
-          </Link>
-          <Link
-            href="/tools"
-            style={{ ...NAV_LINK, ...PILL }}
-            className="hover-ink"
-          >
-            Tools
-          </Link>
+          {NAV_ITEMS.map((item) => (
+            <Link
+              key={item.id}
+              href={item.href}
+              target={item.external ? "_blank" : undefined}
+              rel={item.external ? "noopener noreferrer" : undefined}
+              style={{
+                ...NAV_LINK,
+                ...PILL,
+                opacity: pillHovered === item.id ? 0.5 : 1,
+              }}
+              onMouseEnter={() => setPillHovered(item.id)}
+              onMouseLeave={() => setPillHovered(null)}
+            >
+              {item.label}
+            </Link>
+          ))}
           <button
             onClick={onAskMartta}
             onMouseEnter={() => setAskHovered(true)}
@@ -105,17 +111,17 @@ export default function Navbar({ onAskMartta }: NavbarProps) {
               ...PILL,
               background: askHovered ? "#ECF3F8" : "none",
               borderRadius: "4px",
-              color: askHovered ? "#1087E6" : "rgba(26,26,26,0.5)",
+              color: askHovered ? "#003966" : "#1a1a1a",
               border: "none",
               cursor: "pointer",
-              gap: "6px",
               transition: "color 300ms cubic-bezier(0.4, 0, 0.2, 1), background 300ms cubic-bezier(0.4, 0, 0.2, 1)",
             }}
+            aria-label="Ask Martta"
             aria-haspopup="dialog"
           >
             <svg
-              width="24"
-              height="24"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               aria-hidden="true"
@@ -125,7 +131,6 @@ export default function Navbar({ onAskMartta }: NavbarProps) {
                 fill="currentColor"
               />
             </svg>
-            ASK Martta
           </button>
         </div>
       </nav>
