@@ -30,15 +30,13 @@ _Author: Martta Xu_
 
 ## 3. Global Shell
 
-**Navbar (sticky)**
-
-Layout: `display: flex; justify-content: space-between; align-items: center; align-self: stretch;`
+**Navbar (sticky)** — See `design.md §7` for visual and layout spec.
 
 - Logo: `horse.svg` icon mark (32×32) + "Martta XU" text → `/`
 - Resume → external PDF (Google Drive, new tab)
 - About → `/about`
 - Tools → `/tools`
-- ✦ ASK Martta → opens the Ask Martta drawer (primary action, right-aligned). Default state: grey, no background (`rgba(26,26,26,0.5)`) — same as other nav links. Hover state: `border-radius: 4px`, background `#ECF3F8`, text and icon `#1087E6`.
+- ASK Martta → opens the Ask Martta drawer (primary action, right-aligned).
 
 **Footer**
 
@@ -60,7 +58,7 @@ Headline:
 
 > "Martta is a product designer who stands at the intersection of design, business, and engineering."
 
-Styled in Crimson Pro Medium, 48px, line-height 52px, letter-spacing 0.96px. Hero padding: 64px vertical, 72px horizontal, column-gap 16px.
+See `design.md §4 & §5` for hero typography and layout spec.
 
 **Project Grid**
 The work. Thumbnail-first layout. Each project is a full-width vertical block, stacked vertically.
@@ -69,7 +67,7 @@ Each block contains:
 
 1. **Image strip** — 3 project screenshots side-by-side (≥1350px); single column below 1350px
 2. **Project name**
-3. **One-line description**, 2px below the name
+3. **One-line description** directly below the name
 
 Data sourced from `src/data/projects.json`. Each entry requires: `id`, `title`, `description`, `images` (array of 3 URLs).
 
@@ -119,13 +117,13 @@ An AI assistant accessible from anywhere via the navbar. The goal is to help rec
 
 **Intro message (on first open):**
 
-> "Hi, I'm Martta AI. Ask me anything about my work, process, or background — I'm here to help you figure out if we'd be a good fit."
+> "Hi! I'm Martta's AI assistant. How can I help you explore Martta's work today? Here are some questions people like to ask her about."
 
-**Default prompt chips:**
+**Default prompt suggestions:**
 
-1. What is your design process?
-2. When will you be available?
-3. How do you vibe code?
+1. Tell me about yourself.
+2. What is your favorite thing in the world?
+3. What is your design process?
 
 ---
 
