@@ -1,32 +1,32 @@
 [
   {
     "id": "datalign",
-    "title": "Making wealth management approachable for everyone",
-    "description": "Product design — desktop & mobile · Datalign · 2024",
-    "images": [
-      "https://placehold.co/600x339/F5F5F5/CCCCCC?text=Datalign+1",
-      "https://placehold.co/600x339/EFEFEF/CCCCCC?text=Datalign+2",
-      "https://placehold.co/600x339/E8E8E8/CCCCCC?text=Datalign+3"
-    ]
+    "company": "Datalign",
+    "date": "2024",
+    "type": "Product design, desktop & mobile",
+    "headline": "Making wealth management approachable for everyone",
+    "image": "https://placehold.co/600x344/F5F5F5/CCCCCC?text=Datalign",
+    "aspectRatio": "16/9",
+    "href": "#"
   },
   {
     "id": "ark7",
-    "title": "Fractional real estate investing, made intuitive",
-    "description": "Product design — mobile · ARK7 · 2023",
-    "images": [
-      "https://placehold.co/600x339/F5F5F5/CCCCCC?text=ARK7+1",
-      "https://placehold.co/600x339/EFEFEF/CCCCCC?text=ARK7+2",
-      "https://placehold.co/600x339/E8E8E8/CCCCCC?text=ARK7+3"
-    ]
+    "company": "ARK7",
+    "date": "2023",
+    "type": "Product design, mobile",
+    "headline": "Fractional real estate investing, made intuitive",
+    "image": "https://placehold.co/600x450/EFEFEF/CCCCCC?text=ARK7",
+    "aspectRatio": "4/3",
+    "href": "#"
   },
   {
     "id": "sanofi",
-    "title": "Simplifying global data workflows for a pharma team",
-    "description": "Strategy & service design · Sanofi · 2022",
-    "images": [
-      "https://placehold.co/600x339/F5F5F5/CCCCCC?text=Sanofi+1",
-      "https://placehold.co/600x339/EFEFEF/CCCCCC?text=Sanofi+2",
-      "https://placehold.co/600x339/E8E8E8/CCCCCC?text=Sanofi+3"
-    ]
+    "company": "Sanofi",
+    "date": "2022",
+    "type": "Strategy & service design",
+    "headline": "Simplifying global data workflows for a pharma team",
+    "image": "https://placehold.co/600x400/E8E8E8/CCCCCC?text=Sanofi",
+    "aspectRatio": "3/2",
+    "href": "#"
   }
 ]

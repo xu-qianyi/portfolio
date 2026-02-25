@@ -1,8 +1,8 @@
 # PRD.md — Martta Xu Portfolio (2026)
 
-*Version: 2.1*
-*Last updated: February 2026*
-*Author: Martta Xu*
+_Version: 2.1_
+_Last updated: February 2026_
+_Author: Martta Xu_
 
 > For all visual and interaction decisions, refer to `design.md`. No design spec belongs in this file.
 
@@ -32,7 +32,7 @@
 
 **Navbar (sticky)** — See `design.md §7` for visual and layout spec.
 
-- Logo: `许谦益之印_红色.svg` (28×28) + "Martta XU" text → `/`; nav typography Crimson Pro, 18px, color `#1a1a1a`; Resume/About/Tools hover: 50% opacity.
+- Logo: `许谦益之印_红色.svg` (28×28) + "Martta XU" text → `/`; nav typography Playfair Display, 18px, color `#1a1a1a`; Resume/About/Tools hover: 50% opacity.
 - Resume → external PDF (Google Drive, new tab)
 - About → `/about`
 - Tools → `/tools`
@@ -57,12 +57,12 @@ The entry point. Two-column layout: headline on the left; right column is intent
 
 Headline copy:
 
-> "Martta is a product designer who stands at the intersection of design, business, and engineering."
+> "Martta is a builder who stands at the intersection of design, business, and engineering. Lorem ipsum dolor sit amet consectetur adipiscing elit. Consectetur adipiscing elit quisque faucibus ex sapien vitae. Ex sapien vitae pellentesque sem placerat in id. Placerat in id cursus mi pretium tellus duis. Pretium tellus duis convallis tempus leo eu aenean."
 
 **Project Grid**
-The work. Thumbnail-first layout. Each project is a full-width vertical block, stacked vertically. Each block: image strip (3 screenshots), project name, one-line description. See `design.md §7` for breakpoint and spacing.
+The work. Two-column masonry layout. Each project card: single cover image (varying aspect ratio), a metadata row (company · date · type), and a one-line headline. Cards flow top-to-bottom within each column; the stagger comes from varying image proportions. On mobile (<768px), collapses to a single column. See `design.md §7` for breakpoint and spacing.
 
-Data sourced from `src/data/projects.json`. Each entry requires: `id`, `title`, `description`, `images` (array of 3 URLs).
+Data sourced from `src/data/projects.json`. Each entry requires: `id`, `company`, `date`, `type`, `headline`, `image` (single URL), `aspectRatio`, `href`.
 
 ---
 
@@ -142,7 +142,6 @@ Ask Martta is grounded in a single source-of-truth file: `src/data/martta-knowle
 
 This file contains everything the AI is allowed to know and say:
 
-
 | Section         | Content                                            |
 | --------------- | -------------------------------------------------- |
 | Resume          | Work history, roles, companies, dates              |
@@ -152,7 +151,6 @@ This file contains everything the AI is allowed to know and say:
 | Design opinions | Her point of view on craft, process, accessibility |
 | FAQs            | Pre-written answers to common recruiter questions  |
 
-
 This file is the only thing that needs updating when Martta's story evolves. The AI prompt references it as context on every request.
 
 ---
@@ -160,7 +158,7 @@ This file is the only thing that needs updating when Martta's story evolves. The
 **Out-of-scope handling**
 If asked something outside the knowledge base (salary expectations, confidential work, personal contact details), Ask Martta deflects gracefully and redirects:
 
-> "That's not something I can speak to here — but feel free to reach out to Martta directly on LinkedIn."
+> "That's not something I can speak to here - but feel free to reach out to Martta directly on LinkedIn."
 
 It never fabricates, never guesses, and never breaks character.
 
@@ -180,9 +178,12 @@ It never fabricates, never guesses, and never breaks character.
 
 A custom not-found page. Should feel intentional, not broken — consistent with the site's visual identity.
 
-**Content:** A short, dry line in Martta's voice (e.g. "This page doesn't exist. But good design should be easy to find.") + a single link back to `/`.
+**Content:** "It looks like you’ve wandered off the path...  
+But don’t worry, every detour is just a chance to connect the dots in a new way."
 
-**No elaborate illustration or animation.** Restraint applies here too.
+**Button icon:** home-8-line.svg
+
+**Button style:** Same as button used to open the home side drawer
 
 ---
 
@@ -194,7 +195,6 @@ A custom not-found page. Should feel intentional, not broken — consistent with
 
 ## 6. Technical Stack
 
-
 |           |                                                             |
 | --------- | ----------------------------------------------------------- |
 | Framework | Next.js 14+ (App Router)                                    |
@@ -202,7 +202,6 @@ A custom not-found page. Should feel intentional, not broken — consistent with
 | Animation | Framer Motion                                               |
 | Fonts     | See `design.md` §4                                          |
 | Viewport  | Tablet + desktop + mobile. See `design.md` for breakpoints. |
-
 
 ---
 

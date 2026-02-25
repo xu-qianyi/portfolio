@@ -1,5 +1,5 @@
 const HEADLINE: React.CSSProperties = {
-  fontFamily: "var(--font-crimson-pro), 'Crimson Pro', Georgia, serif",
+  fontFamily: "var(--font-playfair-display), 'Playfair Display', Georgia, serif",
   fontSize: "48px",
   fontWeight: 500,
   color: "#1A1A1A",
@@ -19,7 +19,7 @@ export default function NotFound() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        padding: "72px",
+        padding: "72px 24px",
       }}
     >
       {/* 404 background decoration */}
@@ -36,7 +36,7 @@ export default function NotFound() {
       >
         <span
           style={{
-            fontFamily: "'Switzer', sans-serif",
+            fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
             fontSize: "12rem",
             fontWeight: 700,
             color: "rgba(26,26,26,0.06)",

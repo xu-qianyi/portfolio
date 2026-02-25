@@ -9,8 +9,8 @@ interface NavbarProps {
 }
 
 const NAV_LINK: React.CSSProperties = {
-  fontFamily: "var(--font-crimson-pro), 'Crimson Pro', Georgia, serif",
-  fontSize: "18px",
+  fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
+  fontSize: "14px",
   fontWeight: 500,
   color: "#1a1a1a",
   letterSpacing: "0.32px",
@@ -57,7 +57,8 @@ export default function Navbar({ onAskMartta }: NavbarProps) {
       <nav
         style={{
           display: "flex",
-          padding: "20px 72px",
+          height: "fit-content",
+          padding: "16px 24px",
           justifyContent: "space-between",
           alignItems: "center",
           alignSelf: "stretch",

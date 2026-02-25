@@ -58,7 +58,7 @@ export default function AskMarttaDrawer({
       aria-modal="true"
       aria-label="Ask Martta"
       style={{
-        width: "380px",
+        width: "360px",
         height: "100%",
         display: "flex",
         flexDirection: "column",
@@ -70,18 +70,18 @@ export default function AskMarttaDrawer({
             <div
               style={{
                 display: "flex",
-                width: "380px",
+                width: "360px",
                 height: "76px",
                 alignItems: "center",
                 justifyContent: "space-between",
-                padding: "20px 24px",
+                padding: "16px 24px",
                 borderBottom: "1px solid rgba(26,26,26,0.1)",
                 flexShrink: 0,
               }}
             >
               <span
                 style={{
-                  fontFamily: "'Switzer', sans-serif",
+                  fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
                   fontSize: "16px",
                   fontStyle: "normal",
                   fontWeight: 500,
@@ -144,7 +144,7 @@ export default function AskMarttaDrawer({
                     <p
                       style={{
                         margin: 0,
-                        fontFamily: "'Switzer', sans-serif",
+                        fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
                         fontSize: "15px",
                         fontStyle: "normal",
                         fontWeight: 400,
@@ -163,7 +163,7 @@ export default function AskMarttaDrawer({
                         borderRadius: "4px 4px 0 4px",
                         border: "1px solid rgba(26, 26, 26, 0.12)",
                         background: "#FFF",
-                        fontFamily: "'Switzer', sans-serif",
+                        fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
                         fontSize: "15px",
                         fontStyle: "normal",
                         fontWeight: 400,
@@ -201,7 +201,7 @@ export default function AskMarttaDrawer({
                         gap: "6px",
                         border: "none",
                         padding: "6px 0",
-                        fontFamily: "'Switzer', sans-serif",
+                        fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
                         fontSize: "15px",
                         fontStyle: "italic",
                         fontWeight: 500,
@@ -281,7 +281,7 @@ export default function AskMarttaDrawer({
                     background: "none",
                     border: "none",
                     outline: "none",
-                    fontFamily: "'Switzer', sans-serif",
+                    fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
                     fontSize: "16px",
                     color: "#1A1A1A",
                   }}
@@ -332,7 +332,7 @@ export default function AskMarttaDrawer({
                   style={{
                     marginTop: "12px",
                     marginBottom: 0,
-                    fontFamily: "'Switzer', sans-serif",
+                    fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
                     fontSize: "13px",
                     fontWeight: 400,
                     lineHeight: "14px",
@@ -346,7 +346,7 @@ export default function AskMarttaDrawer({
               <p
                 style={{
                   marginTop: "12px",
-                  fontFamily: "'Switzer', sans-serif",
+                  fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
                   fontSize: "13px",
                   fontStyle: "normal",
                   fontWeight: 400,

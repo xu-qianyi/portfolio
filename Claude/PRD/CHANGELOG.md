@@ -11,13 +11,13 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 - **Accent color** — `#1087E6` → `#003966` everywhere (ASK Martta hover, prompt link hover); `--color-accent` and design spec updated
 - **Nav logo** — `horse.svg` (32×32) → `许谦益之印_红色.svg` (28×28)
-- **Nav typography** — Switzer 16px → Crimson Pro 18px; color `#1a1a1a`; Resume/About/Tools hover: 50% opacity (implemented via React state for reliable hover)
+- **Nav typography** — Switzer 16px → Playfair Display 18px; color `#1a1a1a`; Resume/About/Tools hover: 50% opacity (implemented via React state for reliable hover)
 - **ASK Martta button** — text removed, icon only; `gemini-line.svg` 24×24 → 20×20; `aria-label="Ask Martta"`
 - **Ask Martta drawer header** — height 80px → 76px, `padding: 20px 24px` unchanged
 
 ### Docs
 
-- **design.md** — accent `#003966`; Nav spec (Crimson Pro 18px, logo seal 28×28, pill hover 50% opacity, ASK icon-only 20×20); drawer header 380×76px
+- **design.md** — accent `#003966`; Nav spec (Playfair Display 18px, logo seal 28×28, pill hover 50% opacity, ASK icon-only 20×20); drawer header 380×76px
 - **master PRD.md** — Navbar bullets updated to match (logo asset, typography, ASK icon-only)
 
 ---
@@ -26,7 +26,7 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 ### Changed
 
-- **Project title font** — Switzer 16px → Crimson Pro 20px weight 500; title/description gap 2px → 0
+- **Project title font** — Switzer 16px → Playfair Display 20px weight 500; title/description gap 2px → 0
 - **Prompt chips → text links** — replaced pill chips with text-link prompts; icon `corner-down-left-line.svg` at 6px gap; 6px vertical clickable area; color `#717171`, hover/focus `#003966` + `rgba(236,243,248,0.5)` 16px row highlight
 - **Chat message animation** — messages enter with opacity 0→1, translateY 8→0, 350ms easeOut (Framer Motion)
 - **Intro message** — updated to "Hi! I'm Martta's AI assistant…"; prompts updated to "Tell me about yourself.", "What is your favorite thing in the world?", "What is your design process?"
@@ -45,7 +45,7 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 ### Docs
 
-- **design.md** — updated project title spec (Crimson Pro 20px, gap 0), prompt color spec, chat animation spec; kept at 150 lines
+- **design.md** — updated project title spec (Playfair Display 20px, gap 0), prompt color spec, chat animation spec; kept at 150 lines
 - **master PRD.md** — removed embedded design specs (navbar CSS, hero typography) → redirected to `design.md`; updated intro message and default prompt copy to match code
 
 ---
@@ -55,7 +55,7 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 ### Changed
 
 - **Hero layout** — grid: `minmax(0, 2fr) / minmax(0, 1fr)`, padding `64px 72px`, column-gap `16px`, `inline-grid` + `align-self: stretch`
-- **Hero font** — replaced Geist body text with Crimson Pro Medium 48px / 52px line-height / 0.96px letter-spacing
+- **Hero font** — replaced Geist body text with Playfair Display Medium 48px / 52px line-height / 0.96px letter-spacing
 - **Hero copy** — "Martta is a product designer who stands at the intersection of design, business, and engineering."
 - **Project card text gap** — 4px → 2px between title and description
 - **Nav pill padding** — `4px 12px` → `8px` all sides (Resume, About, Tools, ASK Martta)
@@ -65,7 +65,7 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 ### Added
 
-- **Crimson Pro** — loaded via `next/font/google` (weight 500), exposed as `--font-crimson-pro` CSS variable
+- **Playfair Display** — loaded via `next/font/google` (weight 500), exposed as `--font-playfair-display` CSS variable
 
 ---
 
@@ -74,11 +74,11 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 ### Fixed
 
 - **ASK Martta hover** — replaced CSS class approach (broken against inline styles) with React `useState`; hover now correctly shows `#ECF3F8` background, `border-radius: 4px`, `#003966` text/icon
-- **Hero slogan** — updated to "Martta is a product designer who stands at the intersection of design, business, and engineering." (Crimson Pro Medium, 48px, line-height 52px, letter-spacing 0.96px)
+- **Hero slogan** — updated to "Martta is a product designer who stands at the intersection of design, business, and engineering." (Playfair Display Medium, 48px, line-height 52px, letter-spacing 0.96px)
 
 ### Added
 
-- **Crimson Pro** — loaded via `next/font/google` (weight 500), exposed as `--font-crimson-pro` CSS variable
+- **Playfair Display** — loaded via `next/font/google` (weight 500), exposed as `--font-playfair-display` CSS variable
 
 ---
 

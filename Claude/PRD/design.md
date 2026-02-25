@@ -49,19 +49,18 @@ These are hard constraints. If a decision pushes toward any of these, it's the w
 
 ## 4. Typography
 
-**Crimson Pro** — Hero headline, navigation. Serif weight for editorial presence.
-**Switzer** — UI, card titles, footer. Anything the user reads as interface.
-**Geist Sans** — Body prose, captions. Anything the user reads as content.
+**Playfair Display** — Hero headline, navigation. Serif weight for editorial presence.
+**Geist** — UI, body, card metadata, footer, drawer. Anything the user reads as interface or content.
 
 ```
-Hero text:            Crimson Pro, 48px, weight 500, line-height 52px, letter-spacing 0.96px, color #1A1A1A
-Project title:        Switzer, 16px, weight 500, color #1A1A1A
-Project description:  Switzer, 16px, weight 400, color rgba(26,26,26,0.5)
-Section heading:      Switzer, 1.25rem, weight 500, line-height 1.3
+Hero text:            Playfair Display, 48px, weight 500, line-height 52px, letter-spacing 0.96px, color #1A1A1A
+Project metadata:     Geist, 14px, weight 500, color rgba(26,26,26,0.5); dot separators between company · date · type
+Project headline:     Playfair Display, 20px, weight 400, line-height 130%, color #1A1A1A
+Section heading:      Geist, 1.25rem, weight 500, line-height 1.3
 Body / narrative:     Geist, 1rem, weight 400, line-height 1.7
 Caption / meta:       Geist, 0.875rem, weight 400, color --color-muted
-Nav:                  Crimson Pro, 18px, weight 500, color #1a1a1a, letter-spacing 0.32px; Resume/About/Tools hover: 50% opacity
-Footer:               Switzer, 16px, weight 500, color rgba(26,26,26,0.5)
+Nav:                  Playfair Display, 18px, weight 500, color #1a1a1a, letter-spacing 0.32px; Resume/About/Tools hover: 50% opacity
+Footer:               Geist, 16px, weight 500, color rgba(26,26,26,0.5)
 ```
 
 **Rules:**
@@ -77,17 +76,17 @@ Footer:               Switzer, 16px, weight 500, color rgba(26,26,26,0.5)
 **Philosophy:** When in doubt, add space. Padding should feel slightly more generous than necessary. The grid breathes.
 
 ```
-Page horizontal pad:   72px on each side — no max-width cap, content fills the viewport width
-Navbar padding:        20px 72px
-Hero padding:          64px vertical, 72px horizontal; column-gap 16px; grid 2fr / 1fr
-Project section pad:   72px horizontal, 80px bottom; 60px gap between projects; 24px gap between images
-Footer padding:        32px vertical, 72px horizontal
+Page horizontal pad:   24px on each side — no max-width cap, content fills the viewport width
+Navbar padding:        16px 24px; height fit-content
+Hero padding:          64px vertical, 24px horizontal; column-gap 16px; grid 2fr / 1fr
+Project section pad:   24px horizontal, 80px bottom; 2-column masonry via CSS columns at lg (1024px+), 24px column-gap, 48px row-gap between cards
+Footer padding:        32px vertical, 24px horizontal
 Section gap:           5rem–7rem vertical
 ```
 
 **Border color:** `rgba(26,26,26,0.1)` for footer and nav borders (not `#E5E5E5`).
 
-**Breakpoint:** 1350px. Below it: project image strip collapses to single column. Graceful mobile layout.
+**Breakpoint:** Tablet and below (<1024px): projects stack in a single column. From 1024px (lg): 2-column masonry.
 
 **Rules:** Never crowd cards — reduce columns before reducing padding. Negative space is a design element; the hero's empty right column is intentional.
 
@@ -102,7 +101,7 @@ Default duration:     400ms
 Default ease:         cubic-bezier(0.4, 0, 0.2, 1)   /* Material "standard" — smooth deceleration */
 Hover transitions:    300ms cubic-bezier(0.4, 0, 0.2, 1)
 Drawer slide-in:      Spring (stiffness 260, damping 28, mass 0.9)
-Drawer width:         380px; background: #f9f9fb
+Drawer width:         360px; background: #f9f9fb
 Profile card fade:    350ms ease, slight translateY(8px) → translateY(0)
 ```
 
@@ -111,20 +110,20 @@ Profile card fade:    350ms ease, slight translateY(8px) → translateY(0)
 - Every animation must have a functional reason. "It looks cool" is not a reason.
 - No entrance animations on page load. Content appears immediately — animation is reserved for interaction responses.
 - Hover states on cards: subtle shadow lift + scale(1.015). Never scale more than 1.02.
-- The Ask Martta drawer slides in from the right as a **push sidebar** — the main content column shrinks to make room. It does not overlay content. Width animates 0→380px.
+- The Ask Martta drawer slides in from the right as a **push sidebar** — the main content column shrinks to make room. It does not overlay content. Width animates 0→360px.
 
 ---
 
 ## 7. Component Voice
 
-**Project Cards (thumbnail-first layout):** Full-width vertical blocks; image strip then title + description.
+**Project Cards (masonry layout):** Two-column masonry from lg (1024px); each card is a single cover image + two-row text block.
 
 ```
-Image strip:           3 cols, height 339px, gap 24px, border 1px solid rgba(204,209,218,0.2); <1350px → single column
-Margin below images:    24px
-Project name:           Crimson Pro, 20px, weight 500, #1A1A1A
-Description:            Switzer, 16px, weight 400, rgba(26,26,26,0.5); 0px gap from title
-Stack gap:              60px between projects; no hairline borders
+Layout:                CSS columns: 2 at lg+, column-gap 24px; break-inside avoid; <1024px → columns: 1 (vertical stack)
+Card gap:              48px vertical between cards (margin-bottom)
+Image:                 width 100%, aspect-ratio from data (varies per card), object-fit cover, border 1px solid rgba(204,209,218,0.2)
+Metadata row:          Geist, 14px, weight 500, rgba(26,26,26,0.5); items separated by ·  dot dividers (4px circle, same color); 16px above
+Headline:              Playfair Display, 20px, weight 400, line-height 130%, #1A1A1A; 4px below metadata
 ```
 
 **Tools Cards:** Slightly more playful than project cards (vibe coding), still within grid discipline.
@@ -134,23 +133,23 @@ Stack gap:              60px between projects; no hairline borders
 **Ask Martta Drawer:** Push sidebar; all specs below.
 
 ```
-Container:              width 380px, background #F9F9FB
-Header:                 flex, 380×76px, padding 20px 24px, "Martta Cloned", border-bottom rgba(26,26,26,0.1)
+Container:              width 360px, background #F9F9FB
+Header:                 flex, 360×76px, padding 16px 24px, "Martta Cloned", border-bottom rgba(26,26,26,0.1)
 Prompts:                text links + corner-down-left-line.svg, 6px gap, 6px vertical padding; color #717171, hover/focus #003966 + rgba(236,243,248,0.5) 16px row
 User bubble:            max-width 270px, padding 12px, border-radius 4px 4px 0 4px, border 1px solid rgba(26,26,26,0.12), #FFF
-Assistant:              no bubble, no max-width; Switzer 15px/400, line-height 160%, #1A1A1A
+Assistant:              no bubble, no max-width; Geist 15px/400, line-height 160%, #1A1A1A
 Message entrance:      opacity 0→1, translateY 8→0, 350ms easeOut
 Send:                   arrow-up-line.svg; muted until input has content, then #1A1A1A
 Input:                  padding 12px, gap 12px, border-radius 4px, #FFF; placeholder "Ask her anything"
-Disclaimer:             Switzer 13px, rgba(26,26,26,0.5), line-height 14px; 12px below input; section bottom 32px
+Disclaimer:             Geist 13px, rgba(26,26,26,0.5), line-height 14px; 12px below input; section bottom 32px
 Messages gap:           32px
 ```
 
 **Navigation:** Sticky, unobtrusive. Logo + links + ASK button.
 
 ```
-Logo:                  许谦益之印_红色.svg 28×28 + "Martta XU"; Crimson Pro 18px, color #1a1a1a
-Pill links:            Resume, About, Tools; padding 8px; Crimson Pro 18px, #1a1a1a; hover 50% opacity
+Logo:                  许谦益之印_红色.svg 28×28 + "Martta XU"; Playfair Display 18px, color #1a1a1a
+Pill links:            Resume, About, Tools; padding 8px; Playfair Display 18px, #1a1a1a; hover 50% opacity
 ASK Martta:            icon only, gemini-line.svg 20×20; default #1a1a1a; hover border-radius 4px, bg #ECF3F8, icon #003966; transition 300ms cubic-bezier(0.4,0,0.2,1); aria-label "Ask Martta"
 ```
 
