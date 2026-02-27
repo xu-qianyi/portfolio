@@ -6,41 +6,27 @@ A different team lead within the company has reviewed the current code/implement
 
 Findings from peer review:
 
-### **⚠️ Issues Found**
-
-- **[MEDIUM]** portfolio/src/app/globals.css:9 - Accent token is still #0072E5, while current design/docs and implemented hover states use #003966. This can cause visual drift when --color-accent is used later.
-
-- Fix: Set --color-accent to #003966.
-
-- **[MEDIUM]** portfolio/src/hooks/useMarttaChat.ts:14-16 - Intro message copy is out of sync with PRD/design intent ("I'm a clone of Martta" vs the approved assistant phrasing).
-
-- Fix: Align INTRO_MESSAGE with the canonical product copy in PRD.
-
-- **[MEDIUM]** portfolio/src/hooks/useMarttaChat.ts:44-46 + portfolio/src/components/AskMarttaDrawer.tsx - Error state is set but never surfaced to users; failures silently degrade UX.
-
-- Fix: Render a small inline error state in the drawer when status === "error" (and optionally allow retry).
-
-- **[LOW]** portfolio/src/components/Navbar.tsx:76-113 - Repeated Resume/About/Tools link blocks duplicate logic and event handlers, reducing DRY/composability.
-
-- Fix: Extract a small reusable nav-pill renderer (array map or tiny component) to centralize hover behavior and styling.
-
 ### **✅ Looks Good**
 
-- No console.log, TODO, @ts-ignore, or any usage found in reviewed app files.
+- Shell now renders only AnimalGardenFooter and no longer references old Footer.
 
-- React effects in AskMarttaDrawer include cleanup and reasonable dependency arrays.
+- Footer text now uses the correct Playfair variable: --font-playfair-display.
 
-- External link security is handled correctly (rel="noopener noreferrer").
+- No console.log, any, @ts-ignore, or TODO/FIXME markers in AnimalGardenFooter.
 
-- No linter errors reported in reviewed source paths.
+- Core interaction logic (RAF chase, hover wobble, click cycles) is structured and readable.
 
----
+### **⚠️ Issues Found**
 
-### **📊 Summary**
+- **[HIGH]** portfolio/src/components/AnimalGardenFooter.tsx - Wand cursor image is rendered globally and follows mouse even outside footer, which conflicts with “footer-only cursor replacement”.
 
-- Files reviewed: **5** (Navbar.tsx, AskMarttaDrawer.tsx, useMarttaChat.ts, globals.css, plus repo-wide pattern scan)
+- Fix: Render wand image only when pointer is inside garden/footer bounds (or hide via conditional state); keep cursor:none scoped to footer area.
 
-- Critical issues: **0**
+- **[MEDIUM]** portfolio/src/components/AnimalGardenFooter.tsx - setTimeout calls for bunny reset and wobble are not cleaned up on unmount, risking stale state updates.
 
-- Warnings: **4** (3 medium, 1 low)
+- Fix: store timeout IDs in refs and clear them in useEffect cleanup.
+
+- **[LOW]** portfolio/src/components/AnimalGardenFooter.tsx - fontSize hardcoded to 16 for all breakpoints; this diverges from prior responsive text behavior and may compress mobile layout.
+
+- Fix:  use responsive sizing (e.g. mobile 13, tablet/desktop 14).
 

@@ -5,6 +5,15 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 ---
 
+## [2026-02-27 · Session G] — Fufu sleep behavior + asset wiring
+
+### Changed
+
+- **Cat A (Fufu) sleep trigger** — instead of requiring the wand to leave the garden, Fufu now switches to a sleep GIF whenever she reaches the cat bed area, defined as a small zone around the bed rather than a single pixel-perfect point.
+- **Sleep GIF asset path** — wired `catA_sleep1(r).gif` through `/public/footer` so the "sleep on bed" animation loads correctly in the footer garden.
+
+---
+
 ## [2026-02-27 · Session F] — Animal Garden footer
 
 ### Added

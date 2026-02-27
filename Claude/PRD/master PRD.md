@@ -46,7 +46,7 @@ _Author: Martta Xu_
   - Line 2 mobile: `Come to play with my cat - Fufu on desktop`
 - Below the text (tablet/desktop only), an interactive pixel garden:
   - Wand cursor (`CatToy.gif`) replaces the system cursor **inside the footer only**, chasing interactions
-  - Cat A (Fufu) chases the wand using directional walk GIFs; Cat B cycles sleep/scratch states on click
+  - Cat A (Fufu) chases the wand using directional walk GIFs and, when she reaches the cat bed area (a small zone around the bed, not pixel-perfect), she switches to a sleep GIF; Cat B cycles sleep/scratch states on click
   - Bunny jumps on click, then settles back to sitting; flowers wobble gently on hover
   - Garden hidden on mobile (<640px); only the text lines show
 

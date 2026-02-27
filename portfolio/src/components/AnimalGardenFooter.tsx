@@ -15,6 +15,7 @@ const ASSETS = {
   catA_walkLD: "/footer/walk_left_d.gif",
   catA_walkRU: "/footer/walk_right_up.gif",
   catA_walkLU: "/footer/walk_left_up.gif",
+  catA_sleep1: "/footer/catA_sleep1(r).gif",
   // Cat B — click to cycle
   catB_0: "/footer/sleep3(r).gif",
   catB_1: "/footer/sleep4(l).gif",
@@ -86,21 +87,24 @@ const CAT_B_KEYS: AssetKey[] = ["catB_0", "catB_1", "catB_2", "catB_3"];
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function AnimalGardenFooter() {
-  const gardenRef = useRef<HTMLDivElement>(null);
-  const rafRef    = useRef<number>(0);
-  const wandPos   = useRef({ x: -999, y: -999 });
-  const posRef    = useRef({ x: 30, y: 30 });
-  const catBRef   = useRef(0);
+  const gardenRef     = useRef<HTMLDivElement>(null);
+  const rafRef        = useRef<number>(0);
+  const wandPos       = useRef({ x: -999, y: -999 });
+  const posRef        = useRef({ x: 30, y: 30 });
+  const catBRef       = useRef(0);
+  const bunnyTimer    = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const wobbleTimers  = useRef<Map<number, ReturnType<typeof setTimeout>>>(new Map());
 
-  const [cursor,     setCursor]     = useState({ x: -999, y: -999 });
-  const [wobbling,   setWobbling]   = useState<Record<number, boolean>>({});
-  const [catAPos,    setCatAPos]    = useState({ x: 30, y: 30 });
-  const [catAState,  setCatAState]  = useState<"walk" | "arrive">("arrive");
-  const [catAFlip,   setCatAFlip]   = useState(false);
-  const [catADir,    setCatADir]    = useState({ dx: 1, dy: 0 });
-  const [catBIdx,    setCatBIdx]    = useState(0);
-  const [bunnyState, setBunnyState] = useState<"idle" | "sleep" | "react">("idle");
-  const [vw,         setVw]         = useState(
+  const [cursor,      setCursor]     = useState({ x: -999, y: -999 });
+  const [isOverFooter,setIsOverFooter] = useState(false);
+  const [wobbling,    setWobbling]   = useState<Record<number, boolean>>({});
+  const [catAPos,     setCatAPos]    = useState({ x: 30, y: 30 });
+  const [catAState,   setCatAState]  = useState<"walk" | "arrive">("arrive");
+  const [catAFlip,    setCatAFlip]   = useState(false);
+  const [catADir,     setCatADir]    = useState({ dx: 1, dy: 0 });
+  const [catBIdx,     setCatBIdx]    = useState(0);
+  const [bunnyState,  setBunnyState] = useState<"idle" | "sleep" | "react">("idle");
+  const [vw,          setVw]         = useState(
     typeof window !== "undefined" ? window.innerWidth : 1200
   );
 
@@ -113,6 +117,14 @@ export default function AnimalGardenFooter() {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  // ── Cleanup all timers on unmount ───────────────────────────────────────────
+  useEffect(() => {
+    return () => {
+      if (bunnyTimer.current) clearTimeout(bunnyTimer.current);
+      wobbleTimers.current.forEach(id => clearTimeout(id));
+    };
+  }, []);
+
   // Responsive sizes
   const gardenH  = isTablet ? 190  : 220;
   const catSize  = isTablet ? 48   : 52;
@@ -123,7 +135,7 @@ export default function AnimalGardenFooter() {
   const rB       = isTablet ? 72   : ROW_B;
   const rC       = isTablet ? 24   : ROW_C;
   const padding  = isMobile ? "12px 16px" : "16px 24px";
-  const fontSize = isMobile ? 11 : 12;
+  const fontSize = 16;
 
   // ── Walk GIF resolver ───────────────────────────────────────────────────────
   const getWalkSrc = useCallback((dx: number, dy: number): string => {
@@ -157,9 +169,13 @@ export default function AnimalGardenFooter() {
       const dy = ty - y;
       const dist = Math.sqrt(dx * dx + dy * dy);
 
-      if (dist < 2) { setCatAState("arrive"); return; }
+      // Too close — settle into arrive/idle state
+      if (dist < 3) { setCatAState("arrive"); return; }
 
-      const speed = 0.4;
+      // Distance‑adaptive speed: farther targets → faster, close‑in → slower
+      const baseSpeed = 0.35;
+      const extra     = Math.min(dist * 0.015, 0.45); // softer ramp + lower max
+      const speed     = baseSpeed + extra;
       const next = {
         x: Math.max(1,  Math.min(92, x + (dx / dist) * speed)),
         y: Math.max(5,  Math.min(210, y + (dy / dist) * speed)),
@@ -201,58 +217,80 @@ export default function AnimalGardenFooter() {
 
   const handleBunnyClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
+    if (bunnyTimer.current) clearTimeout(bunnyTimer.current);
     setBunnyState("react");
-    setTimeout(() => setBunnyState("idle"), 2500);
+    bunnyTimer.current = setTimeout(() => setBunnyState("idle"), 2500);
   }, []);
 
   const wobblePlant = (idx: number) => {
+    const existing = wobbleTimers.current.get(idx);
+    if (existing) clearTimeout(existing);
     setWobbling(w => ({ ...w, [idx]: true }));
-    setTimeout(() => setWobbling(w => ({ ...w, [idx]: false })), 700);
+    const id = setTimeout(() => {
+      setWobbling(w => ({ ...w, [idx]: false }));
+      wobbleTimers.current.delete(idx);
+    }, 700);
+    wobbleTimers.current.set(idx, id);
   };
 
-  const catAImgSrc = catAState === "walk"
-    ? getWalkSrc(catADir.dx, catADir.dy)
-    : ASSETS.catA_arrive;
+  // Cat bed position (Row C, second slot)
+  const catBedPos = { x: rowC_x[1], y: rC };
+
+  // 视为“在床上”的范围（可以按感觉微调 4 和 10）
+  const isXNearBed = Math.abs(catAPos.x - catBedPos.x) < 4;
+  const isYNearBed = Math.abs(catAPos.y - catBedPos.y) < 10;
+  const isNearBed  = isXNearBed && isYNearBed;
+
+  const catAImgSrc =
+    isNearBed
+      ? ASSETS.catA_sleep1
+      : catAState === "walk"
+        ? getWalkSrc(catADir.dx, catADir.dy)
+        : ASSETS.catA_arrive;
 
   const catBImgSrc = ASSETS[CAT_B_KEYS[catBIdx]];
 
   // ─── Render ───────────────────────────────────────────────────────────────
   return (
     <>
-      {/* Global wand cursor */}
-      <img
-        src={ASSETS.wand}
-        draggable={false}
-        aria-hidden
-        style={{
-          position: "fixed",
-          left: cursor.x,
-          top: cursor.y,
-          width: 32,
-          height: 32,
-          imageRendering: "pixelated",
-          pointerEvents: "none",
-          transform: "translate(-4px, -4px)",
-          zIndex: 9999,
-        }}
-      />
+      {/* Wand cursor — only visible while hovering over footer */}
+      {isOverFooter && (
+        <img
+          src={ASSETS.wand}
+          draggable={false}
+          aria-hidden
+          style={{
+            position: "fixed",
+            left: cursor.x,
+            top: cursor.y,
+            width: 32,
+            height: 32,
+            imageRendering: "pixelated",
+            pointerEvents: "none",
+            transform: "translate(-4px, -4px)",
+            zIndex: 9999,
+          }}
+        />
+      )}
 
       <footer
+        onMouseEnter={() => setIsOverFooter(true)}
+        onMouseLeave={() => setIsOverFooter(false)}
         style={{
           background: "#ffffff",
           borderTop: "1px solid rgba(26,26,26,0.08)",
-          fontFamily: "var(--font-playfair), 'Playfair Display', Georgia, serif",
-          cursor: "none",
+          fontFamily: "var(--font-playfair-display), 'Playfair Display', Georgia, serif",
+          cursor: isOverFooter ? "none" : "auto",
         }}
       >
         {/* Text row */}
         <div style={{ padding }}>
           <p
             style={{
-              fontFamily: "var(--font-playfair), 'Playfair Display', Georgia, serif",
+              fontFamily: "var(--font-playfair-display), 'Playfair Display', Georgia, serif",
               fontStyle: "italic",
               fontSize,
-              color: "#1a1a1a",
+              color: "rgba(26,26,26,0.5)",
               margin: 0,
             }}
           >
@@ -260,10 +298,10 @@ export default function AnimalGardenFooter() {
           </p>
           <p
             style={{
-              fontFamily: "var(--font-playfair), 'Playfair Display', Georgia, serif",
+              fontFamily: "var(--font-playfair-display), 'Playfair Display', Georgia, serif",
               fontStyle: "italic",
               fontSize,
-              color: "#1a1a1a",
+              color: "rgba(26,26,26,0.5)",
               margin: "4px 0 0 0",
             }}
           >
@@ -280,134 +318,138 @@ export default function AnimalGardenFooter() {
 
         {/* Garden — hidden on mobile */}
         {!isMobile && (
-          <div
-            ref={gardenRef}
-            style={{ position: "relative", width: "100%", height: gardenH, overflow: "hidden" }}
-          >
-            {/* Flowers */}
-            {FLOWERS.map((item, idx) => (
+          <>
+            <div
+              ref={gardenRef}
+              style={{ position: "relative", width: "100%", height: gardenH, overflow: "visible" }}
+            >
+              {/* Flowers */}
+              {FLOWERS.map((item, idx) => (
+                <div
+                  key={"f" + idx}
+                  onMouseEnter={() => wobblePlant(idx)}
+                  style={{
+                    position: "absolute",
+                    left: `${item.x}%`,
+                    bottom: `${item.y === ROW_A ? rA : rB}px`,
+                    transformOrigin: "bottom center",
+                    transform: wobbling[idx] ? "rotate(8deg)" : "rotate(0deg)",
+                    transition: "transform 0.15s ease",
+                    zIndex: item.y === ROW_A ? 3 : 4,
+                    cursor: "none",
+                  }}
+                >
+                  <img
+                    src={ASSETS[item.key]}
+                    draggable={false}
+                    alt=""
+                    style={{
+                      width: item.key === "plant_arnica" ? arnicaSz : flowerSz,
+                      height: item.key === "plant_arnica" ? arnicaSz : flowerSz,
+                      imageRendering: "pixelated",
+                      display: "block",
+                    }}
+                  />
+                </div>
+              ))}
+
+              {/* Extra plant (after bunny) */}
+              <div style={{
+                position: "absolute",
+                left: `${EXTRA_PLANT.x}%`,
+                bottom: `${rC}px`,
+                zIndex: 4,
+              }}>
+                <img
+                  src={ASSETS[EXTRA_PLANT.key]}
+                  draggable={false}
+                  alt=""
+                  style={{ width: flowerSz, height: flowerSz, imageRendering: "pixelated", display: "block" }}
+                />
+              </div>
+
+              {/* Props & static animals */}
+              {PROPS.map((item, idx) => (
+                <div
+                  key={"p" + idx}
+                  style={{ position: "absolute", left: `${item.x}%`, bottom: `${rC}px`, zIndex: 6 }}
+                >
+                  <img
+                    src={ASSETS[item.key]}
+                    draggable={false}
+                    alt=""
+                    style={{
+                      width: item.key === "catbed" ? (isTablet ? 44 : 52) : item.size,
+                      height: item.key === "catbed" ? (isTablet ? 44 : 52) : item.size,
+                      imageRendering: "pixelated",
+                      display: "block",
+                    }}
+                  />
+                </div>
+              ))}
+
+              {/* Cat A — Fufu, chases wand */}
+              <div style={{
+                position: "absolute",
+                left: `${catAPos.x}%`,
+                bottom: `${catAPos.y}px`,
+                zIndex: 8,
+              }}>
+                <img
+                  src={catAImgSrc}
+                  draggable={false}
+                  alt="Fufu"
+                  style={{
+                    width: catSize,
+                    height: catSize,
+                    imageRendering: "pixelated",
+                    display: "block",
+                    transform: (catAState === "arrive" && catAFlip) ? "scaleX(-1)" : "none",
+                  }}
+                />
+              </div>
+
+              {/* Cat B — click to cycle states */}
               <div
-                key={"f" + idx}
-                onMouseEnter={() => wobblePlant(idx)}
+                onClick={handleCatBClick}
                 style={{
                   position: "absolute",
-                  left: `${item.x}%`,
-                  bottom: `${item.y === ROW_A ? rA : rB}px`,
-                  transformOrigin: "bottom center",
-                  transform: wobbling[idx] ? "rotate(8deg)" : "rotate(0deg)",
-                  transition: "transform 0.15s ease",
-                  zIndex: item.y === ROW_A ? 3 : 4,
+                  left: `${CATB_POS.x}%`,
+                  bottom: `${rC}px`,
+                  zIndex: 7,
                   cursor: "none",
                 }}
               >
                 <img
-                  src={ASSETS[item.key]}
+                  src={catBImgSrc}
                   draggable={false}
                   alt=""
-                  style={{
-                    width: item.key === "plant_arnica" ? arnicaSz : flowerSz,
-                    height: item.key === "plant_arnica" ? arnicaSz : flowerSz,
-                    imageRendering: "pixelated",
-                    display: "block",
-                  }}
+                  style={{ width: catSize, height: catSize, imageRendering: "pixelated", display: "block" }}
                 />
               </div>
-            ))}
 
-            {/* Extra plant (after bunny) */}
-            <div style={{
-              position: "absolute",
-              left: `${EXTRA_PLANT.x}%`,
-              bottom: `${rC}px`,
-              zIndex: 4,
-            }}>
-              <img
-                src={ASSETS[EXTRA_PLANT.key]}
-                draggable={false}
-                alt=""
-                style={{ width: flowerSz, height: flowerSz, imageRendering: "pixelated", display: "block" }}
-              />
-            </div>
-
-            {/* Props & static animals */}
-            {PROPS.map((item, idx) => (
+              {/* Bunny */}
               <div
-                key={"p" + idx}
-                style={{ position: "absolute", left: `${item.x}%`, bottom: `${rC}px`, zIndex: 6 }}
+                onClick={handleBunnyClick}
+                style={{
+                  position: "absolute",
+                  left: `${BUNNY_POS.x}%`,
+                  bottom: `${rC}px`,
+                  zIndex: 7,
+                  cursor: "none",
+                }}
               >
                 <img
-                  src={ASSETS[item.key]}
+                  src={ASSETS[`bunny_${bunnyState}` as AssetKey]}
                   draggable={false}
                   alt=""
-                  style={{
-                    width: item.key === "catbed" ? (isTablet ? 44 : 52) : item.size,
-                    height: item.key === "catbed" ? (isTablet ? 44 : 52) : item.size,
-                    imageRendering: "pixelated",
-                    display: "block",
-                  }}
+                  style={{ width: bnySize, height: bnySize, imageRendering: "pixelated", display: "block" }}
                 />
               </div>
-            ))}
-
-            {/* Cat A — Fufu, chases wand */}
-            <div style={{
-              position: "absolute",
-              left: `${catAPos.x}%`,
-              bottom: `${catAPos.y}px`,
-              zIndex: 8,
-            }}>
-              <img
-                src={catAImgSrc}
-                draggable={false}
-                alt="Fufu"
-                style={{
-                  width: catSize,
-                  height: catSize,
-                  imageRendering: "pixelated",
-                  display: "block",
-                  transform: catAFlip ? "scaleX(-1)" : "none",
-                }}
-              />
             </div>
-
-            {/* Cat B — click to cycle states */}
-            <div
-              onClick={handleCatBClick}
-              style={{
-                position: "absolute",
-                left: `${CATB_POS.x}%`,
-                bottom: `${rC}px`,
-                zIndex: 7,
-                cursor: "none",
-              }}
-            >
-              <img
-                src={catBImgSrc}
-                draggable={false}
-                alt=""
-                style={{ width: catSize, height: catSize, imageRendering: "pixelated", display: "block" }}
-              />
-            </div>
-
-            {/* Bunny */}
-            <div
-              onClick={handleBunnyClick}
-              style={{
-                position: "absolute",
-                left: `${BUNNY_POS.x}%`,
-                bottom: `${rC}px`,
-                zIndex: 7,
-                cursor: "none",
-              }}
-            >
-              <img
-                src={ASSETS[`bunny_${bunnyState}` as AssetKey]}
-                draggable={false}
-                alt=""
-                style={{ width: bnySize, height: bnySize, imageRendering: "pixelated", display: "block" }}
-              />
-            </div>
-          </div>
+            {/* Breathing room below the garden frame */}
+            <div style={{ height: 16 }} />
+          </>
         )}
       </footer>
     </>
