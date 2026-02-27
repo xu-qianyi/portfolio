@@ -62,8 +62,11 @@ export default function AskMarttaDrawer({
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#f9f9fb",
-        borderLeft: "1px solid rgba(26,26,26,0.1)",
+        backgroundColor: "rgba(249,249,251,0.72)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+        isolation: "isolate",
+        borderLeft: "1px solid rgba(255,255,255,0.5)",
       }}
     >
             {/* Header */}
@@ -75,7 +78,7 @@ export default function AskMarttaDrawer({
                 alignItems: "center",
                 justifyContent: "space-between",
                 padding: "16px 24px",
-                borderBottom: "1px solid rgba(26,26,26,0.1)",
+                borderBottom: "1px solid rgba(26,26,26,0.08)",
                 flexShrink: 0,
               }}
             >
@@ -162,7 +165,9 @@ export default function AskMarttaDrawer({
                         padding: "12px",
                         borderRadius: "4px 4px 0 4px",
                         border: "1px solid rgba(26, 26, 26, 0.12)",
-                        background: "#FFF",
+                        background: "rgba(255,255,255,0.65)",
+                        backdropFilter: "blur(6px)",
+                        WebkitBackdropFilter: "blur(6px)",
                         fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
                         fontSize: "15px",
                         fontStyle: "normal",
@@ -267,7 +272,9 @@ export default function AskMarttaDrawer({
                   gap: "12px",
                   alignSelf: "stretch",
                   borderRadius: "4px",
-                  background: "#FFF",
+                  background: "rgba(255,255,255,0.65)",
+                  backdropFilter: "blur(6px)",
+                  WebkitBackdropFilter: "blur(6px)",
                 }}
               >
                 <input

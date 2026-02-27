@@ -5,6 +5,19 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 ---
 
+## [2026-02-27 · Session F] — Animal Garden footer
+
+### Added
+
+- **Animal Garden footer** — replaced simple text/LinkedIn footer with an animated pixel garden featuring Fufu (Cat A), Cat B, a bunny, chicks, and flowers. Garden appears on tablet/desktop only; mobile keeps text-only footer.
+
+### Changed
+
+- **Footer copy** — updated to Playfair Display lines: `© 2026 brewed by Martta + Cursor + Claude Code` and `Fufu wants to play with you 🥺` (desktop/tablet) or `Come to play with my cat - Fufu on desktop` (mobile).
+- **Cat A size** — increased to 52×52px on desktop and 48×48px on tablet for clearer presence, while keeping other garden asset sizes as originally specced.
+
+---
+
 ## [2026-02-20] — Navigation, accent, drawer header + PRD sync
 
 ### Changed

@@ -49,8 +49,8 @@ These are hard constraints. If a decision pushes toward any of these, it's the w
 
 ## 4. Typography
 
-**Playfair Display** — Hero headline, navigation. Serif weight for editorial presence.
-**Geist** — UI, body, card metadata, footer, drawer. Anything the user reads as interface or content.
+**Playfair Display** — Hero headline, navigation, Animal Garden footer text. Serif weight for editorial presence.
+**Geist** — UI, body, card metadata, drawer. Anything the user reads as interface or content.
 
 ```
 Hero text:            Playfair Display, 48px, weight 500, line-height 52px, letter-spacing 0.96px, color #1A1A1A
@@ -60,7 +60,7 @@ Section heading:      Geist, 1.25rem, weight 500, line-height 1.3
 Body / narrative:     Geist, 1rem, weight 400, line-height 1.7
 Caption / meta:       Geist, 0.875rem, weight 400, color --color-muted
 Nav:                  Playfair Display, 18px, weight 500, color #1a1a1a, letter-spacing 0.32px; Resume/About/Tools hover: 50% opacity
-Footer:               Geist, 16px, weight 500, color rgba(26,26,26,0.5)
+Footer (Animal Garden): Playfair Display, 12px, italic, color #1A1A1A (mobile slightly smaller)
 ```
 
 **Rules:**
@@ -80,11 +80,11 @@ Page horizontal pad:   24px on each side — no max-width cap, content fills the
 Navbar padding:        16px 24px; height fit-content
 Hero padding:          64px vertical, 24px horizontal; column-gap 16px; grid 2fr / 1fr
 Project section pad:   24px horizontal, 80px bottom; 2-column masonry via CSS columns at lg (1024px+), 24px column-gap, 48px row-gap between cards
-Footer padding:        32px vertical, 24px horizontal
+Footer padding:        16px vertical, 24px horizontal (desktop/tablet); 12px vertical, 16px horizontal (mobile)
 Section gap:           5rem–7rem vertical
 ```
 
-**Border color:** `rgba(26,26,26,0.1)` for footer and nav borders (not `#E5E5E5`).
+**Border color:** `rgba(26,26,26,0.08)` for footer (and any remaining dividers), not `#E5E5E5`.
 
 **Breakpoint:** Tablet and below (<1024px): projects stack in a single column. From 1024px (lg): 2-column masonry.
 
@@ -101,7 +101,7 @@ Default duration:     400ms
 Default ease:         cubic-bezier(0.4, 0, 0.2, 1)   /* Material "standard" — smooth deceleration */
 Hover transitions:    300ms cubic-bezier(0.4, 0, 0.2, 1)
 Drawer slide-in:      Spring (stiffness 260, damping 28, mass 0.9)
-Drawer width:         360px; background: #f9f9fb
+Drawer width:         360px; glass: rgba(249,249,251,0.72), backdrop-filter blur(12px), border-left rgba(255,255,255,0.5)
 Profile card fade:    350ms ease, slight translateY(8px) → translateY(0)
 ```
 
@@ -133,14 +133,14 @@ Headline:              Playfair Display, 20px, weight 400, line-height 130%, #1A
 **Ask Martta Drawer:** Push sidebar; all specs below.
 
 ```
-Container:              width 360px, background #F9F9FB
-Header:                 flex, 360×76px, padding 16px 24px, "Martta Cloned", border-bottom rgba(26,26,26,0.1)
+Container:              width 360px; glass: rgba(249,249,251,0.72), backdrop-filter blur(12px), -webkit-backdrop-filter, isolation isolate, border-left 1px solid rgba(255,255,255,0.5)
+Header:                 flex, 360×76px, padding 16px 24px, "Martta Cloned", border-bottom rgba(26,26,26,0.08)
 Prompts:                text links + corner-down-left-line.svg, 6px gap, 6px vertical padding; color #717171, hover/focus #003966 + rgba(236,243,248,0.5) 16px row
-User bubble:            max-width 270px, padding 12px, border-radius 4px 4px 0 4px, border 1px solid rgba(26,26,26,0.12), #FFF
+User bubble:            max-width 270px, padding 12px, border-radius 4px 4px 0 4px, border 1px solid rgba(26,26,26,0.12), rgba(255,255,255,0.65), backdrop-filter blur(6px)
 Assistant:              no bubble, no max-width; Geist 15px/400, line-height 160%, #1A1A1A
 Message entrance:      opacity 0→1, translateY 8→0, 350ms easeOut
 Send:                   arrow-up-line.svg; muted until input has content, then #1A1A1A
-Input:                  padding 12px, gap 12px, border-radius 4px, #FFF; placeholder "Ask her anything"
+Input:                  padding 12px, gap 12px, border-radius 4px, rgba(255,255,255,0.65), backdrop-filter blur(6px); placeholder "Ask her anything"
 Disclaimer:             Geist 13px, rgba(26,26,26,0.5), line-height 14px; 12px below input; section bottom 32px
 Messages gap:           32px
 ```

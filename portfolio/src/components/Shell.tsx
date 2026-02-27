@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "./Navbar";
-import Footer from "./Footer";
+import AnimalGardenFooter from "./AnimalGardenFooter";
 import AskMarttaDrawer from "./AskMarttaDrawer";
 
 export default function Shell({ children }: { children: React.ReactNode }) {
@@ -20,7 +20,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
       >
         <Navbar onAskMartta={() => setDrawerOpen(true)} />
         <main style={{ flex: 1 }}>{children}</main>
-        <Footer />
+        <AnimalGardenFooter />
       </div>
 
       {/* Push sidebar — animates width, content stays behind */}

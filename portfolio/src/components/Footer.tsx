@@ -1,6 +1,6 @@
 const FOOT_TEXT: React.CSSProperties = {
   fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-  fontSize: "16px",
+  fontSize: "12px",
   fontWeight: 500,
   color: "rgba(26,26,26,0.5)",
   margin: 0,
@@ -20,7 +20,7 @@ export default function Footer() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: "32px 24px",
+          padding: "16px 24px",
         }}
       >
         <p style={FOOT_TEXT}>© 2026 made by Martta + Cursor + Claude Code + Figma MCP </p>

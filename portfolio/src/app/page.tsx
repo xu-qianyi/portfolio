@@ -87,21 +87,53 @@ export default function Home() {
     <>
       {/* Hero */}
       <section
+        className="grid lg:grid-cols-2 gap-y-[80px] gap-x-[16px]"
         style={{
-          display: "inline-grid",
           padding: "64px 24px",
-          rowGap: "80px",
-          columnGap: "16px",
           alignSelf: "stretch",
-          gridTemplateRows: "repeat(1, fit-content(100%))",
-          gridTemplateColumns: "minmax(0, 2fr) minmax(0, 1fr)",
         }}
       >
         <p style={HERO_TEXT}>
-          Martta is a product designer who stands at the intersection of design, business, and engineering.
+          My design practice lives in the making - through .fig files, code, and increasingly, AI. Right now I'm building in wealth management, where access and clarity matter most. Previously: engineering at{" "}
+          <a
+            href="https://www.thoughtworks.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hero-company-link"
+          >
+            Thoughtworks
+          </a>
+          , user research at{" "}
+          <a
+            href="https://looklook.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hero-company-link"
+          >
+            Looklook
+          </a>
+          , strategy at{" "}
+          <a
+            href="https://www.pwc.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hero-company-link"
+          >
+            PwC
+          </a>{" "}
+          and{" "}
+          <a
+            href="https://www.jll.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hero-company-link"
+          >
+            JLL
+          </a>
+          .
         </p>
-        {/* Intentional negative space */}
-        <div aria-hidden="true" />
+        {/* Intentional negative space on large screens only */}
+        <div aria-hidden="true" className="hidden lg:block" />
       </section>
 
       {/* Masonry project grid */}

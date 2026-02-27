@@ -38,10 +38,17 @@ _Author: Martta Xu_
 - Tools → `/tools`
 - ASK Martta → icon only (`gemini-line.svg` 20×20), opens the Ask Martta drawer (primary action, right-aligned); `aria-label="Ask Martta"`.
 
-**Footer**
+**Footer — Animal Garden**
 
-- Left: © 2026 Martta Xu
-- Right: LinkedIn → external, new tab
+- Two-line Playfair Display text:
+  - Line 1: `© 2026 brewed by Martta + Cursor + Claude Code`
+  - Line 2 desktop/tablet: `Fufu wants to play with you 🥺`
+  - Line 2 mobile: `Come to play with my cat - Fufu on desktop`
+- Below the text (tablet/desktop only), an interactive pixel garden:
+  - Wand cursor (`CatToy.gif`) replaces the system cursor **inside the footer only**, chasing interactions
+  - Cat A (Fufu) chases the wand using directional walk GIFs; Cat B cycles sleep/scratch states on click
+  - Bunny jumps on click, then settles back to sitting; flowers wobble gently on hover
+  - Garden hidden on mobile (<640px); only the text lines show
 
 ---
 
@@ -53,11 +60,11 @@ _Author: Martta Xu_
 
 **Hero** — See `design.md` for layout and typography.
 
-The entry point. Two-column layout: headline on the left; right column is intentional negative space.
+The entry point. On large screens, a two-column layout: headline on the left; right column is intentional negative space.
 
 Headline copy:
 
-> "Martta is a builder who stands at the intersection of design, business, and engineering. Lorem ipsum dolor sit amet consectetur adipiscing elit. Consectetur adipiscing elit quisque faucibus ex sapien vitae. Ex sapien vitae pellentesque sem placerat in id. Placerat in id cursus mi pretium tellus duis. Pretium tellus duis convallis tempus leo eu aenean."
+> "My design practice lives in the making - through .fig files, code, and increasingly, AI. Right now I'm building in wealth management, where access and clarity matter most. Previously: engineering at Thoughtworks*, user research at LookLook*, strategy at PwC* and JLL*."
 
 **Project Grid**
 The work. Two-column masonry layout. Each project card: single cover image (varying aspect ratio), a metadata row (company · date · type), and a one-line headline. Cards flow top-to-bottom within each column; the stagger comes from varying image proportions. On mobile (<768px), collapses to a single column. See `design.md §7` for breakpoint and spacing.
@@ -162,7 +169,7 @@ If asked something outside the knowledge base (salary expectations, confidential
 
 It never fabricates, never guesses, and never breaks character.
 
-**Disclaimer (persistent, below the chat input):** See `design.md` for styling. Copy: "AI assistant can make mistakes and hallucinate. For anything important, please verify directly with Martta." Always visible — not a one-time dismissible banner.
+**Disclaimer (persistent, below the chat input):** See `design.md` for styling. Copy: "AI can make mistakes and hallucinate. For anything important, please verify directly with Martta." Always visible — not a one-time dismissible banner.
 
 ---
 
@@ -190,6 +197,8 @@ But don’t worry, every detour is just a chance to connect the dots in a new wa
 ## 5. Content Notes
 
 ⚠️ All project descriptions, essay copy, and testimonials are placeholder. Use Lorem Ipsum freely during the build — do not wait for final copy to unblock UI work.
+
+- Asterisks next to company names in the home hero are a visual detail only; they do not indicate separate footnotes or references.
 
 ---
 

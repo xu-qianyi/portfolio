@@ -51,14 +51,13 @@ export default function Navbar({ onAskMartta }: NavbarProps) {
         top: 0,
         zIndex: 40,
         backgroundColor: "var(--color-surface)",
-        borderBottom: "1px solid rgba(26,26,26,0.1)",
       }}
     >
       <nav
         style={{
           display: "flex",
           height: "fit-content",
-          padding: "16px 24px",
+          padding: "12px 24px",
           justifyContent: "space-between",
           alignItems: "center",
           alignSelf: "stretch",
