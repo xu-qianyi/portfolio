@@ -5,7 +5,7 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 ---
 
-## [2026-03-01 · Session H · 008a02d] — Shell, nav, footer alignment + docs sync
+## [2026-03-01 · Session H · 71168c1] — Shell, nav, footer alignment + docs sync
 
 ### Removed
 
