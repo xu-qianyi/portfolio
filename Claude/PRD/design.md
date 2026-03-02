@@ -1,6 +1,6 @@
 # design.md — Martta Xu Portfolio
 
-*Last updated: February 2026*
+*Last updated: March 2026*
 *Keep this file under 150 lines. When updating, refine — don't just add.*
 
 ---
@@ -35,14 +35,14 @@ These are hard constraints. If a decision pushes toward any of these, it's the w
 --color-surface:   #FFFFFF   /* Page background */
 --color-subtle:    #F5F5F5   /* Card backgrounds, subtle dividers */
 --color-muted:     #999999   /* Captions, meta text, footer */
---color-accent:    #003966   /* Interaction only: highlights, the Ask Martta button */
+--color-accent:    #003966   /* Interaction only: "In Their Eyes" text highlight */
 ```
 
 **Rules:**
 
-- Accent appears on: the "In Their Eyes" text highlight and the ASK Martta button hover state only.
+- Accent appears on the "In Their Eyes" text highlight only.
 - Link hover color is `#1A1A1A` — not accent. Underline on hover is the only affordance for inline links.
-- Accent never appears as: decorative backgrounds, section dividers, illustration color, nav hover states.
+- Accent never appears as: decorative backgrounds, section dividers, illustration color.
 - When in doubt, use `--color-ink` at reduced opacity rather than reaching for a new color.
 
 ---
@@ -50,7 +50,7 @@ These are hard constraints. If a decision pushes toward any of these, it's the w
 ## 4. Typography
 
 **Playfair Display** — Hero headline, navigation, Animal Garden footer text. Serif weight for editorial presence.
-**Geist** — UI, body, card metadata, drawer. Anything the user reads as interface or content.
+**Geist** — UI, body, card metadata. Anything the user reads as interface or content.
 
 ```
 Hero text:            Playfair Display, 48px, weight 500, line-height 52px, letter-spacing 0.96px, color #1A1A1A
@@ -60,7 +60,7 @@ Section heading:      Geist, 1.25rem, weight 500, line-height 1.3
 Body / narrative:     Geist, 1rem, weight 400, line-height 1.7
 Caption / meta:       Geist, 0.875rem, weight 400, color --color-muted
 Nav:                  Playfair Display, 18px, weight 500, color #1a1a1a, letter-spacing 0.32px; Resume/About/Tools hover: 50% opacity
-Footer (Animal Garden): Playfair Display, 12px, italic, color #1A1A1A (mobile slightly smaller)
+Footer (Animal Garden): Playfair Display, italic, color #1A1A1A; first line margin 0; second line margin 0, paddingTop 0
 ```
 
 **Rules:**
@@ -76,13 +76,15 @@ Footer (Animal Garden): Playfair Display, 12px, italic, color #1A1A1A (mobile sl
 **Philosophy:** When in doubt, add space. Padding should feel slightly more generous than necessary. The grid breathes.
 
 ```
-Page horizontal pad:   24px on each side — no max-width cap, content fills the viewport width
-Navbar padding:        16px 24px; height fit-content
-Hero padding:          64px vertical, 24px horizontal; column-gap 16px; grid 2fr / 1fr
-Project section pad:   24px horizontal, 80px bottom; 2-column masonry via CSS columns at lg (1024px+), 24px column-gap, 48px row-gap between cards
-Footer padding:        16px vertical, 24px horizontal (desktop/tablet); 12px vertical, 16px horizontal (mobile)
-Section gap:           5rem–7rem vertical
+Page horizontal pad:   72px on each side — nav, main content, footer aligned; no max-width cap
+Navbar padding:       12px 72px; height fit-content
+Hero padding:         64px vertical, 72px horizontal; column-gap 16px; grid 2fr / 1fr
+Project section pad:  72px horizontal, 80px bottom; 2-column masonry at lg (1024px+), 24px column-gap, 48px row-gap
+Footer padding:       16px 72px (desktop/tablet); 12px 72px (mobile)
+Section gap:          5rem–7rem vertical
 ```
+
+**Footer garden:** First element aligns with footer text; layout uses a horizontal content band (6%–94% of footer width via `gardenX`), no padding wrapper.
 
 **Border color:** `rgba(26,26,26,0.08)` for footer (and any remaining dividers), not `#E5E5E5`.
 
@@ -100,8 +102,6 @@ Section gap:           5rem–7rem vertical
 Default duration:     400ms
 Default ease:         cubic-bezier(0.4, 0, 0.2, 1)   /* Material "standard" — smooth deceleration */
 Hover transitions:    300ms cubic-bezier(0.4, 0, 0.2, 1)
-Drawer slide-in:      Spring (stiffness 260, damping 28, mass 0.9)
-Drawer width:         360px; glass: rgba(249,249,251,0.72), backdrop-filter blur(12px), border-left rgba(255,255,255,0.5)
 Profile card fade:    350ms ease, slight translateY(8px) → translateY(0)
 ```
 
@@ -110,7 +110,6 @@ Profile card fade:    350ms ease, slight translateY(8px) → translateY(0)
 - Every animation must have a functional reason. "It looks cool" is not a reason.
 - No entrance animations on page load. Content appears immediately — animation is reserved for interaction responses.
 - Hover states on cards: subtle shadow lift + scale(1.015). Never scale more than 1.02.
-- The Ask Martta drawer slides in from the right as a **push sidebar** — the main content column shrinks to make room. It does not overlay content. Width animates 0→360px.
 
 ---
 
@@ -130,27 +129,11 @@ Headline:              Playfair Display, 20px, weight 400, line-height 130%, #1A
 
 **"In Their Eyes" Testimonials:** Profile cards appear/disappear quietly — felt discovered, not announced.
 
-**Ask Martta Drawer:** Push sidebar; all specs below.
+**Navigation:** Sticky, unobtrusive. Text logo + pill links only.
 
 ```
-Container:              width 360px; glass: rgba(249,249,251,0.72), backdrop-filter blur(12px), -webkit-backdrop-filter, isolation isolate, border-left 1px solid rgba(255,255,255,0.5)
-Header:                 flex, 360×76px, padding 16px 24px, "Martta Cloned", border-bottom rgba(26,26,26,0.08)
-Prompts:                text links + corner-down-left-line.svg, 6px gap, 6px vertical padding; color #717171, hover/focus #003966 + rgba(236,243,248,0.5) 16px row
-User bubble:            max-width 270px, padding 12px, border-radius 4px 4px 0 4px, border 1px solid rgba(26,26,26,0.12), rgba(255,255,255,0.65), backdrop-filter blur(6px)
-Assistant:              no bubble, no max-width; Geist 15px/400, line-height 160%, #1A1A1A
-Message entrance:      opacity 0→1, translateY 8→0, 350ms easeOut
-Send:                   arrow-up-line.svg; muted until input has content, then #1A1A1A
-Input:                  padding 12px, gap 12px, border-radius 4px, rgba(255,255,255,0.65), backdrop-filter blur(6px); placeholder "Ask her anything"
-Disclaimer:             Geist 13px, rgba(26,26,26,0.5), line-height 14px; 12px below input; section bottom 32px
-Messages gap:           32px
-```
-
-**Navigation:** Sticky, unobtrusive. Logo + links + ASK button.
-
-```
-Logo:                  许谦益之印_红色.svg 28×28 + "Martta XU"; Playfair Display 18px, color #1a1a1a
-Pill links:            Resume, About, Tools; padding 8px; Playfair Display 18px, #1a1a1a; hover 50% opacity
-ASK Martta:            icon only, gemini-line.svg 20×20; default #1a1a1a; hover border-radius 4px, bg #ECF3F8, icon #003966; transition 300ms cubic-bezier(0.4,0,0.2,1); aria-label "Ask Martta"
+Logo:                  "Martta XU" text only; Playfair Display, 14px, weight 500, color #1a1a1a
+Pill links:            Resume, About, Tools; padding 8px; same typography; hover 50% opacity
 ```
 
 **Hero inline links (company names):** Blend with body; underline on hover only. No accent.

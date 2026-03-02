@@ -1,7 +1,7 @@
 # PRD.md — Martta Xu Portfolio (2026)
 
-_Version: 2.1_
-_Last updated: February 2026_
+_Version: 2.2_
+_Last updated: March 2026_
 _Author: Martta Xu_
 
 > For all visual and interaction decisions, refer to `design.md`. No design spec belongs in this file.
@@ -32,19 +32,18 @@ _Author: Martta Xu_
 
 **Navbar (sticky)** — See `design.md §7` for visual and layout spec.
 
-- Logo: `许谦益之印_红色.svg` (28×28) + "Martta XU" text → `/`; nav typography Playfair Display, 18px, color `#1a1a1a`; Resume/About/Tools hover: 50% opacity.
+- Logo: "Martta XU" text only → `/`; Geist 14px, weight 500, color `#1a1a1a`. Resume/About/Tools pill links; hover: 50% opacity.
 - Resume → external PDF (Google Drive, new tab)
 - About → `/about`
 - Tools → `/tools`
-- ASK Martta → icon only (`gemini-line.svg` 20×20), opens the Ask Martta drawer (primary action, right-aligned); `aria-label="Ask Martta"`.
 
 **Footer — Animal Garden**
 
-- Two-line Playfair Display text:
+- Two-line Playfair Display text, black (`#1a1a1a`), italic; second line `paddingTop: 0`:
   - Line 1: `© 2026 brewed by Martta + Cursor + Claude Code`
   - Line 2 desktop/tablet: `Fufu wants to play with you 🥺`
   - Line 2 mobile: `Come to play with my cat - Fufu on desktop`
-- Below the text (tablet/desktop only), an interactive pixel garden:
+- Below the text (tablet/desktop only), an interactive pixel garden. Garden content band aligned with footer text (layout offset, no padding wrapper):
   - Wand cursor (`CatToy.gif`) replaces the system cursor **inside the footer only**, chasing interactions
   - Cat A (Fufu) chases the wand using directional walk GIFs and, when she reaches the cat bed area (a small zone around the bed, not pixel-perfect), she switches to a sleep GIF; Cat B cycles sleep/scratch states on click
   - Bunny jumps on click, then settles back to sitting; flowers wobble gently on hover
@@ -107,81 +106,7 @@ Data sourced from `src/data/tools.json`.
 
 ---
 
-### 4.4 Ask Martta (Global Drawer)
-
-An AI assistant accessible from anywhere via the navbar. The goal is to help recruiters and hiring managers understand Martta more deeply — beyond what a résumé or case study can convey. It speaks in first person, as Martta.
-
-**Reference:** RacheLLM on rachelchen.tech
-
----
-
-**UI & Behavior** — See `design.md` for all visual spec (header, bubbles, typography, input, disclaimer).
-
-- Slides in from the right as a **push sidebar**. Main content column shrinks; sidebar does not overlay.
-- Closeable via × button, clicking outside, or pressing `Escape`.
-- Accessible: focus moves into drawer on open, returns to trigger on close.
-- On first open: intro message + default prompt suggestions. Once a conversation starts, suggestions disappear.
-- Input placeholder: "Ask her anything".
-
-**Intro message (on first open):**
-
-> "Hi! I'm a clone of Martta. How can I help you explore Martta's work today? Here are some questions people like to ask her about."
-
-**Default prompt suggestions:**
-
-1. Tell me about yourself.
-2. What is your favorite thing in the world?
-3. What is your design process?
-
----
-
-**Voice & Tone**
-
-- First person, as Martta. "I believe…", "In my experience…", "At ARK7, I…"
-- Confident but not rehearsed. Thoughtful, not corporate.
-- Matches the writing style in `design.md §8` — short sentences, no buzzwords.
-- Never says "As an AI…" or breaks the persona.
-
----
-
-**Knowledge Base**
-Ask Martta is grounded in a single source-of-truth file: `src/data/martta-knowledge.md`
-
-This file contains everything the AI is allowed to know and say:
-
-| Section         | Content                                            |
-| --------------- | -------------------------------------------------- |
-| Resume          | Work history, roles, companies, dates              |
-| Projects        | Problem, process, outcome for each case study      |
-| Tools           | What was built, why, what tech was used            |
-| Personal story  | Background, career path, motivations               |
-| Design opinions | Her point of view on craft, process, accessibility |
-| FAQs            | Pre-written answers to common recruiter questions  |
-
-This file is the only thing that needs updating when Martta's story evolves. The AI prompt references it as context on every request.
-
----
-
-**Out-of-scope handling**
-If asked something outside the knowledge base (salary expectations, confidential work, personal contact details), Ask Martta deflects gracefully and redirects:
-
-> "That's not something I can speak to here - but feel free to reach out to Martta directly on LinkedIn."
-
-It never fabricates, never guesses, and never breaks character.
-
-**Disclaimer (persistent, below the chat input):** See `design.md` for styling. Copy: "AI can make mistakes and hallucinate. For anything important, please verify directly with Martta." Always visible — not a one-time dismissible banner.
-
----
-
-**Phases**
-
-**Phase 1 (UI shell):** Drawer animation, intro message, default prompt chips, chat bubble layout. No API.
-
-**Phase 4 (Live):** Connect to Claude API via Vercel AI SDK. System prompt references `martta-knowledge.md` as full context. Streaming responses enabled for a natural feel.
-
----
-
-### 4.5 404 Page
+### 4.4 404 Page
 
 A custom not-found page. Should feel intentional, not broken — consistent with the site's visual identity.
 
@@ -190,7 +115,7 @@ But don’t worry, every detour is just a chance to connect the dots in a new wa
 
 **Button icon:** home-8-line.svg
 
-**Button style:** Same as button used to open the home side drawer
+**Button style:** Consistent with site primary actions
 
 ---
 
@@ -223,7 +148,7 @@ Project setup. Global shell (Navbar, Footer). Design tokens and fonts configured
 Static layouts for all three pages. Placeholder images and copy throughout.
 
 **Phase 3 — The Vibe**
-Interactions: "In Their Eyes" hover + profile cards, project and tool card hovers, Ask Martta drawer open/close animation.
+Interactions: "In Their Eyes" hover + profile cards, project and tool card hovers.
 
 **Phase 4 — The Brain**
-Real assets and copy replace placeholders. Ask Martta connected to Claude API via Vercel AI SDK. Integrate Vercel Analytics.
+Real assets and copy replace placeholders. Integrate Vercel Analytics.

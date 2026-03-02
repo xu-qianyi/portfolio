@@ -5,6 +5,21 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 ---
 
+## [2026-03-01 · Session H · 008a02d] — Shell, nav, footer alignment + docs sync
+
+### Removed
+
+- **Ask Martta drawer** — `AskMarttaDrawer` component deleted; AI button and drawer open/close logic removed from `Shell.tsx` and `Navbar.tsx`. Resume, About, Tools remain.
+
+### Changed
+
+- **Horizontal padding** — Nav, main content, and footer use 72px left/right consistently (`Navbar` 12px 72px; home hero and project section 72px; `AnimalGardenFooter` text row 16px 72px / 12px 72px mobile).
+- **Navbar logo** — Logo image removed; "Martta XU" text only, Geist 14px.
+- **Footer text** — Both lines use `#1a1a1a`; second line `margin: 0`, `paddingTop: 0`.
+- **Footer garden alignment** — Garden content band aligned with footer text via layout offset (`gardenX` mapping 6%–94% of width); no padding wrapper. First element aligns with footer text.
+
+---
+
 ## [2026-02-27 · Session G] — Fufu sleep behavior + asset wiring
 
 ### Changed
