@@ -5,7 +5,7 @@
   --color-surface: #FFFFFF;
   --color-subtle:  #F5F5F5;
   --color-muted:   #999999;
-  --color-accent:  #003966;
+  --color-accent:  #EC4523;
 }
 
 @theme inline {
@@ -43,11 +43,11 @@ body {
   right: -0.35em;
   font-size: 0.8em;
   line-height: 1;
-  color: #F76600;
+  color: var(--color-accent);
 }
 
 .hero-company-link:hover {
-  color: #F76600;
+  color: var(--color-accent);
   text-decoration-style: dotted;
-  text-decoration-color: #F76600;
+  text-decoration-color: var(--color-accent);
 }

@@ -35,13 +35,12 @@ These are hard constraints. If a decision pushes toward any of these, it's the w
 --color-surface:   #FFFFFF   /* Page background */
 --color-subtle:    #F5F5F5   /* Card backgrounds, subtle dividers */
 --color-muted:     #999999   /* Captions, meta text, footer */
---color-accent:    #003966   /* Interaction only: "In Their Eyes" text highlight */
+--color-accent:    #EC4523   /* Interaction only: hero company link hover + asterisk */
 ```
 
 **Rules:**
 
-- Accent appears on the "In Their Eyes" text highlight only.
-- Link hover color is `#1A1A1A` — not accent. Underline on hover is the only affordance for inline links.
+- Accent appears on hero company link hover state (text + underline) and the trailing `*` asterisk.
 - Accent never appears as: decorative backgrounds, section dividers, illustration color.
 - When in doubt, use `--color-ink` at reduced opacity rather than reaching for a new color.
 
@@ -54,7 +53,7 @@ These are hard constraints. If a decision pushes toward any of these, it's the w
 
 ```
 Hero text:            Playfair Display, 48px, weight 500, line-height 52px, letter-spacing 0.96px, color #1A1A1A
-Project metadata:     Geist, 14px, weight 500, color rgba(26,26,26,0.5); dot separators between company · date · type
+Project metadata:     Geist, 14px, weight 500, color rgba(26,26,26,0.5); dot separators between company · industry · date · type
 Project headline:     Playfair Display, 20px, weight 400, line-height 130%, color #1A1A1A
 Section heading:      Geist, 1.25rem, weight 500, line-height 1.3
 Body / narrative:     Geist, 1rem, weight 400, line-height 1.7
@@ -121,7 +120,7 @@ Profile card fade:    350ms ease, slight translateY(8px) → translateY(0)
 Layout:                CSS columns: 2 at lg+, column-gap 24px; break-inside avoid; <1024px → columns: 1 (vertical stack)
 Card gap:              48px vertical between cards (margin-bottom)
 Image:                 width 100%, aspect-ratio from data (varies per card), object-fit cover, border 1px solid rgba(204,209,218,0.2)
-Metadata row:          Geist, 14px, weight 500, rgba(26,26,26,0.5); items separated by ·  dot dividers (4px circle, same color); 16px above
+Metadata row:          Geist, 14px, weight 500, rgba(26,26,26,0.5); items separated by · dot dividers (4px circle, same color); 16px above; order: company · industry · date · type
 Headline:              Playfair Display, 20px, weight 400, line-height 130%, #1A1A1A; 4px below metadata
 ```
 
@@ -136,11 +135,13 @@ Logo:                  "Martta XU" text only; Playfair Display, 14px, weight 500
 Pill links:            Resume, About, Tools; padding 8px; same typography; hover 50% opacity
 ```
 
-**Hero inline links (company names):** Blend with body; underline on hover only. No accent.
+**Hero inline links (company names):** Blend with body; hover triggers accent color + dotted underline + trailing `*` asterisk.
 
 ```
 Color:                  #1A1A1A
-Hover:                  underline only
+Hover color:            var(--color-accent)
+Hover underline:        dotted, var(--color-accent)
+Asterisk:               var(--color-accent), always visible
 ```
 
 ---

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import projects from "@/data/projects.json";
+import LottiePreview from "@/components/LottiePreview";
 
 const HERO_TEXT: React.CSSProperties = {
   fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
@@ -53,24 +54,30 @@ function ProjectCard({ project }: { project: (typeof projects)[number] }) {
         style={{
           position: "relative",
           width: "100%",
-          aspectRatio: project.aspectRatio,
+          aspectRatio: `${project.width} / ${project.height}`,
           border: "1px solid rgba(204,209,218,0.2)",
           overflow: "hidden",
           backgroundColor: "#F5F5F5",
         }}
       >
-        <Image
-          src={project.image}
-          alt={project.headline}
-          fill
-          style={{ objectFit: "cover" }}
-          unoptimized
-        />
+        {project.image.endsWith(".json") ? (
+          <LottiePreview src={project.image} />
+        ) : (
+          <Image
+            src={project.image}
+            alt={project.headline}
+            fill
+            style={{ objectFit: "cover" }}
+            unoptimized
+          />
+        )}
       </div>
 
       <div style={{ marginTop: "16px", display: "flex", flexDirection: "column", gap: "4px" }}>
         <p style={PROJECT_META}>
           <span>{project.company}</span>
+          <DotSeparator />
+          <span>{project.industry}</span>
           <DotSeparator />
           <span>{project.date}</span>
           <DotSeparator />
@@ -89,7 +96,7 @@ export default function Home() {
       <section
         className="grid lg:grid-cols-2 gap-y-[80px] gap-x-[16px]"
         style={{
-          padding: "64px 24px",
+          padding: "64px 72px",
           alignSelf: "stretch",
         }}
       >
@@ -137,7 +144,7 @@ export default function Home() {
       </section>
 
       {/* Masonry project grid */}
-      <section className="columns-1 lg:columns-2 gap-x-[24px]" style={{ padding: "0 24px 80px" }}>
+      <section className="columns-1 lg:columns-2 gap-x-[24px]" style={{ padding: "0 72px 80px" }}>
         {projects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}

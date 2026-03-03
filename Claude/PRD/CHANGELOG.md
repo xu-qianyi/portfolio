@@ -5,6 +5,23 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 ---
 
+## [2026-03-03 · Session I] — Project industry field + accent color update
+
+### Added
+
+- **`industry` field** — added to all entries in `projects.json`; rendered in `ProjectCard` meta row after company name (order: company · industry · date · type). Values: `FinTech` (Datalign ×2, ARK7), `User Research` (LookLook/NARS; `type` updated from "User research…" to "Consumer research, concept testing").
+
+### Changed
+
+- **Accent color** — `#003966` → `#EC4523`; `--color-accent` updated in `globals.css`.
+- **Hero company link hover** — hardcoded hex values replaced with `var(--color-accent)` for asterisk and hover text/underline.
+
+### Docs
+
+- **design.md** — accent value, accent rules, project metadata order, hero inline link spec all updated.
+
+---
+
 ## [2026-03-01 · Session H · 71168c1] — Shell, nav, footer alignment + docs sync
 
 ### Removed

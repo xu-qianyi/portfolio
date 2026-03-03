@@ -2,31 +2,50 @@
   {
     "id": "datalign",
     "company": "Datalign",
-    "date": "2024",
-    "type": "Product design, desktop & mobile",
+    "date": "2025",
+    "type": "Desktop & mobile",
     "headline": "Making wealth management approachable for everyone",
-    "image": "https://placehold.co/600x344/F5F5F5/CCCCCC?text=Datalign",
-    "aspectRatio": "16/9",
-    "href": "#"
+    "image": "/images/preview/Datalign.webp",
+    "width": 1280,
+    "height": 900,
+    "href": "#",
+    "industry": "FinTech"
+  },
+
+  {
+    "id": "datalign2",
+    "company": "Datalign",
+    "date": "2025",
+    "type": "Website",
+    "headline": "Renovate the official website of Datalign",
+    "image": "https://placehold.co/1280x900/E3EDF4/999999?text=Website",
+    "width": 1280,
+    "height": 960,
+    "href": "#",
+    "industry": "FinTech"
   },
   {
     "id": "ark7",
     "company": "ARK7",
     "date": "2023",
-    "type": "Product design, mobile",
-    "headline": "Fractional real estate investing, made intuitive",
-    "image": "https://placehold.co/600x450/EFEFEF/CCCCCC?text=ARK7",
-    "aspectRatio": "4/3",
-    "href": "#"
+    "type": "Mobile",
+    "headline": "Building trust in fractional real estate investing",
+    "image": "/images/preview/ARK7.webp",
+    "width": 1280,
+    "height": 720,
+    "href": "#",
+    "industry": "FinTech"
   },
   {
-    "id": "sanofi",
-    "company": "Sanofi",
-    "date": "2022",
-    "type": "Strategy & service design",
-    "headline": "Simplifying global data workflows for a pharma team",
-    "image": "https://placehold.co/600x400/E8E8E8/CCCCCC?text=Sanofi",
-    "aspectRatio": "3/2",
-    "href": "#"
+    "id": "looklook-nars",
+    "company": "LookLook",
+    "date": "2023",
+    "type": "Consumer research, concept testing",
+    "headline": "NARS Longwear Foundation concept testing - US & China insights",
+    "image": "/images/preview/Nars-playful.json",
+    "width": 1280,
+    "height": 960,
+    "href": "#",
+    "industry": "User Research"
   }
 ]
