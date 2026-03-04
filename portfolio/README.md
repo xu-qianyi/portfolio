@@ -1,47 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Martta Xu – Portfolio (Code)
 
-## Getting Started
+> **Important notice:** This repository exists **only to display the implementation of my personal portfolio website.**  
+> I do **not** intend or permit others to clone, fork, or reuse this repository as a starter template or production project.
 
-### Run the dev server
+---
 
-**Recommended:** run from a normal terminal (not inside Cursor’s integrated terminal if you’ve had issues):
+## What this repo is
 
-```bash
-cd portfolio
-npm run dev
-```
+This repo contains the source code for my personal design portfolio at a point in time.  
+It is meant as a behind‑the‑scenes look at how the site is built, not as a generic boilerplate.
 
-- **Faster startup (Turbopack):** `npm run dev:fast`
-- **Stable (Webpack):** `npm run dev` (default)
+- Focus: product/design portfolio
+- Style: minimal, “quiet confidence”, no dark mode, no flashy agency effects
+- Scope: home, about, tools, and an interactive “Animal Garden” footer
 
-Open [http://localhost:3000](http://localhost:3000) or [http://127.0.0.1:3000](http://127.0.0.1:3000) in your browser.
+For visual and interaction decisions, see the internal docs in `Claude/PRD/` (not required to run the site).
 
-### If localhost:3000 won’t open or is slow
+---
 
-1. **Run `npm run dev` in your own terminal** (e.g. Terminal.app or iTerm). Running it from inside Cursor can trigger a Node/OS error (`uv_interface_addresses`) in some setups; using a normal terminal avoids that.
-2. **Port 3000 already in use?** Free it, then start again:
-   ```bash
-   npm run free-port   # kills any process on port 3000
-   npm run dev
-   ```
-   Or manually: `lsof -i :3000`, then `kill <PID>`.
-3. **First load is slow** — Next.js compiles on first request; give it 10–20 seconds then refresh.
+## Tech stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework**: Next.js 15 (App Router)
+- **Runtime**: React 18
+- **Styling**: Tailwind CSS v4
+- **Animation**: Framer Motion, Lottie (for specific previews)
+- **Node version**: **22.x** (see `.nvmrc`)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+You will need Node 22+ if you choose to run this locally.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Running locally (at your own risk)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Again: this is primarily for my own use and review. If you still want to run it:
