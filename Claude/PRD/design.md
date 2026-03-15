@@ -48,8 +48,8 @@ These are hard constraints. If a decision pushes toward any of these, it's the w
 
 ## 4. Typography
 
-**Playfair Display** — Hero headline, navigation, Animal Garden footer text. Serif weight for editorial presence.
-**Geist** — UI, body, card metadata. Anything the user reads as interface or content.
+**Playfair Display** — Hero headline, project headlines, navigation. Serif weight for editorial presence.
+**Geist** — UI, body, card metadata, footer. Anything the user reads as interface or content.
 
 ```
 Hero text:            Playfair Display, 48px, weight 500, line-height 52px, letter-spacing 0.96px, color #1A1A1A
@@ -58,8 +58,8 @@ Project headline:     Playfair Display, 20px, weight 400, line-height 130%, colo
 Section heading:      Geist, 1.25rem, weight 500, line-height 1.3
 Body / narrative:     Geist, 1rem, weight 400, line-height 1.7
 Caption / meta:       Geist, 0.875rem, weight 400, color --color-muted
-Nav:                  Playfair Display, 18px, weight 500, color #1a1a1a, letter-spacing 0.32px; Resume/About/Tools hover: 50% opacity
-Footer (Animal Garden): Playfair Display, italic, color #1A1A1A; first line margin 0; second line margin 0, paddingTop 0
+Nav:                  Playfair Display, 18px, weight 500, color #1a1a1a, letter-spacing 0.32px; Resume/About/Extras hover: 50% opacity
+Footer (Animal Garden): Geist, 14px, weight 500; line 1: rgba(26,26,26,0.5) — live Boston time + "(Open to relocate)"; line 2: #1A1A1A — Fufu CTA + animated CatEars SVG; gap 0 between lines
 ```
 
 **Rules:**
@@ -132,7 +132,7 @@ Headline:              Playfair Display, 20px, weight 400, line-height 130%, #1A
 
 ```
 Logo:                  "Martta XU" text only; Playfair Display, 14px, weight 500, color #1a1a1a
-Pill links:            Resume, About, Tools; padding 8px; same typography; hover 50% opacity
+Pill links:            Resume, About, Extras; padding 8px; same typography; hover 50% opacity
 ```
 
 **Hero inline links (company names):** Blend with body; hover triggers accent color + dotted underline + subtle background highlight + trailing `✦` four-pointed star (`::after`, `font-size: 8px`, `opacity: 0.8`, `user-select: none`).

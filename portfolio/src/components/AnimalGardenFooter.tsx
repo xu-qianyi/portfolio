@@ -93,6 +93,50 @@ const EXTRA_PLANT = { x: rowC_x[6], y: ROW_C, key: "plant_cosmo" as AssetKey };
 
 const CAT_B_KEYS: AssetKey[] = ["catB_0", "catB_1", "catB_2", "catB_3"];
 
+// ─── Cat Ears SVG ─────────────────────────────────────────────────────────────
+const CatEars = ({ size = 24, color = "rgba(0, 0, 0, 0.4)" }: { size?: number; color?: string }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 40 40"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    style={{ overflow: "visible", display: "inline-block", verticalAlign: "middle" }}
+  >
+    <style>{`
+      .cat-ear-left, .cat-ear-right { transform-origin: bottom center; transform-box: fill-box; }
+      @keyframes catLeftEarTwitch {
+        0%, 9% { transform: rotate(0deg); }
+        12% { transform: rotate(-10deg); }
+        16%, 34% { transform: rotate(0deg); }
+        38% { transform: rotate(-15deg); }
+        42% { transform: rotate(-5deg); }
+        48%, 58% { transform: rotate(0deg); }
+        62% { transform: rotate(-25deg); }
+        70% { transform: rotate(-20deg); }
+        78%, 100% { transform: rotate(0deg); }
+      }
+      @keyframes catRightEarTwitch {
+        0%, 9% { transform: rotate(0deg); }
+        12% { transform: rotate(6deg); }
+        16%, 34% { transform: rotate(0deg); }
+        38% { transform: rotate(10deg); }
+        42% { transform: rotate(4deg); }
+        48%, 58% { transform: rotate(0deg); }
+        62% { transform: rotate(-15deg); }
+        70% { transform: rotate(-10deg); }
+        78%, 100% { transform: rotate(0deg); }
+      }
+      .cat-ear-left { animation: catLeftEarTwitch 12s ease-in-out infinite; }
+      .cat-ear-right { animation: catRightEarTwitch 12s ease-in-out infinite; }
+    `}</style>
+    <g transform="translate(6, 8)">
+      <path className="cat-ear-left" d="M 1 14 L 3 6 L 8 12" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <path className="cat-ear-right" d="M 25 14 L 23 6 L 18 12" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    </g>
+  </svg>
+);
+
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function AnimalGardenFooter() {
   const gardenRef     = useRef<HTMLDivElement>(null);
@@ -114,6 +158,7 @@ export default function AnimalGardenFooter() {
   const [bunnyState,  setBunnyState]   = useState<"idle" | "react">("idle");
   const [vw,          setVw]           = useState(1200);
   const [gardenWidth, setGardenWidth]  = useState(800);
+  const [timeStr,     setTimeStr]      = useState("");
 
   const isMobile = vw < 640;
   const isTablet = vw >= 640 && vw < 1024;
@@ -123,6 +168,19 @@ export default function AnimalGardenFooter() {
     const onResize = () => setVw(window.innerWidth);
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  useEffect(() => {
+    const fmt = new Intl.DateTimeFormat("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+      timeZone: "America/New_York",
+    });
+    const tick = () => setTimeStr(fmt.format(new Date()).toLowerCase());
+    tick();
+    const id = setInterval(tick, 60_000);
+    return () => clearInterval(id);
   }, []);
 
   // Track garden width for direction calculations
@@ -154,7 +212,7 @@ export default function AnimalGardenFooter() {
   const rB       = isTablet ? 72   : ROW_B;
   const rC       = isTablet ? 24   : ROW_C;
   const padding  = isMobile ? "12px 16px" : "16px 72px";
-  const fontSize = 16;
+  const fontSize = 14;
 
   // ── Walk GIF resolver ───────────────────────────────────────────────────────
   const getWalkSrc = useCallback((dx: number, dy: number, gardenW: number): string => {
@@ -302,29 +360,29 @@ export default function AnimalGardenFooter() {
         style={{
           background: "#ffffff",
           borderTop: "none",
-          fontFamily: "var(--font-playfair-display), 'Playfair Display', Georgia, serif",
+          fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
           cursor: isOverFooter ? "none" : "auto",
         }}
       >
         {/* Text row */}
-        <div style={{ padding }}>
+        <div style={{ padding, display: "flex", flexDirection: "column", gap: "0px" }}>
           <p
             style={{
-              fontFamily: "var(--font-playfair-display), 'Playfair Display', Georgia, serif",
-              fontStyle: "italic",
+              fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
               fontSize,
-              color: "#1a1a1a",
+              fontWeight: 500,
+              color: "rgba(26,26,26,0.5)",
               margin: 0,
             }}
           >
-            © 2026 brewed by Martta + Cursor + Claude Code
+            {timeStr} in Boston, MA (Open to relocate)
           </p>
           <p
             style={{
-              fontFamily: "var(--font-playfair-display), 'Playfair Display', Georgia, serif",
-              fontStyle: "italic",
+              fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
               fontSize,
-              color: "#E04020",
+              fontWeight: 500,
+              color: "#1a1a1a",
               margin: 0,
               paddingTop: 0,
             }}
@@ -334,7 +392,7 @@ export default function AnimalGardenFooter() {
               : (
                 <span>
                   Fufu would like to play with you{" "}
-                  <span style={{ fontStyle: "normal" }}>🥺</span>
+                  <CatEars size={32} color="#1a1a1a" />
                 </span>
               )}
           </p>

@@ -23,7 +23,7 @@
 ```
 /               Home — work overview
 /about          About — who Martta is, in two voices
-/tools          Tools — vibe coding showcase
+/extras         Extras — vibe coding showcase
 ```
 
 ---
@@ -32,16 +32,16 @@
 
 **Navbar (sticky)** — See `design.md §7` for visual and layout spec.
 
-- Logo: "Martta XU" text only → `/`; Geist 14px, weight 500, color `#1a1a1a`. Resume/About/Tools pill links; hover: 50% opacity.
+- Logo: "Martta XU" text only → `/`; Geist 14px, weight 500, color `#1a1a1a`. Resume/About/Extras pill links; hover: 50% opacity.
 - Resume → external PDF (Google Drive, new tab)
 - About → `/about`
-- Tools → `/tools`
+- Extras → `/extras`
 
 **Footer — Animal Garden**
 
-- Two-line Playfair Display text, black (`#1a1a1a`), italic; second line `paddingTop: 0`:
-  - Line 1: `© 2026 brewed by Martta + Cursor + Claude Code`
-  - Line 2 desktop/tablet: `Fufu would like to play with you` 
+- Two-line Geist text, 14px, weight 500; gap 0 between lines:
+  - Line 1: live Boston time — `[h:mm am/pm] in Boston, MA (Open to relocate)`; color `rgba(26,26,26,0.5)`
+  - Line 2 desktop/tablet: `Fufu would like to play with you` + animated CatEars SVG; color `#1a1a1a`
   - Line 2 mobile: `Come to play with my cat - Fufu on desktop`
 - Below the text (tablet/desktop only), an interactive pixel garden. Garden content band aligned with footer text (layout offset, no padding wrapper):
   - Wand cursor (`CatToy.gif`) replaces the system cursor **inside the footer only**, chasing interactions
@@ -100,7 +100,7 @@ A first-person essay in Martta's own voice. Prose only. No bullet points, no hea
 
 ---
 
-### 4.3 Tools (`/tools`)
+### 4.3 Extras (`/extras`)
 
 Demonstrates vibe-coding capability — real tools Martta has built. Each card shows a live preview (image or GIF), title, short description, tech stack, and a "Click to play" action.
 

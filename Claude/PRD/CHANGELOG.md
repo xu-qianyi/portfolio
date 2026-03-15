@@ -5,6 +5,36 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 ---
 
+## [2026-03-15 · Session M] — Footer typography overhaul + live Boston clock + CatEars
+
+### Changed
+
+- **Footer font** — Playfair Display italic → Geist, 14px, weight 500 (matches project metadata style).
+- **Footer line 1** — static copyright text replaced with a live Boston clock: `[h:mm am/pm] in Boston, MA (Open to relocate)`; updates every 60s via `setInterval` + `Intl.DateTimeFormat` with `timeZone: "America/New_York"`; color `rgba(26,26,26,0.5)`.
+- **Footer line 2** — 😊 emoji replaced with inline animated `CatEars` SVG component (size 32, color `#1a1a1a`); two cat ears twitch independently on a 12s loop.
+- **Footer line colors** — line 1: `rgba(26,26,26,0.5)`; line 2: `#1a1a1a` (was `#E04020`).
+- **Footer text row gap** — `display: flex; flexDirection: column; gap: 0` to tighten the two lines.
+
+### Docs
+
+- **design.md** — Typography section updated: Playfair Display scope narrowed (hero headline, project headlines, nav); Geist scope expanded to include footer; footer spec rewritten.
+- **master PRD.md** — Footer copy spec updated to reflect live clock, new colors, and CatEars SVG.
+
+---
+
+## [2026-03-15 · Session L] — Nav rename: Tools → Extras
+
+### Changed
+
+- **Nav item rename** — "Tools" → "Extras"; `id`, `label`, and `href` updated in `Navbar.tsx` (`/tools` → `/extras`).
+
+### Docs
+
+- **master PRD.md** — sitemap, navbar spec, and section 4.3 heading updated to "Extras" / `/extras`.
+- **design.md** — nav typography line and pill links spec updated to "Extras".
+
+---
+
 ## [2026-03-14 · Session K · f832c42] — Hero copy update + footer/garden bug fixes
 
 ### Changed
