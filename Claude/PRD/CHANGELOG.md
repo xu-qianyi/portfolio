@@ -5,7 +5,7 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 ---
 
-## [2026-03-15 · Session N] — Hero nav links + footer social links + navbar simplification
+## [2026-03-15 · Session N · 55a6c37] — Hero nav links + footer social links + navbar simplification
 
 ### Added
 
