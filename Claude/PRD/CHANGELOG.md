@@ -5,6 +5,26 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 ---
 
+## [2026-03-15 · Session N] — Hero nav links + footer social links + navbar simplification
+
+### Added
+
+- **`hero-nav-link` CSS class** (`globals.css`) — identical to `hero-company-link` but `::after` uses `content: attr(data-num)` to render numbered badges ("1"/"2"/"3") instead of `✦`.
+
+### Changed
+
+- **Navbar** — right pill links (Resume/About/Extras) removed; logo only remains.
+- **Hero right column** — Resume/About/Extras added as `hero-nav-link` links (`data-num` 1/2/3); desktop: vertical stack, right-aligned; tablet (sm+): horizontal row below headline; mobile: hidden.
+- **Footer text row** — layout changed from `flex-column` to `flex-row space-between`; CHANGELOG, LinkedIn, X added as `hero-nav-link` links on the right (`flex-col items-end`, gap 4px, top-aligned).
+- **Hero padding** — desktop: `52px top / 64px bottom`; tablet: `28px top / 40px bottom`; default: `64px`. Row-gap reduced `80px → 40px`.
+
+### Docs
+
+- **design.md** — Nav spec updated (logo only); hero spacing updated; footer spec updated; hero link section rewritten to document both `hero-company-link` and `hero-nav-link`; accent color rules updated.
+- **master PRD.md** — Navbar section updated (no pill links); hero description updated.
+
+---
+
 ## [2026-03-15 · Session M · b5bc9ae] — Footer typography overhaul + live Boston clock + CatEars
 
 ### Changed

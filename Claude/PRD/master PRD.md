@@ -32,10 +32,7 @@
 
 **Navbar (sticky)** — See `design.md §7` for visual and layout spec.
 
-- Logo: "Martta XU" text only → `/`; Geist 14px, weight 500, color `#1a1a1a`. Resume/About/Extras pill links; hover: 50% opacity.
-- Resume → external PDF (Google Drive, new tab)
-- About → `/about`
-- Extras → `/extras`
+- Logo: "Martta XU" text only → `/`; Geist 14px, weight 500, color `#1a1a1a`. No pill links — navigation moved to hero section.
 
 **Footer — Animal Garden**
 
@@ -59,7 +56,7 @@
 
 **Hero** — See `design.md` for layout and typography.
 
-The entry point. On large screens, a two-column layout: headline on the left; right column is intentional negative space.
+The entry point. On large screens, a two-column layout: headline on the left; right column has Resume/About/Extras as `hero-nav-link` links, vertical stack, right-aligned. On tablet, nav links appear below the headline in a horizontal row. Hidden on mobile.
 
 Headline copy:
 

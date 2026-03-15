@@ -365,37 +365,68 @@ export default function AnimalGardenFooter() {
         }}
       >
         {/* Text row */}
-        <div style={{ padding, display: "flex", flexDirection: "column", gap: "0px" }}>
-          <p
-            style={{
-              fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-              fontSize,
-              fontWeight: 500,
-              color: "rgba(26,26,26,0.5)",
-              margin: 0,
-            }}
-          >
-            {timeStr} in Boston, MA (Open to relocate)
-          </p>
-          <p
-            style={{
-              fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-              fontSize,
-              fontWeight: 500,
-              color: "#1a1a1a",
-              margin: 0,
-              paddingTop: 0,
-            }}
-          >
-            {isMobile
-              ? "Come to play with my cat - Fufu on desktop"
-              : (
-                <span>
-                  Fufu would like to play with you{" "}
-                  <CatEars size={32} color="#1a1a1a" />
-                </span>
-              )}
-          </p>
+        <div style={{ padding, display: "flex", flexDirection: "row", alignItems: "flex-start", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0px" }}>
+            <p
+              style={{
+                fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
+                fontSize,
+                fontWeight: 500,
+                color: "rgba(26,26,26,0.5)",
+                margin: 0,
+              }}
+            >
+              {timeStr} in Boston, MA (Open to relocate)
+            </p>
+            <p
+              style={{
+                fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
+                fontSize,
+                fontWeight: 500,
+                color: "#1a1a1a",
+                margin: 0,
+                paddingTop: 0,
+              }}
+            >
+              {isMobile
+                ? "Come to play with my cat - Fufu on desktop"
+                : (
+                  <span>
+                    Fufu would like to play with you{" "}
+                    <CatEars size={32} color="#1a1a1a" />
+                  </span>
+                )}
+            </p>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "4px", fontFamily: "var(--font-geist-sans), system-ui, sans-serif", fontSize, fontWeight: 500 }}>
+            <a
+              href="https://github.com/xu-qianyi/portfolio/blob/main/Claude/PRD/CHANGELOG.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hero-nav-link"
+              data-num="1"
+            >
+              CHANGELOG
+            </a>
+            <a
+              href="https://www.linkedin.com/in/marttaxu"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hero-nav-link"
+              data-num="2"
+            >
+              LinkedIn
+            </a>
+            <a
+              href="https://x.com/littlemartta"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hero-nav-link"
+              data-num="3"
+            >
+              X
+            </a>
+          </div>
         </div>
 
         {/* Garden — hidden on mobile */}

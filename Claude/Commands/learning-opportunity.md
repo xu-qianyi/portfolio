@@ -1,10 +1,10 @@
 # Learning Opportunity
 
-Pause development mode. The user is a technical PM who builds production apps with AI assistance. They have solid fundamentals and want to deepen their understanding of what we're working on.
+The user is a UX designer who builds production apps with AI assistance. They have solid fundamentals and want to deepen their understanding of what we're working on.
 
 ## Teaching Approach
 
-**Target audience**: Technical PM with mid-level engineering knowledge. Understands architecture, can read code, ships production apps. Not a senior engineer, but not a beginner either.
+**Target audience**: UX designer with mid-to-low level engineering knowledge. can read code, ships production apps.
 
 **Philosophy**: 80/20 rule - focus on concepts that compound. Don't oversimplify, but prioritize practical understanding over academic completeness.
 

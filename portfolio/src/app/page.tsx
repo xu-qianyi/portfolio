@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import projects from "@/data/projects.json";
 import LottiePreview from "@/components/LottiePreview";
 
@@ -98,11 +99,8 @@ export default function Home() {
     <>
       {/* Hero */}
       <section
-        className="grid lg:grid-cols-2 gap-y-[80px] gap-x-[16px]"
-        style={{
-          padding: "64px 72px",
-          alignSelf: "stretch",
-        }}
+        className="grid lg:grid-cols-2 gap-y-[40px] gap-x-[16px] py-[64px] px-[72px] sm:pt-[28px] sm:pb-[40px] lg:pt-[52px] lg:pb-[64px]"
+        style={{ alignSelf: "stretch" }}
       >
         <p style={HERO_TEXT}>
           My design practice lives in the making - through .fig files, code, and increasingly AI. And in the curating - knowing where to linger, and where to let go. Right now I&apos;m at{" "}
@@ -149,8 +147,23 @@ export default function Home() {
           </a>
           .
         </p>
-        {/* Intentional negative space on large screens only */}
-        <div aria-hidden="true" className="hidden lg:block" />
+        <div className="hidden sm:flex sm:flex-row sm:gap-x-[16px] lg:flex-col lg:items-end lg:gap-x-0 lg:gap-y-[4px]" style={HERO_TEXT}>
+          <a
+            href="https://drive.google.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hero-nav-link"
+            data-num="1"
+          >
+            Resume
+          </a>
+          <Link href="/about" className="hero-nav-link" data-num="2">
+            About
+          </Link>
+          <Link href="/extras" className="hero-nav-link" data-num="3">
+            Extras
+          </Link>
+        </div>
       </section>
 
       {/* Masonry project grid */}

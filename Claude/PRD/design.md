@@ -35,12 +35,12 @@ These are hard constraints. If a decision pushes toward any of these, it's the w
 --color-surface:   #FFFFFF   /* Page background */
 --color-subtle:    #F5F5F5   /* Card backgrounds, subtle dividers */
 --color-muted:     #999999   /* Captions, meta text, footer */
---color-accent:    #EC4523   /* Interaction only: hero company link hover + ✦ star */
+--color-accent:    #EC4523   /* Interaction only: hero link hover states, ✦ star, numbered badges */
 ```
 
 **Rules:**
 
-- Accent appears on hero company link hover state (text + underline) and the trailing `✦` four-pointed star (rendered via CSS `::after`, `font-size: 8px`, `opacity: 0.8`).
+- Accent appears on hero link hover states (text + underline), the trailing `✦` star on company links, and numbered badges (1/2/3) on nav links — all via CSS `::after`, `font-size: 8px`, `opacity: 0.8`.
 - Accent never appears as: decorative backgrounds, section dividers, illustration color.
 - When in doubt, use `--color-ink` at reduced opacity rather than reaching for a new color.
 
@@ -58,8 +58,8 @@ Project headline:     Playfair Display, 20px, weight 400, line-height 130%, colo
 Section heading:      Geist, 1.25rem, weight 500, line-height 1.3
 Body / narrative:     Geist, 1rem, weight 400, line-height 1.7
 Caption / meta:       Geist, 0.875rem, weight 400, color --color-muted
-Nav:                  Playfair Display, 18px, weight 500, color #1a1a1a, letter-spacing 0.32px; Resume/About/Extras hover: 50% opacity
-Footer (Animal Garden): Geist, 14px, weight 500; line 1: rgba(26,26,26,0.5) — live Boston time + "(Open to relocate)"; line 2: #1A1A1A — Fufu CTA + animated CatEars SVG; gap 0 between lines
+Nav:                  Geist, 14px, weight 500, color #1a1a1a, letter-spacing 0.32px; logo only — pill links removed
+Footer (Animal Garden): Geist, 14px, weight 500; text row: flex-row space-between; left col: line 1 rgba(26,26,26,0.5) — live Boston time; line 2 #1A1A1A — Fufu CTA + CatEars SVG; right col: CHANGELOG/LinkedIn/X as hero-nav-link, flex-col items-end, gap 4px
 ```
 
 **Rules:**
@@ -77,7 +77,7 @@ Footer (Animal Garden): Geist, 14px, weight 500; line 1: rgba(26,26,26,0.5) — 
 ```
 Page horizontal pad:   72px on each side — nav, main content, footer aligned; no max-width cap
 Navbar padding:       12px 72px; height fit-content
-Hero padding:         64px vertical, 72px horizontal; column-gap 16px; grid 2fr / 1fr
+Hero padding:         desktop 52px top / 64px bottom, 72px horizontal; tablet 28px top / 40px bottom, 72px horizontal; column-gap 16px; row-gap 40px
 Project section pad:  72px horizontal, 80px bottom; 2-column masonry at lg (1024px+), 24px column-gap, 48px row-gap
 Footer padding:       16px 72px (desktop/tablet); 12px 72px (mobile)
 Section gap:          5rem–7rem vertical
@@ -89,7 +89,7 @@ Section gap:          5rem–7rem vertical
 
 **Breakpoint:** Tablet and below (<1024px): projects stack in a single column. From 1024px (lg): 2-column masonry.
 
-**Rules:** Never crowd cards — reduce columns before reducing padding. Negative space is a design element; the hero's empty right column is intentional.
+**Rules:** Never crowd cards — reduce columns before reducing padding. Negative space is a design element; the hero right column holds nav links (Resume/About/Extras) on desktop; on tablet they appear below the headline in a horizontal row.
 
 ---
 
@@ -128,21 +128,23 @@ Headline:              Playfair Display, 20px, weight 400, line-height 130%, #1A
 
 **"In Their Eyes" Testimonials:** Profile cards appear/disappear quietly — felt discovered, not announced.
 
-**Navigation:** Sticky, unobtrusive. Text logo + pill links only.
+**Navigation:** Sticky, unobtrusive. Logo only.
 
 ```
-Logo:                  "Martta XU" text only; Playfair Display, 14px, weight 500, color #1a1a1a
-Pill links:            Resume, About, Extras; padding 8px; same typography; hover 50% opacity
+Logo:                  "Martta XU" text only; Geist, 14px, weight 500, color #1a1a1a
+Pill links:            removed — Resume/About/Extras moved to hero right column
 ```
 
-**Hero inline links (company names):** Blend with body; hover triggers accent color + dotted underline + subtle background highlight + trailing `✦` four-pointed star (`::after`, `font-size: 8px`, `opacity: 0.8`, `user-select: none`).
+**Hero inline links:** Two classes, same base style (dotted underline, accent hover, `::after` badge via `position: absolute; top: 0.45em; right: -0.85em; font-size: 8px; opacity: 0.8`):
 
 ```
+.hero-company-link     Company names in bio; badge content: "✦"; always visible
+.hero-nav-link         Resume/About/Extras (hero) + CHANGELOG/LinkedIn/X (footer); badge content: attr(data-num) → "1"/"2"/"3"
+
 Color:                  #1A1A1A
 Hover color:            var(--color-accent)
 Hover underline:        dotted, var(--color-accent)
 Hover background:       rgba(236, 69, 35, 0.02)
-✦ star:                 var(--color-accent), always visible, margin-right: 0.45em
 ```
 
 ---

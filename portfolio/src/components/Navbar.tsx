@@ -21,7 +21,7 @@ const PILL: CSSProperties = {
   borderRadius: "9999px",
 };
 
-type PillId = "resume" | "about" | "tools" | null;
+type PillId = "resume" | "about" | "extras" | null;
 type NavItemId = Exclude<PillId, null>;
 
 const NAV_ITEMS: Array<{
@@ -32,7 +32,7 @@ const NAV_ITEMS: Array<{
 }> = [
   { id: "resume", label: "Resume", href: "https://drive.google.com", external: true },
   { id: "about", label: "About", href: "/about" },
-  { id: "tools", label: "Tools", href: "/tools" },
+  { id: "extras", label: "Extras", href: "/extras" },
 ];
 
 export default function Navbar() {
@@ -62,26 +62,6 @@ export default function Navbar() {
           Martta XU
         </Link>
 
-        {/* Right nav links */}
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          {NAV_ITEMS.map((item) => (
-            <Link
-              key={item.id}
-              href={item.href}
-              target={item.external ? "_blank" : undefined}
-              rel={item.external ? "noopener noreferrer" : undefined}
-              style={{
-                ...NAV_LINK,
-                ...PILL,
-                opacity: pillHovered === item.id ? 0.5 : 1,
-              }}
-              onMouseEnter={() => setPillHovered(item.id)}
-              onMouseLeave={() => setPillHovered(null)}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
       </nav>
     </header>
   );

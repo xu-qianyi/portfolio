@@ -55,3 +55,33 @@ body {
   text-decoration-color: var(--color-accent);
   background-color: rgba(236, 69, 35, 0.02);
 }
+
+.hero-nav-link {
+  position: relative;
+  margin-right: 0.45em;
+  color: #1A1A1A;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: #1A1A1A;
+  text-underline-offset: 2px;
+  transition: color 200ms ease, text-decoration-color 200ms ease;
+}
+
+.hero-nav-link::after {
+  content: attr(data-num);
+  position: absolute;
+  top: 0.45em;
+  right: -0.85em;
+  font-size: 8px;
+  line-height: 0;
+  color: var(--color-accent);
+  opacity: 0.8;
+  user-select: none;
+}
+
+.hero-nav-link:hover {
+  color: var(--color-accent);
+  text-decoration-style: dotted;
+  text-decoration-color: var(--color-accent);
+  background-color: rgba(236, 69, 35, 0.02);
+}
