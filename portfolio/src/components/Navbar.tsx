@@ -57,8 +57,9 @@ export default function Navbar() {
           alignSelf: "stretch",
         }}
       >
-        {/* Logo text only */}
-        <Link href="/" style={NAV_LINK}>
+        {/* Logo */}
+        <Link href="/" style={{ ...NAV_LINK, display: "inline-flex", alignItems: "center", gap: "6px" }}>
+          <img src="/yin.svg" alt="" aria-hidden="true" style={{ height: "18px", width: "18px", objectFit: "contain" }} />
           Martta XU
         </Link>
 

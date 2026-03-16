@@ -358,7 +358,7 @@ export default function AnimalGardenFooter() {
         onMouseEnter={() => setIsOverFooter(true)}
         onMouseLeave={() => setIsOverFooter(false)}
         style={{
-          background: "#ffffff",
+          background: "#f8f8f8",
           borderTop: "none",
           fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
           cursor: isOverFooter ? "none" : "auto",
@@ -372,11 +372,11 @@ export default function AnimalGardenFooter() {
                 fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
                 fontSize,
                 fontWeight: 500,
-                color: "rgba(26,26,26,0.5)",
+                color: "#1a1a1a",
                 margin: 0,
               }}
             >
-              {timeStr} in Boston, MA (Open to relocate)
+              {timeStr} in Boston, MA
             </p>
             <p
               style={{

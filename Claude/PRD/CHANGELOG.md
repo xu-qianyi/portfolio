@@ -5,6 +5,18 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 ---
 
+## [2026-03-15 · Session P] — Footer polish + about page copy + navbar logo
+
+### Changed
+
+- **Footer background** — `#ffffff` → `#f8f8f8`
+- **Footer time string** — removed "(Open to relocate)"; color `rgba(26,26,26,0.5)` → `#1a1a1a`
+- **About page layout** — switched to `grid lg:grid-cols-2`; added responsive padding; added right-column nav links (Resume, Work, Extras) visible on sm+
+- **About page copy** — merged Swing sentence into first paragraph; simplified "path" paragraph
+- **Navbar logo** — added `yin.svg` icon (18×18) beside "Martta XU" text
+
+---
+
 ## [2026-03-15 · Session O · 0ab7ffa] — About page build
 
 ### Added

@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import Link from "next/link";
 import CopyEmail from "@/components/CopyEmail";
 
 const HERO_TEXT: CSSProperties = {
@@ -18,19 +19,15 @@ export default function About() {
   return (
     <>
       {/* Text section */}
-      <section style={{ padding: "64px 72px 64px" }}>
-        <div className="w-full lg:w-1/2" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+      <section className="grid lg:grid-cols-2 gap-y-[40px] gap-x-[16px] py-[64px] px-[72px] sm:pt-[28px] sm:pb-[40px] lg:pt-[52px] lg:pb-[64px]">
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <p style={HERO_TEXT}>
-            I&apos;m a designer who reads the room - and the signal.
+            I&apos;m a designer who reads the room - and the signal. I practice Swing - a dance
+            with no routine, just feeling and responding to what you&apos;re given.
           </p>
           <p style={HERO_TEXT}>
-            Drawn to how things connect. People and objects, humans and AI, a dancer and her
-            partner. I practice Swing - a dance with no routine, just feeling and responding to
-            what you&apos;re given.
-          </p>
-          <p style={HERO_TEXT}>
-            The path went through business strategy and engineering. Both felt too far from the
-            thing itself. Design is where I get to actually build something for someone to use.
+            The path to here went through business and strategy. Both felt too far from the thing
+            itself. Design is where I get to actually build something for someone to use.
           </p>
           <p style={HERO_TEXT}>
             I believe good experiences and beautiful things make people feel better. That&apos;s
@@ -39,6 +36,23 @@ export default function About() {
           <p style={HERO_TEXT}>
             If you&apos;re building something, <CopyEmail />! Open to full-time roles and relocation.
           </p>
+        </div>
+        <div className="hidden sm:flex sm:flex-row sm:gap-x-[16px] lg:flex-col lg:items-end lg:gap-x-0 lg:gap-y-[4px]" style={HERO_TEXT}>
+          <a
+            href="https://drive.google.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hero-nav-link"
+            data-num="1"
+          >
+            Resume
+          </a>
+          <Link href="/" className="hero-nav-link" data-num="2">
+            Work
+          </Link>
+          <Link href="/extras" className="hero-nav-link" data-num="3">
+            Extras
+          </Link>
         </div>
       </section>
 

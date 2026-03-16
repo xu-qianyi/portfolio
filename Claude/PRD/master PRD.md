@@ -81,9 +81,9 @@ Data sourced from `src/data/projects.json`. Each entry requires: `id`, `company`
 
 > I'm a designer who reads the room - and the signal.
 >
-> Drawn to how things connect. People and objects, humans and AI, a dancer and her partner. I practice Swing - a dance with no routine, just feeling and responding to what you're given.
+> I practice Swing - a dance with no routine, just feeling and responding to what you're given.
 >
-> The path went through business strategy and engineering. Both felt too far from the thing itself. Design is where I get to actually build something for someone to use.
+> The path to here went through business and strategy. Both felt too far from the thing itself. Design is where I get to actually build something for someone to use.
 >
 > I believe good experiences and beautiful things make people feel better. That's enough reason.
 >
