@@ -5,7 +5,7 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 ---
 
-## [2026-03-15 · Session P] — Footer polish + about page copy + navbar logo
+## [2026-03-15 · Session P · daff36c] — Footer polish + about page copy + navbar logo
 
 ### Changed
 
