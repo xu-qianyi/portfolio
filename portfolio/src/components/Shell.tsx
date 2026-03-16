@@ -25,7 +25,6 @@ export default function Shell({ children }: { children: React.ReactNode }) {
           position: "relative",
           zIndex: 1,
           backgroundColor: "var(--color-surface)",
-          minHeight: "100vh",
           marginBottom: footerH,
           boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
         }}
@@ -33,7 +32,6 @@ export default function Shell({ children }: { children: React.ReactNode }) {
         <div
           style={{
             display: "flex",
-            minHeight: "100vh",
             alignItems: "stretch",
           }}
         >

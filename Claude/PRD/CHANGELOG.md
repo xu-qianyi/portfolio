@@ -5,6 +5,25 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 ---
 
+## [2026-03-15 · Session O] — About page build
+
+### Added
+
+- **`portfolio/src/app/about/page.tsx`** — About page. Text section (left 50% desktop, full width tablet/below) + placeholder photo strip (6 boxes, `height: 320px`). Page hugs content height — no forced full-viewport stretch.
+- **`portfolio/src/components/CopyEmail.tsx`** — "let's talk" interactive element: CSS `:hover` tooltip below the link showing copy icon + "copy email"; on click copies `martta.xu@outlook.com`; tooltip switches to checkmark + "copied!" state. Pure CSS hover to avoid gap/flicker issues.
+- **CSS classes in `globals.css`** — `.copy-email-wrapper`, `.copy-email-btn`, `.copy-email-tooltip`, `.copy-email-arrow`, `.copy-email-box`, `.about-headline`.
+
+### Changed
+
+- **`Shell.tsx`** — removed `minHeight: "100vh"` from both the outer wrapper and the inner flex div; pages now hug content height.
+- **`globals.css`** — `.about-headline`: accent red (`#EC4523`) + dotted underline + faint orange background, static (no hover change needed).
+
+### Docs
+
+- **master PRD.md** — §4.2 About page fully rewritten to reflect what was built (replaced old "In Their Eyes / In Her Own Eyes" concept).
+
+---
+
 ## [2026-03-15 · Session N · 55a6c37] — Hero nav links + footer social links + navbar simplification
 
 ### Added

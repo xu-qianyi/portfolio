@@ -73,27 +73,25 @@ Data sourced from `src/data/projects.json`. Each entry requires: `id`, `company`
 
 ### 4.2 About (`/about`)
 
-Two distinct sections, two distinct voices.
+**Layout:** Single scroll, content hugs height (no forced full-viewport stretch). Text section on top — left 50% on desktop, full width on tablet and below (`lg:w-1/2`). Photo strip at bottom.
 
-**A. "In Their Eyes" — Social proof through others' words**
-
-A list of testimonials from colleagues and collaborators. The interaction: hovering a quote highlights a key phrase and surfaces a profile card (name, role, photo) that appears left or right of the text — alternating as the user reads down the page. The effect should feel discovered, not announced.
-
-Reference aesthetic: YC "In Founders' Words" (ycombinator.com).
-
-Data sourced from `src/data/testimonials.json`.
-
-**B. "In Her Own Eyes" — Personal narrative**
-
-A first-person essay in Martta's own voice. Prose only. No bullet points, no headers. This section answers: who is she beyond the work?
+**Headline style:** "I'm a designer who reads the room - and the signal." renders in static accent-hover state: accent red (`#EC4523`), dotted underline, faint orange background. No hover interaction — it's always in that state.
 
 **Copy:**
 
-> I used to think access was a business problem. You set the right price, you open the right market, the right people get in. I was good at that logic. Winner of global business competition, ACCA certified, management and strategy consulting experience, a product management internship at top language-learning startup in China - I understood how products get built and why companies do what they do.
+> I'm a designer who reads the room - and the signal.
 >
-> But at that startup I watched something happen up close: great strategy, mediocre product. The gap between the deck and the screen. That's where people get lost.
+> Drawn to how things connect. People and objects, humans and AI, a dancer and her partner. I practice Swing - a dance with no routine, just feeling and responding to what you're given.
 >
-> I went back to school to close that gap. I learned design and engineering together because I needed both hands. One to understand the person, one to build the thing.
+> The path went through business strategy and engineering. Both felt too far from the thing itself. Design is where I get to actually build something for someone to use.
+>
+> I believe good experiences and beautiful things make people feel better. That's enough reason.
+>
+> If you're building something, let's talk! Open to full-time roles and relocation.
+
+**"let's talk" interaction (`CopyEmail` component):** On hover, a tooltip appears below with accent orange background, copy icon, and "copy email" text. On click, copies `martta.xu@outlook.com` to clipboard; tooltip switches to checkmark + "copied!". Tooltip implemented in pure CSS (`:hover`) to avoid gap/flicker issues.
+
+**Photo strip:** 5–6 equal-height life photos (dancing, travel, meditation, etc.) in a horizontal row, `object-fit: cover`, `height: 320px`. Placeholders until real photos are provided in `public/images/about/`.
 
 ---
 

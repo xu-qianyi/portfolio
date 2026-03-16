@@ -85,3 +85,77 @@ body {
   text-decoration-color: var(--color-accent);
   background-color: rgba(236, 69, 35, 0.02);
 }
+
+.copy-email-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.copy-email-btn {
+  color: #1A1A1A;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: #1A1A1A;
+  text-underline-offset: 2px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  transition: color 200ms ease, text-decoration-color 200ms ease;
+}
+
+.copy-email-wrapper:hover .copy-email-btn {
+  color: var(--color-accent);
+  text-decoration-color: var(--color-accent);
+}
+
+.copy-email-tooltip {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-top: 4px;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.copy-email-wrapper:hover .copy-email-tooltip {
+  display: inline-flex;
+}
+
+.copy-email-arrow {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid rgba(236, 69, 35, 0.15);
+}
+
+.copy-email-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: rgba(236, 69, 35, 0.06);
+  color: var(--color-accent);
+  font-size: 13px;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.about-headline {
+  color: var(--color-accent);
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: var(--color-accent);
+  text-underline-offset: 2px;
+  background-color: rgba(236, 69, 35, 0.02);
+}
