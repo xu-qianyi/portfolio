@@ -231,12 +231,15 @@ export default function AnimalGardenFooter() {
   const [crabActive,    setCrabActive]    = useState(false);
   const [crabX,         setCrabX]         = useState(50);
   const [crabY,         setCrabY]         = useState(30);
-  const crabXRef        = useRef(50);
-  const crabYRef        = useRef(30);
+  const crabTargetXRef  = useRef(50);   // where crab is heading (instant jump)
+  const crabTargetYRef  = useRef(30);
+  const crabVisualXRef  = useRef(50);   // where crab visually is (lerped, Fufu chases this)
+  const crabVisualYRef  = useRef(30);
   const crabActiveRef   = useRef(false);
   const crabSpawnTimer  = useRef<ReturnType<typeof setTimeout> | null>(null);
   const crabWanderTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const lastCrabEvade   = useRef(0);
+  const crabMoveTime    = useRef(0);       // timestamp of last crab position change
   const [chaseBubbleIdx, setChaseBubbleIdx] = useState(0);
   const chaseBubbleTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const [vw,          setVw]           = useState(1200);
@@ -362,6 +365,13 @@ export default function AnimalGardenFooter() {
         }, 700);
       }
 
+      // Lerp crab visual position toward target (~matches 2s CSS transition)
+      if (crabActiveRef.current) {
+        const lerpSpeed = 0.025;
+        crabVisualXRef.current += (crabTargetXRef.current - crabVisualXRef.current) * lerpSpeed;
+        crabVisualYRef.current += (crabTargetYRef.current - crabVisualYRef.current) * lerpSpeed;
+      }
+
       // Determine chase target: wand (priority) or crab (idle mode)
       const wandInBounds = wx >= 0 && wx <= r.width;
       let tx: number, ty: number;
@@ -376,9 +386,14 @@ export default function AnimalGardenFooter() {
           if (crabWanderTimer.current) clearInterval(crabWanderTimer.current);
         }
       } else if (crabActiveRef.current) {
-        // No wand but crab is active → chase crab
-        tx = crabXRef.current;
-        ty = crabYRef.current;
+        // Crab just moved — give it a 1s head start before Fufu chases
+        if (Date.now() - crabMoveTime.current < 1000) {
+          setCatAState(prev => prev === "arrive" ? prev : "arrive");
+          return;
+        }
+        // Chase crab's visual position
+        tx = crabVisualXRef.current;
+        ty = crabVisualYRef.current;
       } else {
         // Nothing to chase — transition to arrive so idle timer can restart
         setCatAState(prev => prev === "arrive" ? prev : "arrive");
@@ -403,8 +418,9 @@ export default function AnimalGardenFooter() {
             nx = GARDEN_LEFT_PCT + Math.random() * (GARDEN_RIGHT_PCT - GARDEN_LEFT_PCT);
           } while (Math.abs(nx - x) < 20);
           const ny = 20 + Math.random() * 120;
-          crabXRef.current = nx;
-          crabYRef.current = ny;
+          crabTargetXRef.current = nx;
+          crabTargetYRef.current = ny;
+          crabMoveTime.current = Date.now();
           setCrabX(nx);
           setCrabY(ny);
         }
@@ -515,8 +531,10 @@ export default function AnimalGardenFooter() {
     if (fufuIdle) {
       crabSpawnTimer.current = setTimeout(() => {
         const pos = randomCrabPos();
-        crabXRef.current = pos.x;
-        crabYRef.current = pos.y;
+        crabTargetXRef.current = pos.x;
+        crabTargetYRef.current = pos.y;
+        crabVisualXRef.current = pos.x;  // spawn: visual = target immediately
+        crabVisualYRef.current = pos.y;
         setCrabX(pos.x);
         setCrabY(pos.y);
         crabActiveRef.current = true;
@@ -524,8 +542,9 @@ export default function AnimalGardenFooter() {
         // Crab wanders to a new spot every 8s
         crabWanderTimer.current = setInterval(() => {
           const np = randomCrabPos();
-          crabXRef.current = np.x;
-          crabYRef.current = np.y;
+          crabTargetXRef.current = np.x;
+          crabTargetYRef.current = np.y;
+          crabMoveTime.current = Date.now();
           setCrabX(np.x);
           setCrabY(np.y);
         }, 8000);
