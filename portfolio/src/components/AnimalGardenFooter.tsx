@@ -239,6 +239,9 @@ export default function AnimalGardenFooter() {
   const crabWanderTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const lastCrabEvade   = useRef(0);
   const crabMoveTime    = useRef(0);       // timestamp of last crab position change
+  const chaseRestRef    = useRef(false);   // true = both resting
+  const chaseRestTimer  = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const chaseRunTimer   = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [chaseBubbleIdx, setChaseBubbleIdx] = useState(0);
   const chaseBubbleTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const [vw,          setVw]           = useState(1200);
@@ -289,6 +292,8 @@ export default function AnimalGardenFooter() {
       if (crabSpawnTimer.current)  clearTimeout(crabSpawnTimer.current);
       if (crabWanderTimer.current) clearInterval(crabWanderTimer.current);
       if (chaseBubbleTimer.current) clearInterval(chaseBubbleTimer.current);
+      if (chaseRestTimer.current) clearTimeout(chaseRestTimer.current);
+      if (chaseRunTimer.current)  clearTimeout(chaseRunTimer.current);
       timers.forEach(id => clearTimeout(id));
     };
   }, []);
@@ -385,7 +390,12 @@ export default function AnimalGardenFooter() {
           if (crabWanderTimer.current) clearInterval(crabWanderTimer.current);
         }
       } else if (crabActiveRef.current) {
-        // Crab just moved — give it a 1s head start before Fufu chases
+        // Both resting — Fufu stays put
+        if (chaseRestRef.current) {
+          setCatAState(prev => prev === "arrive" ? prev : "arrive");
+          return;
+        }
+        // Crab just moved — give it a head start before Fufu chases
         if (Date.now() - crabMoveTime.current < 1500) {
           setCatAState(prev => prev === "arrive" ? prev : "arrive");
           return;
@@ -526,6 +536,30 @@ export default function AnimalGardenFooter() {
     return { x, y };
   }, []);
 
+  // Start / stop the rest-run cycle together with the crab
+  const startRestCycle = useCallback(() => {
+    const schedule = () => {
+      // Chase for 5–7s, then rest for 2.5–3.5s
+      const runTime  = 5000 + Math.random() * 2000;
+      const restTime = 2500 + Math.random() * 1000;
+      chaseRunTimer.current = setTimeout(() => {
+        chaseRestRef.current = true;
+        chaseRestTimer.current = setTimeout(() => {
+          chaseRestRef.current = false;
+          schedule();                 // next cycle
+        }, restTime);
+      }, runTime);
+    };
+    chaseRestRef.current = false;
+    schedule();
+  }, []);
+
+  const stopRestCycle = useCallback(() => {
+    chaseRestRef.current = false;
+    if (chaseRestTimer.current) clearTimeout(chaseRestTimer.current);
+    if (chaseRunTimer.current)  clearTimeout(chaseRunTimer.current);
+  }, []);
+
   useEffect(() => {
     if (fufuIdle) {
       crabSpawnTimer.current = setTimeout(() => {
@@ -538,8 +572,10 @@ export default function AnimalGardenFooter() {
         setCrabY(pos.y);
         crabActiveRef.current = true;
         setCrabActive(true);
-        // Crab wanders to a new spot every 8s
+        startRestCycle();
+        // Crab wanders to a new spot every 8s (only when not resting)
         crabWanderTimer.current = setInterval(() => {
+          if (chaseRestRef.current) return;  // skip wander during rest
           const np = randomCrabPos();
           crabTargetXRef.current = np.x;
           crabTargetYRef.current = np.y;
@@ -551,12 +587,14 @@ export default function AnimalGardenFooter() {
     } else {
       if (crabSpawnTimer.current)  clearTimeout(crabSpawnTimer.current);
       if (crabWanderTimer.current) clearInterval(crabWanderTimer.current);
+      stopRestCycle();
       crabActiveRef.current = false;
       setCrabActive(false);
     }
     return () => {
       if (crabSpawnTimer.current)  clearTimeout(crabSpawnTimer.current);
       if (crabWanderTimer.current) clearInterval(crabWanderTimer.current);
+      stopRestCycle();
     };
   }, [fufuIdle, randomCrabPos]);
 
