@@ -133,24 +133,26 @@ const Clawd = ({ size = 22 }: { size?: number }) => (
   <svg
     width={size}
     height={size}
-    viewBox="0 0 13 13"
+    viewBox="0 0 17 12"
     xmlns="http://www.w3.org/2000/svg"
     style={{ imageRendering: "pixelated", display: "block" }}
   >
-    {/* Ears — flush with body edges */}
-    <rect x="0" y="0" width="2" height="2" fill="#DA7756" />
-    <rect x="11" y="0" width="2" height="2" fill="#DA7756" />
-    {/* Body — taller below the eyes */}
-    <rect x="0" y="2" width="13" height="7" fill="#DA7756" />
-    {/* Eyes */}
-    <rect x="3" y="3" width="2" height="2" fill="#2a2a2a" />
-    <rect x="8" y="3" width="2" height="2" fill="#2a2a2a" />
-    {/* Outer legs (wider, taller) */}
-    <rect x="0" y="9" width="3" height="4" fill="#DA7756" />
-    <rect x="10" y="9" width="3" height="4" fill="#DA7756" />
-    {/* Inner legs (thinner, shorter) */}
-    <rect x="4" y="9" width="2" height="3" fill="#DA7756" />
-    <rect x="7" y="9" width="2" height="3" fill="#DA7756" />
+    {/* Ears */}
+    <rect x="3" y="0" width="2" height="2" fill="#DA7756" />
+    <rect x="12" y="0" width="2" height="2" fill="#DA7756" />
+    {/* Body */}
+    <rect x="2" y="2" width="13" height="7" fill="#DA7756" />
+    {/* Claws */}
+    <rect x="0" y="3" width="2" height="2" fill="#DA7756" />
+    <rect x="15" y="3" width="2" height="2" fill="#DA7756" />
+    {/* Eyes — small squares, lowered */}
+    <rect x="5" y="5" width="2" height="2" fill="#2a2a2a" />
+    <rect x="10" y="5" width="2" height="2" fill="#2a2a2a" />
+    {/* Four legs — all same size */}
+    <rect x="3" y="9" width="2" height="3" fill="#DA7756" />
+    <rect x="6" y="9" width="2" height="3" fill="#DA7756" />
+    <rect x="9" y="9" width="2" height="3" fill="#DA7756" />
+    <rect x="12" y="9" width="2" height="3" fill="#DA7756" />
   </svg>
 );
 
