@@ -626,7 +626,7 @@ export default function AnimalGardenFooter() {
   const fufuBubble = (() => {
     if (isNearBed)         return "zzz";
     if (isNearCrab)        return "!!";
-    if (crabActive && catAState === "walk") return CHASE_PHRASES[chaseBubbleIdx];
+    if (crabActive && catAState === "walk") return "!";
     if (isNearFood)        return "~yum";
     if (isNearChick)       return "!";
     if (isNearChicken)     return "hmm";
