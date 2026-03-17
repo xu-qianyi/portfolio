@@ -92,8 +92,6 @@ const BUNNY_POS   = { x: rowC_x[5], y: ROW_C };
 const EXTRA_PLANT = { x: rowC_x[6], y: ROW_C, key: "plant_cosmo" as AssetKey };
 
 const CAT_B_KEYS: AssetKey[] = ["catB_0", "catB_1", "catB_2", "catB_3"];
-const CHASE_PHRASES = ["stop!", "wait!", "hey!", "come back!"];
-
 // Pre-computed CSS % positions for proximity checks
 const CATB_CSS_X    = gardenX(CATB_POS.x);    // ≈ 63%
 const CHICK_CSS_X   = gardenX(rowC_x[0]);     // ≈ 9%
@@ -242,8 +240,6 @@ export default function AnimalGardenFooter() {
   const chaseRestRef    = useRef(false);   // true = both resting
   const chaseRestTimer  = useRef<ReturnType<typeof setTimeout> | null>(null);
   const chaseRunTimer   = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [chaseBubbleIdx, setChaseBubbleIdx] = useState(0);
-  const chaseBubbleTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const [vw,          setVw]           = useState(1200);
   const [gardenWidth, setGardenWidth]  = useState(800);
   const [timeStr,     setTimeStr]      = useState("");
@@ -291,7 +287,6 @@ export default function AnimalGardenFooter() {
       if (idleTimerRef.current)  clearTimeout(idleTimerRef.current);
       if (crabSpawnTimer.current)  clearTimeout(crabSpawnTimer.current);
       if (crabWanderTimer.current) clearInterval(crabWanderTimer.current);
-      if (chaseBubbleTimer.current) clearInterval(chaseBubbleTimer.current);
       if (chaseRestTimer.current) clearTimeout(chaseRestTimer.current);
       if (chaseRunTimer.current)  clearTimeout(chaseRunTimer.current);
       timers.forEach(id => clearTimeout(id));
@@ -369,7 +364,7 @@ export default function AnimalGardenFooter() {
         }, 700);
       }
 
-      // Lerp crab visual position toward target (~matches 2s CSS transition)
+      // Lerp crab visual position toward target (~matches 3.5s CSS transition)
       if (crabActiveRef.current) {
         const lerpSpeed = 0.015;
         crabVisualXRef.current += (crabTargetXRef.current - crabVisualXRef.current) * lerpSpeed;
@@ -597,20 +592,6 @@ export default function AnimalGardenFooter() {
       stopRestCycle();
     };
   }, [fufuIdle, randomCrabPos]);
-
-  // ── Chase bubble cycling: rotate phrases while chasing crab ────────────
-  const chasingCrab = crabActive && catAState === "walk";
-  useEffect(() => {
-    if (chasingCrab) {
-      setChaseBubbleIdx(0);
-      chaseBubbleTimer.current = setInterval(() => {
-        setChaseBubbleIdx(i => (i + 1) % CHASE_PHRASES.length);
-      }, 2000);
-    } else {
-      if (chaseBubbleTimer.current) clearInterval(chaseBubbleTimer.current);
-    }
-    return () => { if (chaseBubbleTimer.current) clearInterval(chaseBubbleTimer.current); };
-  }, [chasingCrab]);
 
   // ── Fufu speech bubble (context-sensitive) ─────────────────────────────
   // Use pixel distances so bubbles trigger at consistent visual proximity across screen sizes
