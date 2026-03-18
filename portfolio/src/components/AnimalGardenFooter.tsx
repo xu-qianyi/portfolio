@@ -224,7 +224,11 @@ export default function AnimalGardenFooter() {
   const [bunnyState,    setBunnyState]    = useState<"idle" | "react">("idle");
   const [chickWobble,   setChickWobble]   = useState(false);
   const [fufuIdle,      setFufuIdle]      = useState(false);
+  const [fufuIdlePhrase, setFufuIdlePhrase] = useState("meow?");
+  const IDLE_PHRASES = ["meow?", "야옹~", "म्याऊ~", "miau~", "miaou~"];
+  const idlePhraseIdxRef = useRef(Math.floor(Math.random() * IDLE_PHRASES.length));
   const idleTimerRef    = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [crabCaught,    setCrabCaught]    = useState(false);
   const [crabActive,    setCrabActive]    = useState(false);
   const [crabX,         setCrabX]         = useState(50);
   const [crabY,         setCrabY]         = useState(30);
@@ -240,6 +244,8 @@ export default function AnimalGardenFooter() {
   const chaseRestRef    = useRef(false);   // true = both resting
   const chaseRestTimer  = useRef<ReturnType<typeof setTimeout> | null>(null);
   const chaseRunTimer   = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const crabCaughtRef   = useRef(false);
+  const crabCaughtTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [vw,          setVw]           = useState(1200);
   const [gardenWidth, setGardenWidth]  = useState(800);
   const [timeStr,     setTimeStr]      = useState("");
@@ -289,6 +295,7 @@ export default function AnimalGardenFooter() {
       if (crabWanderTimer.current) clearInterval(crabWanderTimer.current);
       if (chaseRestTimer.current) clearTimeout(chaseRestTimer.current);
       if (chaseRunTimer.current)  clearTimeout(chaseRunTimer.current);
+      if (crabCaughtTimer.current) clearTimeout(crabCaughtTimer.current);
       timers.forEach(id => clearTimeout(id));
     };
   }, []);
@@ -385,13 +392,22 @@ export default function AnimalGardenFooter() {
           if (crabWanderTimer.current) clearInterval(crabWanderTimer.current);
         }
       } else if (crabActiveRef.current) {
-        // Both resting — Fufu stays put
-        if (chaseRestRef.current) {
+        // Compute distance to crab to decide whether to skip rest/head-start
+        const txTmp = crabVisualXRef.current;
+        const tyTmp = crabVisualYRef.current;
+        const { x: cx, y: cy } = posRef.current;
+        const dxTmp = (txTmp - cx) / 100 * r.width;
+        const dyTmp = tyTmp - cy;
+        const distToCrab = Math.sqrt(dxTmp * dxTmp + dyTmp * dyTmp);
+        const crabFar = distToCrab > 200;
+
+        // Both resting — Fufu stays put (only if crab is far)
+        if (chaseRestRef.current && crabFar) {
           setCatAState(prev => prev === "arrive" ? prev : "arrive");
           return;
         }
-        // Crab just moved — give it a head start before Fufu chases
-        if (Date.now() - crabMoveTime.current < 1500) {
+        // Crab just moved — give it a head start (only if crab is far)
+        if (Date.now() - crabMoveTime.current < 1500 && crabFar) {
           setCatAState(prev => prev === "arrive" ? prev : "arrive");
           return;
         }
@@ -413,10 +429,20 @@ export default function AnimalGardenFooter() {
       const dxPx = (dx / 100) * r.width;
       const distPx = Math.sqrt(dxPx * dxPx + dy * dy);
 
-      // If chasing crab and close → crab evades
+      // If chasing crab and close → crab evades, Fufu may say "gotcha!"
       if (!wandInBounds && crabActiveRef.current && distPx < 40) {
         if (Date.now() - lastCrabEvade.current > 2500) {
           lastCrabEvade.current = Date.now();
+          // 30% chance to show catch bubble
+          if (!crabCaughtRef.current && Math.random() < 0.3) {
+            crabCaughtRef.current = true;
+            setCrabCaught(true);
+            if (crabCaughtTimer.current) clearTimeout(crabCaughtTimer.current);
+            crabCaughtTimer.current = setTimeout(() => {
+              crabCaughtRef.current = false;
+              setCrabCaught(false);
+            }, 1200);
+          }
           let nx: number;
           do {
             nx = GARDEN_LEFT_PCT + Math.random() * (GARDEN_RIGHT_PCT - GARDEN_LEFT_PCT);
@@ -510,7 +536,12 @@ export default function AnimalGardenFooter() {
   // ── Fufu idle detection: "meow?" after 4s of not chasing ────────────────
   useEffect(() => {
     if (catAState === "arrive" && !isNearBed) {
-      idleTimerRef.current = setTimeout(() => setFufuIdle(true), 2000);
+      idleTimerRef.current = setTimeout(() => {
+        const phrase = IDLE_PHRASES[idlePhraseIdxRef.current % IDLE_PHRASES.length];
+        idlePhraseIdxRef.current += 1;
+        setFufuIdlePhrase(phrase);
+        setFufuIdle(true);
+      }, 2000);
     } else if (!crabActiveRef.current) {
       // Only clear idle when crab isn't active — otherwise chasing the crab would kill it
       setFufuIdle(false);
@@ -578,7 +609,7 @@ export default function AnimalGardenFooter() {
           setCrabX(np.x);
           setCrabY(np.y);
         }, 8000);
-      }, 500);
+      }, 3500);
     } else {
       if (crabSpawnTimer.current)  clearTimeout(crabSpawnTimer.current);
       if (crabWanderTimer.current) clearInterval(crabWanderTimer.current);
@@ -607,7 +638,9 @@ export default function AnimalGardenFooter() {
 
   const fufuBubble = (() => {
     if (isNearBed)         return "zzz";
+    if (crabCaught)        return "gotcha!";
     if (crabActive && chaseRestRef.current) return "ふぅ";
+    if (fufuIdle && !crabActive) return fufuIdlePhrase;
     if (isNearCrab)        return "!!";
     if (crabActive && catAState === "walk") return crabDist < 120 ? "!" : "...";
     if (isNearFood)        return "~yum";
@@ -616,7 +649,6 @@ export default function AnimalGardenFooter() {
     if (isNearCatBB)       return "?";
     if (isNearBunny)       return "!!";
     if (isNearFlower)      return "~♪";
-    if (fufuIdle && !crabActive) return "meow?";
     if (catAState === "arrive") return "♥";
     return null;
   })();
