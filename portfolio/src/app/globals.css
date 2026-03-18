@@ -12,6 +12,21 @@
   --font-geist: var(--font-geist-sans);
 }
 
+.grid-layout {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: 24px;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+@media (min-width: 1024px) {
+  .grid-layout {
+    padding-left: 72px;
+    padding-right: 72px;
+  }
+}
+
 .hover-ink:hover {
   color: #1A1A1A !important;
 }
@@ -38,11 +53,11 @@ body {
 }
 
 .hero-company-link::after {
-  content: "✦";
+  content: attr(data-num);
   position: absolute;
-  top: 0.45em;
+  top: 0.65em;
   right: -0.85em;
-  font-size: 8px;
+  font-size: 10px;
   line-height: 0;
   color: var(--color-accent);
   opacity: 0.8;
@@ -70,7 +85,7 @@ body {
 .hero-nav-link::after {
   content: attr(data-num);
   position: absolute;
-  top: 0.45em;
+  top: 0.65em;
   right: -0.85em;
   font-size: 8px;
   line-height: 0;

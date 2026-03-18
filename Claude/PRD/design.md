@@ -40,7 +40,7 @@ These are hard constraints. If a decision pushes toward any of these, it's the w
 
 **Rules:**
 
-- Accent appears on hero link hover states (text + underline), the trailing `✦` star on company links, and numbered badges (1/2/3) on nav links — all via CSS `::after`, `font-size: 8px`, `opacity: 0.8`.
+- Accent appears on hero link hover states (text + underline), and numbered badges on company links (1–5) and footer links — all via CSS `::after`, `font-size: 10px`, `opacity: 0.8`.
 - Accent never appears as: decorative backgrounds, section dividers, illustration color.
 - When in doubt, use `--color-ink` at reduced opacity rather than reaching for a new color.
 
@@ -58,8 +58,8 @@ Project headline:     Playfair Display, 20px, weight 400, line-height 130%, colo
 Section heading:      Geist, 1.25rem, weight 500, line-height 1.3
 Body / narrative:     Geist, 1rem, weight 400, line-height 1.7
 Caption / meta:       Geist, 0.875rem, weight 400, color --color-muted
-Nav:                  Geist, 14px, weight 500, color #1a1a1a, letter-spacing 0.32px; logo only — pill links removed
-Footer (Animal Garden): Geist, 14px, weight 500; text row: flex-row space-between; left col: line 1 rgba(26,26,26,0.5) — live Boston time; line 2 #1A1A1A — Fufu CTA + CatEars SVG; right col: CHANGELOG/LinkedIn/X as hero-nav-link, flex-col items-end, gap 4px
+Nav:                  Geist, 16px, weight 500, color #1a1a1a; opacity 0.7 on hover (200ms ease); no underline; 12-col grid-layout; logo col-span-1, links col-start-7 col-span-4, clock col-start-11 col-span-2 (lg only)
+Footer (Animal Garden): Geist, 16px, weight 500; text row: flex-row space-between; left: Fufu CTA #1A1A1A + CatEars SVG; right col: CHANGELOG/LinkedIn/X as hero-nav-link, flex-col items-end, gap 4px
 ```
 
 **Rules:**
@@ -75,10 +75,10 @@ Footer (Animal Garden): Geist, 14px, weight 500; text row: flex-row space-betwee
 **Philosophy:** When in doubt, add space. Padding should feel slightly more generous than necessary. The grid breathes.
 
 ```
-Page horizontal pad:   24px mobile, 72px desktop (lg+) — nav, main content aligned; no max-width cap
-Navbar padding:       12px vertical; 24px horizontal mobile, 72px horizontal lg+; height fit-content
-Hero padding:         desktop 52px top / 64px bottom, 72px horizontal; tablet 28px top / 40px bottom; mobile 64px top/bottom, 24px horizontal; column-gap 16px; row-gap 40px
-Project section pad:  24px horizontal mobile, 72px horizontal lg+; 80px bottom; 2-column masonry at lg (1024px+), 24px column-gap, 48px row-gap
+Page horizontal pad:   24px mobile, 72px desktop (lg+); shared via `.grid-layout` class (repeat(12, 1fr), col-gap 24px)
+Navbar:               12px vertical; grid-layout class; no left padding (grid column 1 is logo); right padding 72px lg
+Hero padding:         desktop 52px top / 64px bottom, 72px horizontal; tablet 28px top / 40px bottom; mobile 64px top/bottom, 24px horizontal; text spans left half (lg:grid-cols-2, col 1 only)
+Project section:      grid-layout class; cards in col-start-1 col-end-13 inner div; masonry columns-1 lg:columns-2; 24px col-gap; 80px bottom
 Footer padding:       16px 72px (desktop/tablet); 12px 72px (mobile)
 Section gap:          5rem–7rem vertical
 ```
@@ -89,7 +89,7 @@ Section gap:          5rem–7rem vertical
 
 **Breakpoint:** Tablet and below (<1024px): projects stack in a single column. From 1024px (lg): 2-column masonry.
 
-**Rules:** Never crowd cards — reduce columns before reducing padding. Negative space is a design element; the hero right column holds nav links (Resume/About/Extras) on desktop; on tablet and mobile they appear below the headline in a horizontal row.
+**Rules:** Never crowd cards — reduce columns before reducing padding. Negative space is a design element. Hero text spans the left half of the page; nav links live in the navbar, not the hero.
 
 ---
 
@@ -128,18 +128,19 @@ Headline:              Playfair Display, 20px, weight 400, line-height 130%, #1A
 
 **"In Their Eyes" Testimonials:** Profile cards appear/disappear quietly — felt discovered, not announced.
 
-**Navigation:** Sticky, unobtrusive. Logo only.
+**Navigation:** Sticky, 12-col grid. Logo col-span-1 col-start-1. Links col-start-7. Clock col-start-11 (lg only).
 
 ```
-Logo:                  "Martta XU" text only; Geist, 14px, weight 500, color #1a1a1a
-Pill links:            removed — Resume/About/Extras moved to hero right column
+Logo:                  "Martta XU"; Geist, 16px, weight 500, color #1a1a1a; opacity 0.7 on hover
+Links:                 Work / About / Extras / Resume; same style as logo; gap 24px
+Clock:                 live Boston time (no am/pm) + "Boston, MA"; same style, static opacity 1
 ```
 
-**Hero inline links:** Two classes, same base style (dotted underline, accent hover, `::after` badge via `position: absolute; top: 0.45em; right: -0.85em; font-size: 8px; opacity: 0.8`):
+**Hero inline links:** Two classes, same base style (dotted underline, accent hover, `::after` badge via `position: absolute; top: 0.65em; right: -0.85em; font-size: 10px; opacity: 0.8`):
 
 ```
-.hero-company-link     Company names in bio; badge content: "✦"; always visible
-.hero-nav-link         Resume/About/Extras (hero) + CHANGELOG/LinkedIn/X (footer); badge content: attr(data-num) → "1"/"2"/"3"
+.hero-company-link     Company names in bio; badge content: attr(data-num) → "1"–"5"; always visible
+.hero-nav-link         CHANGELOG/LinkedIn/X (footer); badge content: attr(data-num)
 
 Color:                  #1A1A1A
 Hover color:            var(--color-accent)

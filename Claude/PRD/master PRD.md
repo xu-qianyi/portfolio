@@ -24,6 +24,7 @@
 /               Home — work overview
 /about          About — who Martta is, in two voices
 /extras         Extras — vibe coding showcase
+/work/[slug]    Case study — per-project deep dive (e.g. /work/ark7)
 ```
 
 ---
@@ -32,14 +33,16 @@
 
 **Navbar (sticky)** — See `design.md §7` for visual and layout spec.
 
-- Logo: "Martta XU" text only → `/`; Geist 14px, weight 500, color `#1a1a1a`. No pill links — navigation moved to hero section.
+- 12-column grid layout (`grid-layout` class, `px-[72px]` lg); Geist 16px, weight 500, color `#1a1a1a`, opacity 0.7 on hover; no underline.
+- Logo "Martta XU": col-span-1 → `/`
+- Nav links (Work / About / Extras / Resume): col-start-7, col-span-4
+- Live Boston clock (no am/pm): col-start-11, col-span-2, right-aligned; hidden on tablet and below
 
 **Footer — Animal Garden**
 
-- Two-line Geist text, 14px, weight 500; gap 0 between lines:
-  - Line 1: live Boston time — `[h:mm am/pm] in Boston, MA (Open to relocate)`; color `rgba(26,26,26,0.5)`
-  - Line 2 desktop/tablet: `Fufu would like to play with you` + animated CatEars SVG; color `#1a1a1a`
-  - Line 2 mobile: `Come to play with my cat - Fufu on desktop`
+- One-line Geist text per side; 16px, weight 500:
+  - Left: `Fufu would like to play with you` + animated CatEars SVG; color `#1a1a1a`
+  - Left mobile: `Come to play with my cat - Fufu on desktop`
 - Below the text (tablet/desktop only), an interactive pixel garden. Garden content band aligned with footer text (layout offset, no padding wrapper):
   - Wand cursor (`CatToy.gif`) replaces the system cursor **inside the footer only**, chasing interactions
   - Cat A (Fufu) chases the wand using directional walk GIFs and, when she reaches the cat bed area (a small zone around the bed, not pixel-perfect), she switches to a sleep GIF; Cat B cycles sleep/scratch states on click, and scratches when Fufu or the wand passes nearby
@@ -58,16 +61,18 @@
 
 **Hero** — See `design.md` for layout and typography.
 
-The entry point. On large screens, a two-column layout: headline on the left; right column has Resume/About/Extras as `hero-nav-link` links, vertical stack, right-aligned. On tablet and mobile, nav links appear below the headline in a horizontal row.
+The entry point. Single-column hero text spanning the left half of the page (`grid lg:grid-cols-2`, text in col 1). Nav links (Work/About/Extras/Resume) live in the navbar, not the hero.
 
 Headline copy:
 
-> "My design practice lives in the making - through .fig files, code, and increasingly AI. And in the curating - knowing where to linger, and where to let go. Right now I'm at Datalign✦, building in wealth management. 
+> "My design practice lives in the making - through .fig files, code, and increasingly AI. And in the curating - knowing where to linger, and where to let go. Right now I'm at Datalign¹, building in wealth management.
 >
-> Previously: engineering at Thoughtworks✦, user research at LookLook✦, strategy at PwC✦ and JLL✦."
+> Previously: engineering at Thoughtworks², user research at LookLook³, strategy at PwC⁴ and JLL⁵."
+
+Company names are `hero-company-link` — dotted underline, numbered badge (1–5 via `data-num`), accent red hover.
 
 **Project Grid**
-The work. Two-column masonry layout. Each project card: single cover image (varying aspect ratio), a metadata row (company · industry · date · type), and a one-line headline. Cards flow top-to-bottom within each column; the stagger comes from varying image proportions. On mobile (<1024px), collapses to a single column. See `design.md §7` for breakpoint and spacing.
+The work. Uses `grid-layout` class (12-col); project cards wrapped in a `col-start-1 col-end-13` inner div with CSS masonry (`columns-1 lg:columns-2`). Each card: cover image, metadata row (company · industry · date · type), one-line headline. Collapses to single column below lg (1024px). See `design.md §7` for spacing.
 
 Data sourced from `src/data/projects.json`. Each entry requires: `id`, `company`, `industry`, `date`, `type`, `headline`, `image`, `width`, `height`, `href`.
 
@@ -105,7 +110,28 @@ Data sourced from `src/data/tools.json`.
 
 ---
 
-### 4.4 404 Page
+### 4.4 Case Study Template (`/work/[slug]`)
+
+The case study page is designed as a reusable template. The first implementation is the Ark7 project (`/work/ark7`); future projects reuse the same layout and components.
+
+**Layout:** Two-column on desktop — a fixed side navigation on the left, scrollable content on the right. On mobile, the side nav collapses (details TBD).
+
+**Side Navigation**
+
+Inspired by Are.na's filter menu interaction. The mechanism:
+
+- A vertical list of section names is rendered in the left column (e.g. Overview, Problem, Process, Solution, Results).
+- A vertical rail runs alongside the list. A small filled dot sits on this rail and tracks the active section.
+- The dot moves via `transform: translateY(...)`, animating smoothly whenever the active section changes — no jump cuts.
+- The active section's label is also visually highlighted (bold or color change).
+- Active section is determined by `IntersectionObserver` watching each content section as the user scrolls.
+- Clicking a nav item smoothly scrolls the page to the corresponding section.
+
+The overall effect: the dot slides up and down the rail like a needle, giving the reader a clear, unobtrusive sense of where they are in the narrative.
+
+---
+
+### 4.5 404 Page
 
 A custom not-found page. Should feel intentional, not broken — consistent with the site's visual identity.
 

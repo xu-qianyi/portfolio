@@ -1,43 +1,37 @@
 "use client";
 
-import { useState, type CSSProperties } from "react";
+import { useState, useEffect, type CSSProperties } from "react";
 import Link from "next/link";
 
 const NAV_LINK: CSSProperties = {
   fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-  fontSize: "14px",
+  fontSize: "16px",
   fontWeight: 500,
   color: "#1a1a1a",
-  letterSpacing: "0.32px",
-  lineHeight: "normal",
   textDecoration: "none",
-  transition: "color 200ms ease, opacity 200ms ease",
+  transition: "opacity 200ms ease",
 };
-
-const PILL: CSSProperties = {
-  display: "inline-flex",
-  alignItems: "center",
-  padding: "8px",
-  borderRadius: "9999px",
-};
-
-type PillId = "resume" | "about" | "extras" | null;
-type NavItemId = Exclude<PillId, null>;
-
-const NAV_ITEMS: Array<{
-  id: NavItemId;
-  label: string;
-  href: string;
-  external?: boolean;
-}> = [
-  { id: "resume", label: "Resume", href: "https://drive.google.com", external: true },
-  { id: "about", label: "About", href: "/about" },
-  { id: "extras", label: "Extras", href: "/extras" },
-];
 
 export default function Navbar() {
-  const [pillHovered, setPillHovered] = useState<PillId>(null);
-  const [logoHovered, setLogoHovered] = useState(false);
+  const [logoHovered,   setLogoHovered]   = useState(false);
+  const [workHovered,   setWorkHovered]   = useState(false);
+  const [aboutHovered,  setAboutHovered]  = useState(false);
+  const [extrasHovered, setExtrasHovered] = useState(false);
+  const [resumeHovered, setResumeHovered] = useState(false);
+  const [timeStr,       setTimeStr]       = useState("");
+
+  useEffect(() => {
+    const fmt = new Intl.DateTimeFormat("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+      timeZone: "America/New_York",
+    });
+    const tick = () => setTimeStr(fmt.format(new Date()).toLowerCase());
+    tick();
+    const id = setInterval(tick, 60_000);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <header
@@ -49,28 +43,63 @@ export default function Navbar() {
       }}
     >
       <nav
-        className="px-[24px] lg:px-[72px]"
-        style={{
-          display: "flex",
-          height: "fit-content",
-          paddingTop: "12px",
-          paddingBottom: "12px",
-          justifyContent: "space-between",
-          alignItems: "center",
-          alignSelf: "stretch",
-        }}
+        className="grid-layout items-center py-[12px]"
       >
-        {/* Logo */}
+        {/* col-start-1 col-span-2 — Logo */}
         <Link
           href="/"
-          style={{ ...NAV_LINK, display: "inline-flex", alignItems: "center", gap: "6px" }}
+          className="col-start-1 col-span-1"
+          style={{ ...NAV_LINK, display: "inline-flex", alignItems: "center" }}
           onMouseEnter={() => setLogoHovered(true)}
           onMouseLeave={() => setLogoHovered(false)}
         >
-          <img src="/yin.svg" alt="" aria-hidden="true" style={{ height: "18px", width: "18px", objectFit: "contain" }} />
           <span style={{ opacity: logoHovered ? 0.7 : 1, transition: "opacity 200ms ease" }}>Martta XU</span>
         </Link>
 
+        {/* col-start-7 col-span-5 — Nav links */}
+        <div className="col-start-7 col-span-4 flex items-center gap-[24px]">
+          <Link
+            href="/"
+            style={{ ...NAV_LINK, opacity: workHovered ? 0.7 : 1 }}
+            onMouseEnter={() => setWorkHovered(true)}
+            onMouseLeave={() => setWorkHovered(false)}
+          >
+            Work
+          </Link>
+          <Link
+            href="/about"
+            style={{ ...NAV_LINK, opacity: aboutHovered ? 0.7 : 1 }}
+            onMouseEnter={() => setAboutHovered(true)}
+            onMouseLeave={() => setAboutHovered(false)}
+          >
+            About
+          </Link>
+          <Link
+            href="/extras"
+            style={{ ...NAV_LINK, opacity: extrasHovered ? 0.7 : 1 }}
+            onMouseEnter={() => setExtrasHovered(true)}
+            onMouseLeave={() => setExtrasHovered(false)}
+          >
+            Extras
+          </Link>
+          <a
+            href="https://drive.google.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ ...NAV_LINK, opacity: resumeHovered ? 0.7 : 1 }}
+            onMouseEnter={() => setResumeHovered(true)}
+            onMouseLeave={() => setResumeHovered(false)}
+          >
+            Resume
+          </a>
+        </div>
+
+        {/* col-start-12 — Clock */}
+        {timeStr && (
+          <span className="col-start-11 col-span-2 hidden lg:flex justify-end" style={{ ...NAV_LINK }}>
+            {timeStr.replace(/\s*(am|pm)/i, "")} Boston, MA
+          </span>
+        )}
       </nav>
     </header>
   );

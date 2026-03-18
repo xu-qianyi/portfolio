@@ -248,7 +248,6 @@ export default function AnimalGardenFooter() {
   const crabCaughtTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [vw,          setVw]           = useState(1200);
   const [gardenWidth, setGardenWidth]  = useState(800);
-  const [timeStr,     setTimeStr]      = useState("");
 
   const isMobile = vw < 640;
   const isTablet = vw >= 640 && vw < 1024;
@@ -260,18 +259,6 @@ export default function AnimalGardenFooter() {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  useEffect(() => {
-    const fmt = new Intl.DateTimeFormat("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-      timeZone: "America/New_York",
-    });
-    const tick = () => setTimeStr(fmt.format(new Date()).toLowerCase());
-    tick();
-    const id = setInterval(tick, 60_000);
-    return () => clearInterval(id);
-  }, []);
 
   // Track garden width for direction calculations
   useEffect(() => {
@@ -703,18 +690,7 @@ export default function AnimalGardenFooter() {
             <p
               style={{
                 fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-                fontSize,
-                fontWeight: 500,
-                color: "#1a1a1a",
-                margin: 0,
-              }}
-            >
-              {timeStr} in Boston, MA
-            </p>
-            <p
-              style={{
-                fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-                fontSize,
+                fontSize: 16,
                 fontWeight: 500,
                 color: "#1a1a1a",
                 margin: 0,

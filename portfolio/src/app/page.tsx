@@ -1,6 +1,5 @@
 import type { CSSProperties } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import projects from "@/data/projects.json";
 import LottiePreview from "@/components/LottiePreview";
 
@@ -9,7 +8,7 @@ const HERO_TEXT: CSSProperties = {
   fontSize: "16px",
   fontWeight: 500,
   color: "#1A1A1A",
-  lineHeight: "140%",
+  lineHeight: "150%",
   letterSpacing: "0px",
   margin: 0,
 };
@@ -99,12 +98,12 @@ export default function Home() {
     <>
       {/* Hero */}
       <section
-        className="grid lg:grid-cols-2 gap-y-[40px] gap-x-[16px] py-[64px] px-[24px] sm:pt-[28px] sm:pb-[40px] lg:pt-[52px] lg:pb-[64px] lg:px-[72px]"
+        className="grid lg:grid-cols-2 py-[64px] px-[24px] sm:pt-[28px] sm:pb-[40px] lg:pt-[52px] lg:pb-[64px] lg:px-[72px]"
         style={{ alignSelf: "stretch" }}
       >
         <p style={HERO_TEXT}>
           My design practice lives in the making - through .fig files, code, and increasingly AI. And in the curating - knowing where to linger, and where to let go. Right now I&apos;m at{" "}
-          <span className="hero-company-link">
+          <span className="hero-company-link" data-num="1">
             Datalign
           </span>
           , building in wealth management. Previously: engineering at{" "}
@@ -113,6 +112,7 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
             className="hero-company-link"
+            data-num="2"
           >
             Thoughtworks
           </a>
@@ -122,6 +122,7 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
             className="hero-company-link"
+            data-num="3"
           >
             Looklook
           </a>
@@ -131,6 +132,7 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
             className="hero-company-link"
+            data-num="4"
           >
             PwC
           </a>{" "}
@@ -140,35 +142,21 @@ export default function Home() {
             target="_blank"
             rel="noopener noreferrer"
             className="hero-company-link"
+            data-num="5"
           >
             JLL
           </a>
           .
         </p>
-        <div className="flex flex-row gap-x-[16px] lg:flex-col lg:items-end lg:gap-x-0 lg:gap-y-[4px]" style={HERO_TEXT}>
-          <a
-            href="https://drive.google.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hero-nav-link"
-            data-num="1"
-          >
-            Resume
-          </a>
-          <Link href="/about" className="hero-nav-link" data-num="2">
-            About
-          </Link>
-          <Link href="/extras" className="hero-nav-link" data-num="3">
-            Extras
-          </Link>
-        </div>
       </section>
 
-      {/* Masonry project grid */}
-      <section className="columns-1 lg:columns-2 gap-x-[24px] px-[24px] pb-20 lg:px-[72px]">
-        {projects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
+      {/* Project grid */}
+      <section className="grid-layout pb-20">
+        <div className="col-start-1 col-end-13 columns-1 lg:columns-2 gap-x-[24px]">
+          {projects.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
+        </div>
       </section>
     </>
   );
