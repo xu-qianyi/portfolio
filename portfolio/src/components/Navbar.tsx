@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, type CSSProperties } from "react";
+import { useState, useEffect, useRef, type CSSProperties } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const NAV_LINK: CSSProperties = {
   fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
@@ -12,13 +13,22 @@ const NAV_LINK: CSSProperties = {
   transition: "opacity 200ms ease",
 };
 
+const NAV_ITEMS = [
+  { label: "Work",   href: "/" },
+  { label: "About",  href: "/about" },
+  { label: "Extras", href: "/extras" },
+];
+
 export default function Navbar() {
+  const pathname = usePathname();
   const [logoHovered,   setLogoHovered]   = useState(false);
-  const [workHovered,   setWorkHovered]   = useState(false);
-  const [aboutHovered,  setAboutHovered]  = useState(false);
-  const [extrasHovered, setExtrasHovered] = useState(false);
+  const [hoveredIdx,    setHoveredIdx]    = useState<number | null>(null);
   const [resumeHovered, setResumeHovered] = useState(false);
   const [timeStr,       setTimeStr]       = useState("");
+  const [indicatorLeft, setIndicatorLeft] = useState<number | null>(null);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const linkRefs     = useRef<(HTMLAnchorElement | null)[]>([]);
 
   useEffect(() => {
     const fmt = new Intl.DateTimeFormat("en-US", {
@@ -33,6 +43,18 @@ export default function Navbar() {
     return () => clearInterval(id);
   }, []);
 
+  useEffect(() => {
+    const activeIdx = NAV_ITEMS.findIndex(item =>
+      item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)
+    );
+    const el        = linkRefs.current[activeIdx];
+    const container = containerRef.current;
+    if (!el || !container) return;
+    const elRect        = el.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    setIndicatorLeft(elRect.left - containerRect.left + elRect.width / 2);
+  }, [pathname]);
+
   return (
     <header
       style={{
@@ -42,10 +64,8 @@ export default function Navbar() {
         backgroundColor: "var(--color-surface)",
       }}
     >
-      <nav
-        className="grid-layout items-center py-[12px]"
-      >
-        {/* col-start-1 col-span-2 — Logo */}
+      <nav className="grid-layout items-center py-[12px]">
+        {/* col-start-1 — Logo */}
         <Link
           href="/"
           className="col-start-1 col-span-1"
@@ -56,32 +76,24 @@ export default function Navbar() {
           <span style={{ opacity: logoHovered ? 0.7 : 1, transition: "opacity 200ms ease" }}>Martta XU</span>
         </Link>
 
-        {/* col-start-7 col-span-5 — Nav links */}
-        <div className="col-start-7 col-span-4 flex items-center gap-[24px]">
-          <Link
-            href="/"
-            style={{ ...NAV_LINK, opacity: workHovered ? 0.7 : 1 }}
-            onMouseEnter={() => setWorkHovered(true)}
-            onMouseLeave={() => setWorkHovered(false)}
-          >
-            Work
-          </Link>
-          <Link
-            href="/about"
-            style={{ ...NAV_LINK, opacity: aboutHovered ? 0.7 : 1 }}
-            onMouseEnter={() => setAboutHovered(true)}
-            onMouseLeave={() => setAboutHovered(false)}
-          >
-            About
-          </Link>
-          <Link
-            href="/extras"
-            style={{ ...NAV_LINK, opacity: extrasHovered ? 0.7 : 1 }}
-            onMouseEnter={() => setExtrasHovered(true)}
-            onMouseLeave={() => setExtrasHovered(false)}
-          >
-            Extras
-          </Link>
+        {/* col-start-7 col-span-4 — Nav links */}
+        <div
+          ref={containerRef}
+          className="col-start-7 col-span-4"
+          style={{ position: "relative", display: "flex", alignItems: "center", gap: "24px" }}
+        >
+          {NAV_ITEMS.map((item, i) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              ref={el => { linkRefs.current[i] = el; }}
+              style={{ ...NAV_LINK, opacity: hoveredIdx === i ? 0.7 : 1 }}
+              onMouseEnter={() => setHoveredIdx(i)}
+              onMouseLeave={() => setHoveredIdx(null)}
+            >
+              {item.label}
+            </Link>
+          ))}
           <a
             href="https://drive.google.com"
             target="_blank"
@@ -92,9 +104,28 @@ export default function Navbar() {
           >
             Resume
           </a>
+
+          {/* Sliding triangle indicator */}
+          {indicatorLeft !== null && (
+            <span
+              style={{
+                position: "absolute",
+                bottom: "-5px",
+                left: indicatorLeft,
+                transform: "translateX(-50%)",
+                width: 0,
+                height: 0,
+                borderLeft: "3px solid transparent",
+                borderRight: "3px solid transparent",
+                borderBottom: "3px solid var(--color-accent)",
+                transition: "left 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+                pointerEvents: "none",
+              }}
+            />
+          )}
         </div>
 
-        {/* col-start-12 — Clock */}
+        {/* col-start-11 — Clock */}
         {timeStr && (
           <span className="col-start-11 col-span-2 hidden lg:flex justify-end" style={{ ...NAV_LINK }}>
             {timeStr.replace(/\s*(am|pm)/i, "")} Boston, MA

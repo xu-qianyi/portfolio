@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
 import AnimalGardenFooter from "./AnimalGardenFooter";
 
 export default function Shell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
   const footerRef = useRef<HTMLDivElement>(null);
   const [footerH, setFooterH] = useState(0);
 
@@ -44,7 +46,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
             }}
           >
             <Navbar />
-            <main style={{ flex: 1 }}>{children}</main>
+            <main key={pathname} style={{ flex: 1 }}>{children}</main>
           </div>
         </div>
       </div>
