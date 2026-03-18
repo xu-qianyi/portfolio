@@ -307,7 +307,7 @@ export default function AnimalGardenFooter() {
   const rA       = isTablet ? 128  : ROW_A;
   const rB       = isTablet ? 72   : ROW_B;
   const rC       = isTablet ? 24   : ROW_C;
-  const padding  = isMobile ? "12px 16px" : "16px 72px";
+  const padding  = isMobile ? "12px 16px" : isTablet ? "16px 24px 0px" : "16px 72px";
   const fontSize = 14;
 
   // ── Walk GIF resolver ───────────────────────────────────────────────────────
