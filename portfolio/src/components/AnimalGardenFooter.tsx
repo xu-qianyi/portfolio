@@ -102,6 +102,8 @@ const BUNNY_CSS_X   = gardenX(BUNNY_POS.x);   // ≈ 77%
 // Pre-computed flower CSS X positions for "near any flower" checks
 const FLOWER_CSS_XS = FLOWERS.map(f => gardenX(f.x));
 
+const IDLE_PHRASES = ["meow?", "야옹~", "म्याऊ~", "miau~", "miaou~"] as const;
+
 // Keyframes for garden animations (module-level to avoid DOM churn)
 const GARDEN_KEYFRAMES = `
   @keyframes chickShake {
@@ -225,7 +227,6 @@ export default function AnimalGardenFooter() {
   const [chickWobble,   setChickWobble]   = useState(false);
   const [fufuIdle,      setFufuIdle]      = useState(false);
   const [fufuIdlePhrase, setFufuIdlePhrase] = useState("meow?");
-  const IDLE_PHRASES = ["meow?", "야옹~", "म्याऊ~", "miau~", "miaou~"];
   const idlePhraseIdxRef = useRef(Math.floor(Math.random() * IDLE_PHRASES.length));
   const idleTimerRef    = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [crabCaught,    setCrabCaught]    = useState(false);
@@ -248,6 +249,7 @@ export default function AnimalGardenFooter() {
   const crabCaughtTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [vw,          setVw]           = useState(1200);
   const [gardenWidth, setGardenWidth]  = useState(800);
+  const gardenWidthRef = useRef(800);  // kept in sync with gardenWidth; used in RAF-frame proximity checks to avoid stale state
 
   const isMobile = vw < 640;
   const isTablet = vw >= 640 && vw < 1024;
@@ -264,11 +266,20 @@ export default function AnimalGardenFooter() {
   useEffect(() => {
     if (!gardenRef.current) return;
     const ro = new ResizeObserver(([entry]) => {
+      gardenWidthRef.current = entry.contentRect.width;
       setGardenWidth(entry.contentRect.width);
     });
     ro.observe(gardenRef.current);
     return () => ro.disconnect();
   }, [isMobile]);
+
+  // ── Inject garden keyframes once (avoids re-injecting every render) ────────
+  useEffect(() => {
+    const el = document.createElement("style");
+    el.textContent = GARDEN_KEYFRAMES;
+    document.head.appendChild(el);
+    return () => { document.head.removeChild(el); };
+  }, []);
 
   // ── Cleanup all timers on unmount ───────────────────────────────────────────
   useEffect(() => {
@@ -558,6 +569,13 @@ export default function AnimalGardenFooter() {
       chaseRunTimer.current = setTimeout(() => {
         chaseRestRef.current = true;
         chaseRestTimer.current = setTimeout(() => {
+          // Move crab first, then release Fufu (head-start via crabMoveTime)
+          const np = randomCrabPos();
+          crabTargetXRef.current = np.x;
+          crabTargetYRef.current = np.y;
+          crabMoveTime.current = Date.now();
+          setCrabX(np.x);
+          setCrabY(np.y);
           chaseRestRef.current = false;
           schedule();                 // next cycle
         }, restTime);
@@ -565,7 +583,7 @@ export default function AnimalGardenFooter() {
     };
     chaseRestRef.current = false;
     schedule();
-  }, []);
+  }, [randomCrabPos]);
 
   const stopRestCycle = useCallback(() => {
     chaseRestRef.current = false;
@@ -609,17 +627,21 @@ export default function AnimalGardenFooter() {
       if (crabWanderTimer.current) clearInterval(crabWanderTimer.current);
       stopRestCycle();
     };
-  }, [fufuIdle, randomCrabPos]);
+  }, [fufuIdle, randomCrabPos, startRestCycle, stopRestCycle]);
 
   // ── Fufu speech bubble (context-sensitive) ─────────────────────────────
-  // Use pixel distances so bubbles trigger at consistent visual proximity across screen sizes
-  const pxFrom = (pct: number) => Math.abs(catAPos.x - pct) / 100 * gardenWidth;
+  // Use pixel distances so bubbles trigger at consistent visual proximity across screen sizes.
+  // gardenWidthRef.current is always fresh (written by ResizeObserver); avoids the one-frame
+  // stale value that gardenWidth state would have immediately after a resize.
+  const pxFrom = (pct: number) => Math.abs(catAPos.x - pct) / 100 * gardenWidthRef.current;
   const isNearFood    = pxFrom(FOOD_CSS_X)    < 25 && Math.abs(catAPos.y - rC) < 30;
   const isNearCatBB   = pxFrom(CATB_CSS_X)    < 40;
   const isNearChick   = pxFrom(CHICK_CSS_X)   < 40;
   const isNearChicken = pxFrom(CHICKEN_CSS_X) < 40;
   const isNearBunny   = pxFrom(BUNNY_CSS_X)   < 40;
   const isNearFlower  = catAPos.y > 70 && FLOWER_CSS_XS.some(fx => pxFrom(fx) < 30);
+  // Both axes are in screen-pixels: pxFrom converts % X → px; catAPos.y / crabY are "bottom px"
+  // (fixed-height garden), which is also pixels — so Euclidean distance is valid here.
   const crabDist      = crabActive ? Math.sqrt(pxFrom(crabX) ** 2 + (catAPos.y - crabY) ** 2) : Infinity;
   const isNearCrab    = crabDist < 50;
 
@@ -791,7 +813,6 @@ export default function AnimalGardenFooter() {
               </div>
 
               {/* Props & static animals */}
-              <style>{GARDEN_KEYFRAMES}</style>
               {PROPS.map((item, idx) => (
                 <div
                   key={"p" + idx}
