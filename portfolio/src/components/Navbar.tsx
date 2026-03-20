@@ -10,7 +10,6 @@ const NAV_LINK: CSSProperties = {
   fontWeight: 500,
   color: "#1a1a1a",
   textDecoration: "none",
-  transition: "opacity 200ms ease",
 };
 
 const NAV_ITEMS = [
@@ -23,9 +22,6 @@ const RESUME_HREF = "https://drive.google.com";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [logoHovered,   setLogoHovered]   = useState(false);
-  const [hoveredIdx,    setHoveredIdx]    = useState<number | null>(null);
-  const [resumeHovered, setResumeHovered] = useState(false);
   const [timeStr,       setTimeStr]       = useState("");
   const [indicatorLeft, setIndicatorLeft] = useState<number | null>(null);
   const [menuOpen,      setMenuOpen]      = useState(false);
@@ -76,10 +72,8 @@ export default function Navbar() {
           href="/"
           className="col-start-1 col-span-6"
           style={{ ...NAV_LINK, display: "inline-flex", alignItems: "center" }}
-          onMouseEnter={() => setLogoHovered(true)}
-          onMouseLeave={() => setLogoHovered(false)}
         >
-          <span style={{ opacity: logoHovered ? 0.7 : 1, transition: "opacity 200ms ease", whiteSpace: "nowrap" }}>
+          <span style={{ whiteSpace: "nowrap" }}>
             Martta XU
           </span>
         </Link>
@@ -95,9 +89,7 @@ export default function Navbar() {
               key={item.href}
               href={item.href}
               ref={el => { linkRefs.current[i] = el; }}
-              style={{ ...NAV_LINK, opacity: hoveredIdx === i ? 0.7 : 1 }}
-              onMouseEnter={() => setHoveredIdx(i)}
-              onMouseLeave={() => setHoveredIdx(null)}
+              style={NAV_LINK}
             >
               {item.label}
             </Link>
@@ -106,9 +98,7 @@ export default function Navbar() {
             href={RESUME_HREF}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ ...NAV_LINK, opacity: resumeHovered ? 0.7 : 1 }}
-            onMouseEnter={() => setResumeHovered(true)}
-            onMouseLeave={() => setResumeHovered(false)}
+            style={NAV_LINK}
           >
             Resume
           </a>

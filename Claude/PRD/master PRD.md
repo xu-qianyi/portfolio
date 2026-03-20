@@ -129,6 +129,41 @@ Inspired by Are.na's filter menu interaction. The mechanism:
 
 The overall effect: the dot slides up and down the rail like a needle, giving the reader a clear, unobtrusive sense of where they are in the narrative.
 
+The side nav renders a flat list of section labels sourced from the project's data. The number and names of sections vary per project and are defined in project data, not in this template. Each content section carries an `id` that matches its nav entry.
+
+**Content Layout**
+
+The case study uses a 3-column page grid: sticky side nav on the left, bounded main content in the center, empty gutter on the right for visual breathing room.
+
+- Page grid: `grid-cols-1 md:grid-cols-[220px_1fr_220px]`
+- Center content: `max-w-3xl` on md, `max-w-4xl` on lg; `py-12`; `flex flex-col gap-12 md:gap-24`
+
+**Hero block** (top of content, before first section):
+
+- Small label — project name + year; Geist, 14px, weight 500, muted
+- Large headline (`h1`) — Playfair Display, display size
+- Full-width `16:9` cover image below the headline
+- Metadata row: Role / Timeline / Team / Skills — 4 columns on desktop, stacked on mobile; Geist; label weight 500, value weight 400
+
+**Section rhythm** (repeats for each content section):
+
+- Section label (`h4`): Geist, 12–13px, weight 500, uppercase, muted — matches the nav item label
+- Section headline (`h2`): Playfair Display, large — the key argument or question of that section
+- Body paragraphs (`p`): Geist, 16px, weight 400, line-height 1.6
+- Optional `1px` full-width horizontal rule (`foreground/10` opacity) between major sections
+
+**Content sub-patterns** (used within sections as needed):
+
+- **Block quote / key insight** — Playfair Display italic; left border `2px` accent color, `pl-4`
+- **Two-column callout cards** — `flex-col md:flex-row gap-6`; each card: short bold label + supporting sentence; Geist
+- **Media + caption** — `grid-cols-1 md:grid-cols-[60%_auto]`; image/placeholder left (`border border-foreground/10`), caption text right (Geist 14px, bottom-aligned on desktop)
+- **Full-width image** — `w-full h-auto object-contain`, `border border-foreground/10`
+
+**Font assignments:**
+
+- Playfair Display → `h1`, `h2`, block quote text
+- Geist → all other text (labels, body, metadata, nav, captions)
+
 ---
 
 ### 4.5 404 Page
