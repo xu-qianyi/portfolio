@@ -53,6 +53,7 @@ function ProjectCard({ project }: { project: (typeof projects)[number] }) {
     <div style={{ breakInside: "avoid", marginBottom: "48px" }}>
       <a
         href={project.href}
+        className="project-card-link"
         style={{
           display: "block",
           position: "relative",
@@ -61,7 +62,6 @@ function ProjectCard({ project }: { project: (typeof projects)[number] }) {
           border: "1px solid rgba(204,209,218,0.2)",
           overflow: "hidden",
           backgroundColor: "#F5F5F5",
-          cursor: "url('/pixel%20cursor.svg') 0 0, pointer",
         }}
       >
         {project.image.endsWith(".json") ? (

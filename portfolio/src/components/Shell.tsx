@@ -12,14 +12,23 @@ export default function Shell({ children }: { children: React.ReactNode }) {
   const footerRef = useRef<HTMLDivElement>(null);
   const [footerH, setFooterH] = useState(0);
 
+  // Footer height for main margin — re-measure when route changes (footer may mount/unmount).
   useEffect(() => {
-    if (!footerRef.current) return;
+    const showFooter = pathname !== "/about" && !pathname.startsWith("/about/");
+    if (!showFooter || !footerRef.current) {
+      setFooterH(0);
+      return;
+    }
+
+    const el = footerRef.current;
+    setFooterH(el.getBoundingClientRect().height);
+
     const ro = new ResizeObserver(([entry]) => {
       setFooterH(entry.contentRect.height);
     });
-    ro.observe(footerRef.current);
+    ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [pathname]);
 
   return (
     <>
