@@ -22,35 +22,98 @@ For every issue reported in the findings, you must classify it into exactly one 
 
 ---
 
-### Issues Found
+### 状态机先行（按你 `review.md` 的要求）：
 
-**[MEDIUM]** [page.tsx:110](vscode-webview://0t5nl5b0tqebovebo19h65tm1e4f5h4kd3hcnf6sob0ib00s5a1i/portfolio/src/app/page.tsx#L110) — Datalign `href="#"` will scroll to page top on click and add `#` to URL.  
-Fix: Use `href="#"` with an `onClick={e => e.preventDefault()}`, or better yet, remove `href` and use `<span className="hero-company-link">` if there's no real destination. Alternatively, once a real URL exists, replace it.
+[Idle/Arrive]
 
-**[MEDIUM]** [AnimalGardenFooter.tsx:121-125](vscode-webview://0t5nl5b0tqebovebo19h65tm1e4f5h4kd3hcnf6sob0ib00s5a1i/portfolio/src/components/AnimalGardenFooter.tsx#L121-L125) — `setVw` is called on resize but the initial value is hardcoded to `1200` (line 115). On SSR/hydration, `isMobile`/`isTablet` will be wrong until the first resize event. This causes a hydration flash (garden visible → hidden, or vice versa).  
-Fix: Add `setVw(window.innerWidth)` inside the effect body before attaching the listener:
+   | mouse in bounds
 
-```tsx
-useEffect(() => {
-  setVw(window.innerWidth);
-  const onResize = () => setVw(window.innerWidth);
-  ...
+   v
 
-```
+[Chase Wand] ----(mouse leaves + crab active)----> [Chase Crab]
 
-**[MEDIUM]** [AnimalGardenFooter.tsx:128-131](vscode-webview://0t5nl5b0tqebovebo19h65tm1e4f5h4kd3hcnf6sob0ib00s5a1i/portfolio/src/components/AnimalGardenFooter.tsx#L128-L131) — `gardenWidth` is read from `gardenRef.current.offsetWidth` inside an effect that depends on `[vw]`, but on first mount `vw` is `1200` (the hardcoded default), so the effect runs once with possibly stale DOM width. Also, `offsetWidth` doesn't react to CSS transitions — a ResizeObserver (like Shell already uses) would be more reliable.
+   | dist < stopDist                                 | dist < 40 triggers crab evade
 
-**[LOW]** [AnimalGardenFooter.tsx:241-250](vscode-webview://0t5nl5b0tqebovebo19h65tm1e4f5h4kd3hcnf6sob0ib00s5a1i/portfolio/src/components/AnimalGardenFooter.tsx#L241-L250) — `wobblePlant` is not wrapped in `useCallback` and is recreated every render. It captures `wobbleTimers` ref so it's functionally stable, but since it's passed as `onMouseEnter` to 14 flower divs, it causes those divs to receive a new prop each render.
+   v                                                 v
 
-**[LOW]** [AnimalGardenFooter.tsx:255-256](vscode-webview://0t5nl5b0tqebovebo19h65tm1e4f5h4kd3hcnf6sob0ib00s5a1i/portfolio/src/components/AnimalGardenFooter.tsx#L255-L256) — Chinese comments (`视为"在床上"的范围`) mixed with otherwise all-English codebase. Not a bug, just inconsistent.
+[Arrive] <-------------------(no target)--------- [Arrive]
 
----
+   |
 
-### Edge Case Matrix
+   | idle timer (2s)
 
-1. **Mobile SSR hydration mismatch** — Initial `vw=1200` renders the garden on the server; a 375px phone hydrates without it → React hydration warning + layout flash.
-2. **Rapid tab-switching / unmount during rAF** — If the component unmounts mid-rAF, `setCatAPos` etc. fire on an unmounted component. React 18+ suppresses this warning, but it's still a wasted update. Could guard with an `isMounted` ref.
-3. **Datalign link** `href="#"` — Screen readers announce it as a link, keyboard users can tab to it, but clicking scrolls to top with no destination. Confusing UX for accessibility users.
+   v
+
+[Fufu Idle Bubble] --(3.5s)--> [Spawn Crab + Rest/Run Cycle]
+
+⚠️ **Issues Found (ordered by severity)**
+
+- **[HIGH]** `Garden` **每帧整组件重渲染，低端设备容易掉帧（核心交互风险）**  
+当前位置更新在 RAF 中持续 `setCatAPos` / `setCatAState`，会连带整个 garden（花、道具、图片树）一起重渲染。
+  Garden.tsxLines 344-351
+  useEffect(() => {
+  const loop = () => {
+  rafRef.current = requestAnimationFrame(loop);
+  if (isMobileRef.current || !gardenRef.current) return;
+  const r = gardenRef.current.getBoundingClientRect();
+  if (r.width === 0) return;
+  const { x: wx, y: wy } = wandPos.current;
+  Garden.tsxLines 503-507
+  posRef.current = next;
+  setCatAPos({ ...next });
+  setCatAState("walk");
+  setCatAFlip(dx < 0);
+  setCatADir({ dx, dy });
+  **Fix:** 把“静态层”（flowers/props）拆成 `React.memo` 子组件；Fufu/crab 用 `ref + style.transform` 做 imperative 更新，避免每帧 React render。
+- **[MEDIUM] 追踪/游走 Y 轴边界是“混合硬编码”，在不同高度下行为不一致**  
+crab 的随机 Y 使用固定范围 `20..140 + interactiveOffset`，与 `gardenH` 未联动；视觉上在不同断点会出现“活动带偏窄/偏低”。
+  Garden.tsxLines 627-635
+  const randomCrabPos = useCallback(() => {
+  const fufuX = posRef.current.x;
+  let x: number;
+  do {
+  x = GARDEN_LEFT_PCT + Math.random() * (GARDEN_RIGHT_PCT - GARDEN_LEFT_PCT);
+  } while (Math.abs(x - fufuX) < 20);
+  *// Random Y between front row and mid-flower row*
+  const y = gardenInteractiveArea + 20 + Math.random() * 120;
+  **Fix:** 用 `const yMax = gardenH + gardenInteractiveArea - margin` 动态计算范围（例如基于 `r.height`），避免断点漂移。
+- **[MEDIUM] 未处理“减少动态效果”偏好（可访问性风险）**  
+多个无限动画+RAF未根据 `prefers-reduced-motion` 降级。
+  Garden.tsxLines 109-135
+  const GARDEN_KEYFRAMES = `
+    @keyframes chickShake {
+      ...
+    }
+    @keyframes bubbleFadeIn {
+      ...
+    }
+    @keyframes crabBounce {
+      ...
+    }
+  `
+  **Fix:** 增加 `matchMedia("(prefers-reduced-motion: reduce)")` 分支：关闭 RAF chase、停用 bounce/twitch 动画，保留基础静态交互。
+- **[LOW] 样式注入无去重标识，未来多实例时可能重复注入**  
+当前每次挂载都 append `<style>`，无 `id` 去重。
+  Garden.tsxLines 286-291
+  useEffect(() => {
+  const el = document.createElement("style");
+  el.textContent = GARDEN_KEYFRAMES;
+  document.head.appendChild(el);
+  return () => { document.head.removeChild(el); };
+  }, []);
+  **Fix:** 给 style 加 `id`（如 `garden-keyframes`），存在则复用；或将 keyframes 放全局 CSS。
+
+✅ **Looks Good**
+
+- 关键定时器/interval/RAF 基本都有 cleanup，内存泄漏风险控制得不错。
+- 交互元素（CatB/Bunny）已有键盘可达性（`role="button"`, `tabIndex`, Enter/Space）。
+- `next/image` 与 `unoptimized` 的组合对你这类像素 GIF 资源是合理折中。
+- 坐标系统已经比早期版本更一致（`r.bottom - e.clientY` + reachable clamp）。
+
+📊 **Summary**
+
+- Files reviewed: **2** (`portfolio/src/components/Garden.tsx`, `portfolio/src/app/about/page.tsx`)
+- Critical: **0** | High: **1** | Medium: **2** | Low: **1**
 
 ## 3. Output Format
 

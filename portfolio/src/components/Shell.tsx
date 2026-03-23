@@ -25,7 +25,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
         }}
       >
         <Navbar />
-        <main key={pathname} style={{ flex: 1 }}>
+        <main key={pathname} style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
           {children}
         </main>
       </div>

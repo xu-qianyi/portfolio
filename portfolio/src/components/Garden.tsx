@@ -1,210 +1,27 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-
-// ─── Asset paths ─────────────────────────────────────────────────────────────
-const ASSETS = {
-  wand:        "/footer/CatToy.gif",
-  // Cat A (Fufu) — walk directions
-  catA_arrive: "/footer/yawn_stand.gif",
-  catA_walkR:  "/footer/walk_right.gif",
-  catA_walkL:  "/footer/walk_left.gif",
-  catA_walkU:  "/footer/walk_up.gif",
-  catA_walkD:  "/footer/walk_down.gif",
-  catA_walkRD: "/footer/walk_right_d.gif",
-  catA_walkLD: "/footer/walk_left_d.gif",
-  catA_walkRU: "/footer/walk_right_up.gif",
-  catA_walkLU: "/footer/walk_left_up.gif",
-  catA_sleep1: "/footer/catA_sleep1(r).gif",
-  // Cat B — click to cycle
-  catB_0: "/footer/sleep3(r).gif",
-  catB_1: "/footer/sleep4(l).gif",
-  catB_2: "/footer/scratch(l).gif",
-  catB_3: "/footer/sleep2(l).gif",
-  // Bunny
-  bunny_idle:  "/footer/BunnySitting.gif",
-  bunny_react: "/footer/BunnyJump.gif",
-  // Static animals & props
-  chick:       "/footer/chick idle.gif",
-  chicken_sit: "/footer/chicken_sitting.gif",
-  catbed:      "/footer/CatBedBlue.png",
-  catfood:     "/footer/catfood.png",
-  // Plants
-  plant_arnica:   "/footer/arnica arnika 3.png",
-  plant_cosmo:    "/footer/Cosmo.png",
-  plant_daisy:    "/footer/Daisy.png",
-  plant_lavender: "/footer/Lavender.png",
-  plant_lily:     "/footer/Lily.png",
-  plant_pansy:    "/footer/Pansy.png",
-  plant_tulip:    "/footer/Tulip.png",
-  plant_valerian: "/footer/valerian kozek lekarski.png",
-} as const;
-
-type AssetKey = keyof typeof ASSETS;
-
-// ─── Layout constants ─────────────────────────────────────────────────────────
-const ROW_A = 160; // px from bottom — back row (tall flowers)
-const ROW_B = 90;  // px from bottom — mid row (shorter flowers)
-const ROW_C = 30;  // px from bottom — front row (animals & props)
-
-// Leave left/right space so garden aligns with footer text (no padding wrapper)
-const GARDEN_LEFT_PCT = 6;
-const GARDEN_RIGHT_PCT = 94;
-const GARDEN_X_MIN = 2;
-const GARDEN_X_MAX = 93;
-function gardenX(x: number): number {
-  return GARDEN_LEFT_PCT + (x - GARDEN_X_MIN) * (GARDEN_RIGHT_PCT - GARDEN_LEFT_PCT) / (GARDEN_X_MAX - GARDEN_X_MIN);
-}
-
-// X positions per row (%), step ~14%, each row offset by ~7%
-const rowA_x = [2,  16, 30, 44, 58, 72, 86];
-const rowB_x = [9,  23, 37, 51, 65, 79, 93];
-const rowC_x = [5,  19, 33, 47, 61, 75, 89];
-
-const FLOWERS: { x: number; y: number; key: AssetKey }[] = [
-  // Row A
-  { x: rowA_x[0], y: ROW_A, key: "plant_arnica" },
-  { x: rowA_x[1], y: ROW_A, key: "plant_tulip" },
-  { x: rowA_x[2], y: ROW_A, key: "plant_lavender" },
-  { x: rowA_x[3], y: ROW_A, key: "plant_cosmo" },
-  { x: rowA_x[4], y: ROW_A, key: "plant_lily" },
-  { x: rowA_x[5], y: ROW_A, key: "plant_pansy" },
-  { x: rowA_x[6], y: ROW_A, key: "plant_valerian" },
-  // Row B
-  { x: rowB_x[0], y: ROW_B, key: "plant_daisy" },
-  { x: rowB_x[1], y: ROW_B, key: "plant_pansy" },
-  { x: rowB_x[2], y: ROW_B, key: "plant_arnica" },
-  { x: rowB_x[3], y: ROW_B, key: "plant_valerian" },
-  { x: rowB_x[4], y: ROW_B, key: "plant_tulip" },
-  { x: rowB_x[5], y: ROW_B, key: "plant_lily" },
-  { x: rowB_x[6], y: ROW_B, key: "plant_daisy" },
-];
-
-const PROPS: { x: number; y: number; key: AssetKey; size: number }[] = [
-  { x: rowC_x[0], y: ROW_C, key: "chick",       size: 24 },
-  { x: rowC_x[1], y: ROW_C, key: "catbed",      size: 52 },
-  { x: rowC_x[2], y: ROW_C, key: "chicken_sit", size: 32 },
-  { x: rowC_x[3], y: ROW_C, key: "catfood",     size: 32 },
-];
-
-const CATB_POS    = { x: rowC_x[4], y: ROW_C };
-const BUNNY_POS   = { x: rowC_x[5], y: ROW_C };
-const EXTRA_PLANT = { x: rowC_x[6], y: ROW_C, key: "plant_cosmo" as AssetKey };
-
-const CAT_B_KEYS: AssetKey[] = ["catB_0", "catB_1", "catB_2", "catB_3"];
-// Pre-computed CSS % positions for proximity checks
-const CATB_CSS_X    = gardenX(CATB_POS.x);    // ≈ 63%
-const CHICK_CSS_X   = gardenX(rowC_x[0]);     // ≈ 9%
-const FOOD_CSS_X    = gardenX(rowC_x[3]);      // ≈ 49.5%
-const CHICKEN_CSS_X = gardenX(rowC_x[2]);      // ≈ 36%
-const BUNNY_CSS_X   = gardenX(BUNNY_POS.x);   // ≈ 77%
-
-// Pre-computed flower CSS X positions for "near any flower" checks
-const FLOWER_CSS_XS = FLOWERS.map(f => gardenX(f.x));
-
-const IDLE_PHRASES = ["meow?", "야옹~", "म्याऊ~", "miau~", "miaou~"] as const;
-
-// Keyframes for garden animations (module-level to avoid DOM churn)
-const GARDEN_KEYFRAMES = `
-  @keyframes chickShake {
-    0%   { transform: rotate(0deg); }
-    20%  { transform: rotate(-12deg); }
-    40%  { transform: rotate(12deg); }
-    60%  { transform: rotate(-8deg); }
-    80%  { transform: rotate(6deg); }
-    100% { transform: rotate(0deg); }
-  }
-  @keyframes bubbleFadeIn {
-    from { opacity: 0; transform: translateX(-50%) translateY(4px); }
-    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-  }
-  @keyframes crabBounce {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50%      { transform: translateY(-3px) scale(1.05); }
-  }
-  @keyframes crabAppear {
-    from { opacity: 0; transform: scale(0.2); }
-    to   { opacity: 1; transform: scale(1); }
-  }
-`;
-
-// ─── Claw'd SVG (pixel-art Claude crab) ──────────────────────────────────────
-const Clawd = ({ size = 22 }: { size?: number }) => (
-  <svg
-    width={size * 1.4}
-    height={size}
-    viewBox="0 0 21 14"
-    xmlns="http://www.w3.org/2000/svg"
-    style={{ imageRendering: "pixelated", display: "block" }}
-  >
-    {/* Body — wide rectangle, no ears */}
-    <rect x="2" y="0" width="17" height="11" fill="#DA7756" />
-    {/* Claws — mid-body height */}
-    <rect x="0" y="6" width="2" height="2" fill="#DA7756" />
-    <rect x="19" y="6" width="2" height="2" fill="#DA7756" />
-    {/* Eyes — small squares */}
-    <rect x="6" y="5" width="2" height="2" fill="#2a2a2a" />
-    <rect x="13" y="5" width="2" height="2" fill="#2a2a2a" />
-    {/* Four legs — all same size */}
-    <rect x="3" y="11" width="2" height="3" fill="#DA7756" />
-    <rect x="7" y="11" width="2" height="3" fill="#DA7756" />
-    <rect x="12" y="11" width="2" height="3" fill="#DA7756" />
-    <rect x="16" y="11" width="2" height="3" fill="#DA7756" />
-  </svg>
-);
-
-// ─── Cat Ears SVG ─────────────────────────────────────────────────────────────
-const CatEars = ({ size = 24, color = "rgba(0, 0, 0, 0.4)" }: { size?: number; color?: string }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 40 40"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    style={{ overflow: "visible", display: "inline-block", verticalAlign: "middle" }}
-  >
-    <style>{`
-      .cat-ear-left, .cat-ear-right { transform-origin: bottom center; transform-box: fill-box; }
-      @keyframes catLeftEarTwitch {
-        0%, 9% { transform: rotate(0deg); }
-        12% { transform: rotate(-10deg); }
-        16%, 34% { transform: rotate(0deg); }
-        38% { transform: rotate(-15deg); }
-        42% { transform: rotate(-5deg); }
-        48%, 58% { transform: rotate(0deg); }
-        62% { transform: rotate(-25deg); }
-        70% { transform: rotate(-20deg); }
-        78%, 100% { transform: rotate(0deg); }
-      }
-      @keyframes catRightEarTwitch {
-        0%, 9% { transform: rotate(0deg); }
-        12% { transform: rotate(6deg); }
-        16%, 34% { transform: rotate(0deg); }
-        38% { transform: rotate(10deg); }
-        42% { transform: rotate(4deg); }
-        48%, 58% { transform: rotate(0deg); }
-        62% { transform: rotate(-15deg); }
-        70% { transform: rotate(-10deg); }
-        78%, 100% { transform: rotate(0deg); }
-      }
-      .cat-ear-left { animation: catLeftEarTwitch 12s ease-in-out infinite; }
-      .cat-ear-right { animation: catRightEarTwitch 12s ease-in-out infinite; }
-    `}</style>
-    <g transform="translate(6, 8)">
-      <path className="cat-ear-left" d="M 1 14 L 3 6 L 8 12" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-      <path className="cat-ear-right" d="M 25 14 L 23 6 L 18 12" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-    </g>
-  </svg>
-);
+import Image from "next/image";
+import Clawd from "./Clawd";
+import CatEars from "./CatEars";
+import {
+  ASSETS, type AssetKey,
+  ROW_A, ROW_B, ROW_C, INTERACTIVE_BOTTOM_AREA,
+  GARDEN_LEFT_PCT, GARDEN_RIGHT_PCT, gardenX, rowC_x,
+  FLOWERS, PROPS,
+  CATB_POS_X, BUNNY_POS_X, EXTRA_PLANT,
+  CAT_B_KEYS, CATB_CSS_X, CHICK_CSS_X, FOOD_CSS_X, CHICKEN_CSS_X, BUNNY_CSS_X,
+  FLOWER_CSS_XS, IDLE_PHRASES, GARDEN_KEYFRAMES,
+} from "./gardenConfig";
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function Garden() {
+  const sectionRef    = useRef<HTMLElement>(null);
   const gardenRef     = useRef<HTMLDivElement>(null);
   const wandCursorRef = useRef<HTMLImageElement>(null);
   const rafRef        = useRef<number>(0);
   const wandPos       = useRef({ x: -999, y: -999 });
-  const posRef        = useRef({ x: gardenX(30), y: 30 });
-  const catBRef           = useRef(0);
+  const posRef        = useRef({ x: gardenX(30), y: ROW_C + INTERACTIVE_BOTTOM_AREA });
   const bunnyTimer        = useRef<ReturnType<typeof setTimeout> | null>(null);
   const wobbleTimers      = useRef<Map<number, ReturnType<typeof setTimeout>>>(new Map());
   const catBDisturbedRef  = useRef(false);
@@ -217,7 +34,7 @@ export default function Garden() {
 
   const [isOverGarden,setIsOverGarden] = useState(false);
   const [wobbling,    setWobbling]     = useState<Record<number, boolean>>({});
-  const [catAPos,     setCatAPos]      = useState({ x: gardenX(30), y: 30 });
+  const [catAPos,     setCatAPos]      = useState({ x: gardenX(30), y: ROW_C + INTERACTIVE_BOTTOM_AREA });
   const [catAState,   setCatAState]    = useState<"walk" | "arrive">("arrive");
   const [catAFlip,    setCatAFlip]     = useState(false);
   const [catADir,     setCatADir]      = useState({ dx: 1, dy: 0 });
@@ -232,11 +49,11 @@ export default function Garden() {
   const [crabCaught,    setCrabCaught]    = useState(false);
   const [crabActive,    setCrabActive]    = useState(false);
   const [crabX,         setCrabX]         = useState(50);
-  const [crabY,         setCrabY]         = useState(30);
+  const [crabY,         setCrabY]         = useState(ROW_C + INTERACTIVE_BOTTOM_AREA);
   const crabTargetXRef  = useRef(50);   // where crab is heading (instant jump)
-  const crabTargetYRef  = useRef(30);
+  const crabTargetYRef  = useRef(ROW_C + INTERACTIVE_BOTTOM_AREA);
   const crabVisualXRef  = useRef(50);   // where crab visually is (lerped, Fufu chases this)
-  const crabVisualYRef  = useRef(30);
+  const crabVisualYRef  = useRef(ROW_C + INTERACTIVE_BOTTOM_AREA);
   const crabActiveRef   = useRef(false);
   const crabSpawnTimer  = useRef<ReturnType<typeof setTimeout> | null>(null);
   const crabWanderTimer = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -248,8 +65,7 @@ export default function Garden() {
   const crabCaughtRef   = useRef(false);
   const crabCaughtTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [vw,          setVw]           = useState(1200);
-  const [gardenWidth, setGardenWidth]  = useState(800);
-  const gardenWidthRef = useRef(800);  // kept in sync with gardenWidth; used in RAF-frame proximity checks to avoid stale state
+  const gardenWidthRef = useRef(800);
 
   const isMobile = vw < 640;
   const isTablet = vw >= 640 && vw < 1024;
@@ -263,13 +79,10 @@ export default function Garden() {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-
-  // Track garden width for direction calculations
   useEffect(() => {
     if (!gardenRef.current) return;
     const ro = new ResizeObserver(([entry]) => {
       gardenWidthRef.current = entry.contentRect.width;
-      setGardenWidth(entry.contentRect.width);
     });
     ro.observe(gardenRef.current);
     return () => ro.disconnect();
@@ -301,14 +114,22 @@ export default function Garden() {
   }, []);
 
   // Responsive sizes
-  const gardenH  = isTablet ? 190  : 220;
+  const gardenH  = isTablet ? 220  : 260;
   const catSize  = isTablet ? 48   : 52;
   const bnySize  = isTablet ? 36   : 44;
   const flowerSz = isTablet ? 27   : 32;
   const arnicaSz = isTablet ? 35   : 42;
   const rA       = isTablet ? 128  : ROW_A;
   const rB       = isTablet ? 72   : ROW_B;
-  const rC       = isTablet ? 24   : ROW_C;
+  const rC       = isTablet ? 10   : ROW_C;
+  const gardenInteractiveArea = isMobile ? 0 : INTERACTIVE_BOTTOM_AREA;
+  const rAVisual = rA + gardenInteractiveArea;
+  const rBVisual = rB + gardenInteractiveArea;
+  const rCVisual = rC + gardenInteractiveArea;
+  const rCVisualRef = useRef(rCVisual);
+  rCVisualRef.current = rCVisual;
+  const catSizeRef = useRef(catSize);
+  catSizeRef.current = catSize;
   const padding  = isMobile ? "12px 16px" : isTablet ? "16px 24px 0px" : "16px 72px";
 
   // ── Walk GIF resolver ───────────────────────────────────────────────────────
@@ -333,14 +154,21 @@ export default function Garden() {
       const r = gardenRef.current.getBoundingClientRect();
       if (r.width === 0) return;
       const { x: wx, y: wy } = wandPos.current;
+      const yMin = 0;
+      const yMax = r.height;
 
       // ── Proximity triggers (run every frame, independent of wand bounds) ───
       const catBPixelX  = CATB_CSS_X  / 100 * r.width;
       const chickPixelX = CHICK_CSS_X / 100 * r.width;
       const fufuPixelX  = posRef.current.x / 100 * r.width;
+      const rowCY = rCVisualRef.current;
 
       // Fufu or wand near Cat B → scratch animation (only on zone entry)
-      const wandNearCatB  = wx >= 0 && wx <= r.width && Math.abs(wx - catBPixelX) < 60;
+      const wandNearCatB  =
+        wx >= 0 &&
+        wx <= r.width &&
+        Math.abs(wx - catBPixelX) < 60 &&
+        Math.abs(wy - rowCY) < 80;
       const fufuNearCatB  = Math.abs(fufuPixelX - catBPixelX) < 60;
       const fufuJustEntered = fufuNearCatB && !wasFufuNearCatB.current;
       const wandJustEntered = wandNearCatB && !wasWandNearCatB.current;
@@ -357,7 +185,11 @@ export default function Garden() {
       }
 
       // Wand near chick → wobble (only on zone entry)
-      const wandNearChick = wx >= 0 && wx <= r.width && Math.abs(wx - chickPixelX) < 60;
+      const wandNearChick =
+        wx >= 0 &&
+        wx <= r.width &&
+        Math.abs(wx - chickPixelX) < 60 &&
+        Math.abs(wy - rowCY) < 80;
       const chickJustEntered = wandNearChick && !wasWandNearChick.current;
       wasWandNearChick.current = wandNearChick;
       if (chickJustEntered && !chickWobbleRef.current) {
@@ -381,9 +213,8 @@ export default function Garden() {
       const wandInBounds = wx >= 0 && wx <= r.width;
       let tx: number, ty: number;
       if (wandInBounds) {
-        // Wand active → chase wand, kill crab
         tx = (wx / r.width) * 100;
-        ty = wy;
+        ty = Math.max(yMin, Math.min(yMax, wy));
         if (crabActiveRef.current) {
           crabActiveRef.current = false;
           setCrabActive(false);
@@ -391,22 +222,13 @@ export default function Garden() {
           if (crabWanderTimer.current) clearInterval(crabWanderTimer.current);
         }
       } else if (crabActiveRef.current) {
-        // Compute distance to crab to decide whether to skip rest/head-start
-        const txTmp = crabVisualXRef.current;
-        const tyTmp = crabVisualYRef.current;
-        const { x: cx, y: cy } = posRef.current;
-        const dxTmp = (txTmp - cx) / 100 * r.width;
-        const dyTmp = tyTmp - cy;
-        const distToCrab = Math.sqrt(dxTmp * dxTmp + dyTmp * dyTmp);
-        const crabFar = distToCrab > 200;
-
-        // Both resting — Fufu stays put (only if crab is far)
-        if (chaseRestRef.current && crabFar) {
+        // Both resting — Fufu stays put
+        if (chaseRestRef.current) {
           setCatAState(prev => prev === "arrive" ? prev : "arrive");
           return;
         }
-        // Crab just moved — give it a head start (only if crab is far)
-        if (Date.now() - crabMoveTime.current < 700 && crabFar) {
+        // Crab just moved — give it a head start (700ms)
+        if (Date.now() - crabMoveTime.current < 700) {
           setCatAState(prev => prev === "arrive" ? prev : "arrive");
           return;
         }
@@ -422,14 +244,13 @@ export default function Garden() {
       const { x, y } = posRef.current;
       const dx = tx - x;
       const dy = ty - y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
 
-      // Pixel-space stopping/arrival threshold
+      // All distance/direction math in pixel space to avoid mixed-unit bias
       const dxPx = (dx / 100) * r.width;
       const distPx = Math.sqrt(dxPx * dxPx + dy * dy);
 
       // If chasing crab and close → crab evades, Fufu may say "gotcha!"
-      if (!wandInBounds && crabActiveRef.current && distPx < 40) {
+      if (!wandInBounds && crabActiveRef.current && distPx < 55) {
         if (Date.now() - lastCrabEvade.current > 2500) {
           lastCrabEvade.current = Date.now();
           // 30% chance to show catch bubble
@@ -442,31 +263,33 @@ export default function Garden() {
               setCrabCaught(false);
             }, 1200);
           }
-          let nx: number;
-          do {
-            nx = GARDEN_LEFT_PCT + Math.random() * (GARDEN_RIGHT_PCT - GARDEN_LEFT_PCT);
-          } while (Math.abs(nx - x) < 20);
-          const ny = 20 + Math.random() * 120;
-          crabTargetXRef.current = nx;
-          crabTargetYRef.current = ny;
+          const oldCx = crabTargetXRef.current;
+          const oldCy = crabTargetYRef.current;
+          const np = randomCrabPos(oldCx, oldCy);
+          crabTargetXRef.current = np.x;
+          crabTargetYRef.current = np.y;
           crabMoveTime.current = Date.now();
-          setCrabX(nx);
-          setCrabY(ny);
+          setCrabX(np.x);
+          setCrabY(np.y);
         }
         setCatAState("arrive");
         return;
       }
 
-      if (distPx < 30) { setCatAState("arrive"); return; }
+      const stopDistPx = wandInBounds ? 20 : 30;
+      if (distPx < stopDistPx) { setCatAState("arrive"); return; }
 
       // Distance‑adaptive speed: farther targets → faster, close‑in → slower
       const chasingCrab = !wandInBounds && crabActiveRef.current;
-      const baseSpeed = chasingCrab ? 0.08 : 0.35;
-      const extra     = Math.min(dist * 0.012, chasingCrab ? 0.14 : 0.45);
-      const speed     = baseSpeed + extra;
+      // Speed defined as % of garden width per frame — scales with screen size
+      const basePct = chasingCrab ? 0.08 : 0.10;
+      const distPct = distPx / r.width * 100;
+      const extraPct = Math.min(distPct * 0.015, chasingCrab ? 0.14 : 0.16);
+      const speedPx  = (basePct + extraPct) / 100 * r.width;
+      // Normalize direction in pixel space, then convert X step back to %
       const next = {
-        x: Math.max(GARDEN_LEFT_PCT, Math.min(GARDEN_RIGHT_PCT, x + (dx / dist) * speed)),
-        y: Math.max(5,  Math.min(210, y + (dy / dist) * speed)),
+        x: Math.max(GARDEN_LEFT_PCT, Math.min(GARDEN_RIGHT_PCT, x + (dxPx / distPx) * speedPx * (100 / r.width))),
+        y: Math.max(yMin, Math.min(yMax, y + (dy / distPx) * speedPx)),
       };
       posRef.current = next;
       setCatAPos({ ...next });
@@ -476,19 +299,36 @@ export default function Garden() {
     };
     rafRef.current = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(rafRef.current);
-  }, []);
+  }, [gardenInteractiveArea, gardenH]);
 
   // ── Mouse tracking ──────────────────────────────────────────────────────────
   useEffect(() => {
+    const hoverSlack = 4; // keep wand active slightly past visual edge to avoid flicker
+
     const onMove = (e: MouseEvent) => {
-      if (isOverGarden && wandCursorRef.current) {
+      const sectionEl = sectionRef.current;
+      const sectionRect = sectionEl?.getBoundingClientRect();
+      const insideHover = !!sectionRect && !isMobileRef.current &&
+        e.clientX >= sectionRect.left - hoverSlack &&
+        e.clientX <= sectionRect.right + hoverSlack &&
+        e.clientY >= sectionRect.top - hoverSlack &&
+        e.clientY <= sectionRect.bottom + hoverSlack;
+
+      setIsOverGarden((prev) => (prev === insideHover ? prev : insideHover));
+
+      if (insideHover && wandCursorRef.current) {
         wandCursorRef.current.style.left = `${e.clientX}px`;
         wandCursorRef.current.style.top = `${e.clientY}px`;
       }
+
       if (!gardenRef.current) return;
       const r = gardenRef.current.getBoundingClientRect();
+      const controlTop = sectionRect?.top ?? r.top;
+
+      // Use garden bottom as Y origin so Fufu's target aligns with rendered positions.
+      // Keep control active up to section top (tip text area), matching visible wand behavior.
       if (e.clientX >= r.left && e.clientX <= r.right &&
-          e.clientY >= r.top  && e.clientY <= r.bottom) {
+          e.clientY >= controlTop && e.clientY <= r.bottom) {
         wandPos.current = { x: e.clientX - r.left, y: r.bottom - e.clientY };
       } else {
         wandPos.current = { x: -999, y: -999 };
@@ -496,22 +336,44 @@ export default function Garden() {
     };
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
-  }, [isOverGarden]);
-
-  // ── Handlers ────────────────────────────────────────────────────────────────
-  const handleCatBClick = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    const next = (catBRef.current + 1) % 4;
-    catBRef.current = next;
-    setCatBIdx(next);
   }, []);
 
-  const handleBunnyClick = useCallback((e: React.MouseEvent) => {
+  // ── Handlers ────────────────────────────────────────────────────────────────
+  const cycleCatB = useCallback(() => {
+    setCatBIdx(prev => (prev + 1) % 4);
+  }, []);
+
+  const handleCatBClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
+    cycleCatB();
+  }, [cycleCatB]);
+
+  const handleCatBKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+      cycleCatB();
+    }
+  }, [cycleCatB]);
+
+  const triggerBunnyReact = useCallback(() => {
     if (bunnyTimer.current) clearTimeout(bunnyTimer.current);
     setBunnyState("react");
     bunnyTimer.current = setTimeout(() => setBunnyState("idle"), 2500);
   }, []);
+
+  const handleBunnyClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    triggerBunnyReact();
+  }, [triggerBunnyReact]);
+
+  const handleBunnyKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+      triggerBunnyReact();
+    }
+  }, [triggerBunnyReact]);
 
   const wobblePlant = useCallback((idx: number) => {
     const existing = wobbleTimers.current.get(idx);
@@ -525,14 +387,15 @@ export default function Garden() {
   }, []);
 
   // Cat bed position (Row C, second slot)
-  const catBedPos = { x: gardenX(rowC_x[1]), y: rC };
+  const catBedPos = { x: gardenX(rowC_x[1]), y: rCVisual };
 
-  // 视为“在床上”的范围（可以按感觉微调 4 和 10）
-  const isXNearBed = Math.abs(catAPos.x - catBedPos.x) < 4;
-  const isYNearBed = Math.abs(catAPos.y - catBedPos.y) < 10;
-  const isNearBed  = isXNearBed && isYNearBed && !crabActive;
+  // "on bed" proximity thresholds (tune 4 and 10 by feel)
+  const isNearBed =
+    Math.abs(catAPos.x - catBedPos.x) < 4 &&
+    Math.abs(catAPos.y - catBedPos.y) < 10 &&
+    !crabActive;
 
-  // ── Fufu idle detection: "meow?" after 4s of not chasing ────────────────
+  // ── Fufu idle detection: "meow?" after 2s of not chasing ────────────────
   useEffect(() => {
     if (catAState === "arrive" && !isNearBed) {
       idleTimerRef.current = setTimeout(() => {
@@ -550,16 +413,30 @@ export default function Garden() {
   }, [catAState, isNearBed]);
 
   // ── Claude crab: appears when idle, Fufu chases it ────────────────────
-  const randomCrabPos = useCallback(() => {
+  // Normalized distance: both axes mapped to 0–100 so distance is screen-size-independent.
+  // Garden diagonal ≈ √(88² + 100²) ≈ 133;  40% of that ≈ 53.
+  const MIN_SPAWN_DIST_PCT = 53;
+  const pctDist = (ax: number, ay: number, bx: number, by: number) => {
+    const dx = ax - bx;
+    const dy = (ay - by) / gardenH * 100;
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
+  const randomCrabPos = useCallback((awayFromX?: number, awayFromY?: number) => {
     const fufuX = posRef.current.x;
-    let x: number;
+    const fufuY = posRef.current.y;
+    let x: number, y: number, tries = 0;
     do {
       x = GARDEN_LEFT_PCT + Math.random() * (GARDEN_RIGHT_PCT - GARDEN_LEFT_PCT);
-    } while (Math.abs(x - fufuX) < 20);
-    // Random Y between front row and mid-flower row
-    const y = 20 + Math.random() * 120;
+      y = gardenInteractiveArea + 20 + Math.random() * (gardenH - 40);
+      tries++;
+    } while (
+      tries < 80 &&
+      (pctDist(x, y, fufuX, fufuY) < MIN_SPAWN_DIST_PCT ||
+       (awayFromX !== undefined && pctDist(x, y, awayFromX, awayFromY!) < MIN_SPAWN_DIST_PCT))
+    );
     return { x, y };
-  }, []);
+  }, [gardenInteractiveArea, gardenH]);
 
   // Start / stop the rest-run cycle together with the crab
   const startRestCycle = useCallback(() => {
@@ -635,7 +512,7 @@ export default function Garden() {
   // gardenWidthRef.current is always fresh (written by ResizeObserver); avoids the one-frame
   // stale value that gardenWidth state would have immediately after a resize.
   const pxFrom = (pct: number) => Math.abs(catAPos.x - pct) / 100 * gardenWidthRef.current;
-  const isNearFood    = pxFrom(FOOD_CSS_X)    < 25 && Math.abs(catAPos.y - rC) < 30;
+  const isNearFood    = pxFrom(FOOD_CSS_X)    < 25 && Math.abs(catAPos.y - rCVisual) < 30;
   const isNearCatBB   = pxFrom(CATB_CSS_X)    < 40;
   const isNearChick   = pxFrom(CHICK_CSS_X)   < 40;
   const isNearChicken = pxFrom(CHICKEN_CSS_X) < 40;
@@ -667,7 +544,7 @@ export default function Garden() {
     isNearBed
       ? ASSETS.catA_sleep1
       : catAState === "walk"
-        ? getWalkSrc(catADir.dx, catADir.dy, gardenWidth)
+        ? getWalkSrc(catADir.dx, catADir.dy, gardenWidthRef.current)
         : ASSETS.catA_arrive;
 
   const catBImgSrc = catBDisturbed ? ASSETS.catB_2 : ASSETS[CAT_B_KEYS[catBIdx]];
@@ -677,18 +554,19 @@ export default function Garden() {
     <>
       {/* Wand cursor — only visible while hovering over footer */}
       {isOverGarden && (
-        <img
+        <Image
           ref={wandCursorRef}
           src={ASSETS.wand}
           alt=""
+          width={32}
+          height={32}
+          unoptimized
           draggable={false}
           aria-hidden
           style={{
             position: "fixed",
             left: -999,
             top: -999,
-            width: 32,
-            height: 32,
             imageRendering: "pixelated",
             pointerEvents: "none",
             transform: "translate(-4px, -4px)",
@@ -698,43 +576,45 @@ export default function Garden() {
       )}
 
       <section
-        onMouseEnter={() => setIsOverGarden(true)}
-        onMouseLeave={() => setIsOverGarden(false)}
+        ref={sectionRef}
+        className={isOverGarden ? "garden-cursor-none" : undefined}
         style={{
-          background: "#f8f8f8",
           borderTop: "none",
           fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-          cursor: isOverGarden ? "none" : "auto",
+          paddingBottom: 0,
         }}
       >
-        {/* Tip text */}
-        <div style={{ padding }}>
-          <p
-            style={{
-              fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-              fontSize: 16,
-              fontWeight: 500,
-              color: "#1a1a1a",
-              margin: 0,
-            }}
-          >
-            {isMobile
-              ? "Come to play with my cat - Fufu on desktop"
-              : (
-                <span>
-                  Tip: Move your mouse (cat teaser) here.{" "}
-                  <CatEars size={32} color="#1a1a1a" />
-                </span>
-              )}
-          </p>
-        </div>
-
         {/* Garden — hidden on mobile */}
         {!isMobile && (
           <>
+            {/* Tip text (above garden frame) */}
+            <div style={{ padding, pointerEvents: "none", cursor: "none", background: "transparent" }}>
+              <p
+                style={{
+                  fontFamily: "monospace",
+                  fontSize: 12,
+                  fontWeight: 400,
+                  color: "#333",
+                  margin: 0,
+                  lineHeight: 1.4,
+                }}
+              >
+                <span>
+                  Tip: Move your mouse (cat teaser) here.{" "}
+                  <CatEars size={32} color="#333" />
+                </span>
+              </p>
+            </div>
+
             <div
               ref={gardenRef}
-              style={{ position: "relative", width: "100%", height: gardenH, overflow: "visible" }}
+              style={{
+                position: "relative",
+                width: "100%",
+                height: gardenH + gardenInteractiveArea,
+                background: "#f8f8f8",
+                overflow: "visible",
+              }}
             >
               {/* Flowers */}
               {FLOWERS.map((item, idx) => (
@@ -744,7 +624,7 @@ export default function Garden() {
                   style={{
                     position: "absolute",
                     left: `${gardenX(item.x)}%`,
-                    bottom: `${item.y === ROW_A ? rA : rB}px`,
+                    bottom: `${item.y === ROW_A ? rAVisual : rBVisual}px`,
                     transformOrigin: "bottom center",
                     transform: wobbling[idx] ? "rotate(8deg)" : "rotate(0deg)",
                     transition: "transform 0.15s ease",
@@ -752,13 +632,14 @@ export default function Garden() {
                     cursor: "none",
                   }}
                 >
-                  <img
+                  <Image
                     src={ASSETS[item.key]}
                     draggable={false}
                     alt=""
+                    width={item.key === "plant_arnica" ? arnicaSz : flowerSz}
+                    height={item.key === "plant_arnica" ? arnicaSz : flowerSz}
+                    unoptimized
                     style={{
-                      width: item.key === "plant_arnica" ? arnicaSz : flowerSz,
-                      height: item.key === "plant_arnica" ? arnicaSz : flowerSz,
                       imageRendering: "pixelated",
                       display: "block",
                     }}
@@ -770,14 +651,17 @@ export default function Garden() {
               <div style={{
                 position: "absolute",
                 left: `${gardenX(EXTRA_PLANT.x)}%`,
-                bottom: `${rC}px`,
+                bottom: `${rCVisual}px`,
                 zIndex: 4,
               }}>
-                <img
+                <Image
                   src={ASSETS[EXTRA_PLANT.key]}
                   draggable={false}
                   alt=""
-                  style={{ width: flowerSz, height: flowerSz, imageRendering: "pixelated", display: "block" }}
+                  width={flowerSz}
+                  height={flowerSz}
+                  unoptimized
+                  style={{ imageRendering: "pixelated", display: "block" }}
                 />
               </div>
 
@@ -788,7 +672,7 @@ export default function Garden() {
                   style={{
                     position: "absolute",
                     left: `${gardenX(item.x)}%`,
-                    bottom: `${rC}px`,
+                    bottom: `${rCVisual}px`,
                     zIndex: 6,
                     ...(item.key === "chick" && {
                       transformOrigin: "bottom center",
@@ -796,13 +680,14 @@ export default function Garden() {
                     }),
                   }}
                 >
-                  <img
+                  <Image
                     src={ASSETS[item.key]}
                     draggable={false}
                     alt=""
+                    width={item.key === "catbed" ? (isTablet ? 44 : 52) : item.size}
+                    height={item.key === "catbed" ? (isTablet ? 44 : 52) : item.size}
+                    unoptimized
                     style={{
-                      width: item.key === "catbed" ? (isTablet ? 44 : 52) : item.size,
-                      height: item.key === "catbed" ? (isTablet ? 44 : 52) : item.size,
                       imageRendering: "pixelated",
                       display: "block",
                     }}
@@ -872,13 +757,14 @@ export default function Garden() {
                     }} />
                   </div>
                 )}
-                <img
+                <Image
                   src={catAImgSrc}
                   draggable={false}
                   alt="Fufu"
+                  width={catSize}
+                  height={catSize}
+                  unoptimized
                   style={{
-                    width: catSize,
-                    height: catSize,
                     imageRendering: "pixelated",
                     display: "block",
                     transform: (catAState === "arrive" && catAFlip) ? "scaleX(-1)" : "none",
@@ -889,44 +775,71 @@ export default function Garden() {
               {/* Cat B — click to cycle states */}
               <div
                 onClick={handleCatBClick}
+                onKeyDown={handleCatBKeyDown}
+                role="button"
+                tabIndex={0}
+                aria-label="Cycle cat animation"
                 style={{
                   position: "absolute",
-                  left: `${gardenX(CATB_POS.x)}%`,
-                  bottom: `${rC}px`,
+                  left: `${CATB_POS_X}%`,
+                  bottom: `${rCVisual}px`,
                   zIndex: 7,
                   cursor: "none",
                 }}
               >
-                <img
+                <Image
                   src={catBImgSrc}
                   draggable={false}
                   alt=""
-                  style={{ width: catSize, height: catSize, imageRendering: "pixelated", display: "block" }}
+                  width={catSize}
+                  height={catSize}
+                  unoptimized
+                  style={{ imageRendering: "pixelated", display: "block" }}
                 />
               </div>
 
               {/* Bunny */}
               <div
                 onClick={handleBunnyClick}
+                onKeyDown={handleBunnyKeyDown}
+                role="button"
+                tabIndex={0}
+                aria-label="Make bunny jump"
                 style={{
                   position: "absolute",
-                  left: `${gardenX(BUNNY_POS.x)}%`,
-                  bottom: `${rC}px`,
+                  left: `${BUNNY_POS_X}%`,
+                  bottom: `${rCVisual}px`,
                   zIndex: 7,
                   cursor: "none",
                 }}
               >
-                <img
+                <Image
                   src={ASSETS[`bunny_${bunnyState}` as AssetKey]}
                   draggable={false}
                   alt=""
-                  style={{ width: bnySize, height: bnySize, imageRendering: "pixelated", display: "block" }}
+                  width={bnySize}
+                  height={bnySize}
+                  unoptimized
+                  style={{ imageRendering: "pixelated", display: "block" }}
                 />
               </div>
             </div>
-            {/* Breathing room below the garden frame */}
-            <div style={{ height: 16 }} />
           </>
+        )}
+        {isMobile && (
+          <div style={{ padding }}>
+            <p
+              style={{
+                fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
+                fontSize: 16,
+                fontWeight: 500,
+                color: "#1a1a1a",
+                margin: 0,
+              }}
+            >
+              Come to play with my cat - Fufu on desktop
+            </p>
+          </div>
         )}
       </section>
     </>

@@ -13,7 +13,7 @@ const HERO_TEXT: CSSProperties = {
 
 export default function About() {
   return (
-    <>
+    <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
       <section
         className="grid lg:grid-cols-2 py-[64px] px-[24px] sm:pt-[28px] sm:pb-[40px] lg:pt-[52px] lg:pb-[64px] lg:px-[72px]"
         style={{ alignSelf: "stretch" }}
@@ -54,7 +54,9 @@ export default function About() {
           given.
         </p>
       </section>
-      <Garden />
-    </>
+      <div style={{ marginTop: "auto", flexShrink: 0 }}>
+        <Garden />
+      </div>
+    </div>
   );
 }
