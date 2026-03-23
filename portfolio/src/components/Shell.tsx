@@ -7,6 +7,8 @@ import AnimalGardenFooter from "./AnimalGardenFooter";
 
 export default function Shell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const isAboutPage = pathname === "/about" || pathname.startsWith("/about/");
+  const shouldShowFooter = !isAboutPage;
   const footerRef = useRef<HTMLDivElement>(null);
   const [footerH, setFooterH] = useState(0);
 
@@ -27,7 +29,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
           position: "relative",
           zIndex: 1,
           backgroundColor: "var(--color-surface)",
-          marginBottom: footerH,
+          marginBottom: shouldShowFooter ? footerH : 0,
           boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
         }}
       >
@@ -43,27 +45,38 @@ export default function Shell({ children }: { children: React.ReactNode }) {
               minWidth: 0,
               display: "flex",
               flexDirection: "column",
+              minHeight: "100dvh",
             }}
           >
             <Navbar />
-            <main key={pathname} style={{ flex: 1 }}>{children}</main>
+            <main
+              key={pathname}
+              style={{
+                flex: 1,
+                overflow: isAboutPage ? "hidden" : "visible",
+              }}
+            >
+              {children}
+            </main>
           </div>
         </div>
       </div>
 
       {/* ── Footer: sticky at the bottom, revealed when main scrolls away ── */}
-      <div
-        ref={footerRef}
-        style={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          width: "100%",
-          zIndex: 0,
-        }}
-      >
-        <AnimalGardenFooter />
-      </div>
+      {shouldShowFooter ? (
+        <div
+          ref={footerRef}
+          style={{
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            width: "100%",
+            zIndex: 0,
+          }}
+        >
+          <AnimalGardenFooter />
+        </div>
+      ) : null}
     </>
   );
 }

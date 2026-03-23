@@ -35,13 +35,13 @@
 
 - 12-column grid layout (`grid-layout` class, `px-[72px]` lg); Geist 16px, weight 500, color `#1a1a1a`, opacity 0.7 on hover; no underline.
 - Logo "Martta XU": col-span-1 → `/`
-- Nav links (Work / About / Extras / Resume): col-start-7, col-span-4
+- Nav links (Work / About / Extras / Resume): `md:col-start-2`, `md:col-span-8` (desktop)
 - Live Boston clock (no am/pm): col-start-11, col-span-2, right-aligned; hidden on tablet and below
 
 **Footer — Animal Garden**
 
 - One-line Geist text per side; 16px, weight 500:
-  - Left: `Fufu would like to play with you` + animated CatEars SVG; color `#1a1a1a`
+  - Left: `Tip: Move your mouse (cat teaser) here.` + animated CatEars SVG; color `#1a1a1a`
   - Left mobile: `Come to play with my cat - Fufu on desktop`
 - Below the text (tablet/desktop only), an interactive pixel garden. Garden content band aligned with footer text (layout offset, no padding wrapper):
   - Wand cursor (`CatToy.gif`) replaces the system cursor **inside the footer only**, chasing interactions

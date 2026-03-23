@@ -723,7 +723,7 @@ export default function AnimalGardenFooter() {
                 ? "Come to play with my cat - Fufu on desktop"
                 : (
                   <span>
-                    Fufu would like to play with you{" "}
+                    Tip: Move your mouse (cat teaser) here.{" "}
                     <CatEars size={32} color="#1a1a1a" />
                   </span>
                 )}

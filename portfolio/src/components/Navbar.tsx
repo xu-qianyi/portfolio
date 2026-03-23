@@ -70,7 +70,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link
           href="/"
-          className="col-start-1 col-span-6"
+          className="col-start-1 col-span-6 md:col-span-1"
           style={{ ...NAV_LINK, display: "inline-flex", alignItems: "center" }}
         >
           <span style={{ whiteSpace: "nowrap" }}>
@@ -81,7 +81,7 @@ export default function Navbar() {
         {/* Desktop nav links */}
         <div
           ref={containerRef}
-          className="col-start-7 col-span-4 hidden md:flex items-center"
+          className="col-start-7 col-span-4 md:col-start-2 md:col-span-8 hidden md:flex items-center"
           style={{ position: "relative", gap: "24px" }}
         >
           {NAV_ITEMS.map((item, i) => (
