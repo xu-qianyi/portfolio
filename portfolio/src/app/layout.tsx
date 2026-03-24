@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
 import Shell from "@/components/Shell";
+import CustomCursor from "@/components/CustomCursor";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,6 +26,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} antialiased`}>
+        <noscript><style>{"* { cursor: auto !important; }"}</style></noscript>
+        <CustomCursor />
         <Shell>{children}</Shell>
       </body>
     </html>

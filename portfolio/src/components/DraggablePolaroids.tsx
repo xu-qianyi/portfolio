@@ -41,7 +41,6 @@ function Polaroid({
       onPointerDown={onPointerDown}
       style={{
         position: "absolute",
-        cursor: "grab",
         padding: POLAROID_PAD,
         paddingBottom: POLAROID_BOT,
         background: "#fff",
@@ -113,7 +112,6 @@ export default function DraggablePolaroids() {
       e.preventDefault();
       const el = e.currentTarget as HTMLElement;
       el.setPointerCapture(e.pointerId);
-      el.style.cursor = "grabbing";
 
       dragging.current = {
         index,
@@ -149,8 +147,6 @@ export default function DraggablePolaroids() {
 
   const handlePointerUp = useCallback((e: React.PointerEvent) => {
     if (!dragging.current) return;
-    const el = e.currentTarget as HTMLElement;
-    el.style.cursor = "";
     dragging.current = null;
   }, []);
 

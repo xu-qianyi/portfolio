@@ -612,7 +612,7 @@ export default function Garden() {
 
       <section
         ref={sectionRef}
-        className={isOverGarden ? "garden-cursor-none" : undefined}
+        data-garden-section
         style={{
           borderTop: "none",
           fontFamily: "var(--font-geist-sans), system-ui, sans-serif",

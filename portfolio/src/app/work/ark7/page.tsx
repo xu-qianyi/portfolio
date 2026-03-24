@@ -15,9 +15,9 @@ const SECTIONS: Section[] = [
   {
     id: "overview",
     label: "Overview",
-    title: "who's ark7?",
+    title: "Who's ARK7?",
     body: [
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum id urna vitae velit feugiat convallis. Nam volutpat, tellus in blandit ultrices, massa velit placerat dolor, id efficitur eros orci sed est.",
+      "ARK7 is a platform that simplifies real estate investment by offering fractional shares for as little as $20 per share in premium residential properties across the United States.",
       "Suspendisse potenti. Integer feugiat turpis sed turpis porta, vitae vulputate lectus fringilla. Donec interdum pretium nunc, vitae bibendum justo malesuada at.",
     ],
   },
@@ -202,7 +202,7 @@ export default function Ark7CaseStudyPage() {
                   margin: 0,
                 }}
               >
-                ARK7 - Cultivating a Trusted Community for Over 100K Users, Empowering Connections in Their Investment Journey.
+                Cultivating a Trusted Investment Community
               </h1>
             </div>
 
@@ -274,9 +274,9 @@ export default function Ark7CaseStudyPage() {
                 <h2
                   style={{
                     fontFamily: "tiemposText, 'Tiempos Text', Georgia, serif",
-                    fontSize: "clamp(24px, 3.6vw, 40px)",
+                    fontSize: "24px",
                     lineHeight: "120%",
-                    fontWeight: 600,
+                    fontWeight: 400,
                     color: "#1A1A1A",
                     opacity: 0.8,
                     margin: 0,

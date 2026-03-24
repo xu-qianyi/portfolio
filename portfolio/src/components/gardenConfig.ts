@@ -114,8 +114,5 @@ export const GARDEN_KEYFRAMES = `
     from { opacity: 0; transform: scale(0.2); }
     to   { opacity: 1; transform: scale(1); }
   }
-  .garden-cursor-none,
-  .garden-cursor-none * {
-    cursor: none !important;
-  }
 `;
+

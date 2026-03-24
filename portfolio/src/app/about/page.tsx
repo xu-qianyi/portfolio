@@ -42,7 +42,7 @@ export default function About() {
             >
               Boston College
             </a>
-            . I practice{" "}
+            . One lens never felt like enough. I practice{" "}
             <a
               href="https://en.wikipedia.org/wiki/Swing_(dance)"
               target="_blank"

@@ -5,6 +5,28 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 ---
 
+## [2026-03-24 · Session R] — JS cursor system + paranoid audit fixes
+
+### Added
+
+- **`CustomCursor.tsx`** — JS cursor component rendered in root layout. `position: fixed` div follows mouse via `requestAnimationFrame`; renders orange triangle SVG (32×32). Replaces all CSS cursor machinery.
+- **`<noscript>` fallback** in `layout.tsx` — restores `cursor: auto !important` if JS bundle fails to load.
+
+### Changed
+
+- **Cursor system** — replaced SVG data URI in CSS custom property with a JS div approach; immune to macOS/browser OS-level cursor overrides that caused the triangle to intermittently revert to system default.
+- **`globals.css`** — removed `--cursor-triangle` variable and all `cursor: var(...)` rules; replaced with `cursor: none !important` on `html, body, *, *::before, *::after`.
+- **`DraggablePolaroids.tsx`** — removed inline `cursor: grab / grabbing` styles (now redundant).
+- **`Garden.tsx`** — added `data-garden-section` attribute to `<section>`; `CustomCursor` uses this to hide itself when the user enters the Garden (wand cursor takes over).
+
+### Fixed (paranoid audit)
+
+- **Scrollbar hover** — swapped `mouseout` + `relatedTarget` check for `mouseleave` on `documentElement`; cursor no longer briefly disappears when mouse crosses into the OS scrollbar area.
+- **Cursor tip offset** — `translate(x-2, y-2)` aligns the visual triangle tip with the actual click point (was 1.8px off).
+- **Dead CSS** — removed `.garden-cursor-none` class from `gardenConfig.ts` and its usage in `Garden.tsx`; `cursor: none` is already global.
+
+---
+
 ## [2026-03-16 · Session Q · 87d9584] — Claw'd crab + Fufu chase behaviors + footer bug fixes
 
 ### Added

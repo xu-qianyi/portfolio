@@ -64,17 +64,19 @@ function ProjectCard({ project }: { project: (typeof projects)[number] }) {
           backgroundColor: "#F5F5F5",
         }}
       >
-        {project.image.endsWith(".json") ? (
-          <LottiePreview src={project.image} />
-        ) : (
-          <Image
-            src={project.image}
-            alt={project.headline}
-            fill
-            sizes="(min-width: 1024px) 50vw, 100vw"
-            style={{ objectFit: "cover" }}
-          />
-        )}
+        <div className="project-card-media">
+          {project.image.endsWith(".json") ? (
+            <LottiePreview src={project.image} />
+          ) : (
+            <Image
+              src={project.image}
+              alt={project.headline}
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              style={{ objectFit: "cover" }}
+            />
+          )}
+        </div>
       </a>
 
       <div style={{ marginTop: "16px", display: "flex", flexDirection: "column", gap: "4px" }}>

@@ -38,6 +38,13 @@
 - Nav links (Work / About / Extras / Resume): `md:col-start-2`, `md:col-span-8` (desktop)
 - Live Boston clock (no am/pm): col-start-11, col-span-2, right-aligned; hidden on tablet and below
 
+**Custom Cursor**
+
+- JS-based cursor (`CustomCursor.tsx`, rendered in root layout). CSS sets `cursor: none !important` globally.
+- A `position: fixed` div follows the mouse via `requestAnimationFrame`; renders an orange triangle SVG (32×32, `#EC4523` fill, white stroke).
+- Hidden on touch devices (`pointer: coarse`), hidden when over the Garden section (`data-garden-section` attribute), hidden when mouse leaves the viewport (`mouseleave` on `documentElement`).
+- `<noscript>` fallback in layout restores `cursor: auto` if JS fails.
+
 **Footer - Site Footer**
 
 - Normal-flow footer on all pages (not fixed/sticky).
@@ -136,28 +143,28 @@ The case study uses a 3-column page grid: sticky side nav on the left, bounded m
 
 **Hero block** (top of content, before first section):
 
-- Small label — project name + year; Geist, 14px, weight 500, muted
-- Large headline (`h1`) — Playfair Display, display size
+- Small label — project + domain (e.g. `ARK7 • FinTech`); Geist, 14px, weight 500, muted
+- Large headline (`h1`) — `tiemposText`, currently set to 28px in ARK7
 - Full-width `16:9` cover image below the headline
-- Metadata row: Role / Timeline / Team / Skills — 4 columns on desktop, stacked on mobile; Geist; label weight 500, value weight 400
+- Metadata row: Role / Timeline / Team — 3 columns on desktop, stacked on mobile; Geist; label weight 500
 
 **Section rhythm** (repeats for each content section):
 
 - Section label (`h4`): Geist, 12–13px, weight 500, uppercase, muted — matches the nav item label
-- Section headline (`h2`): Playfair Display, large — the key argument or question of that section
+- Section headline (`h2`): `tiemposText`, large — the key argument or question of that section
 - Body paragraphs (`p`): Geist, 16px, weight 400, line-height 1.6
 - Optional `1px` full-width horizontal rule (`foreground/10` opacity) between major sections
 
 **Content sub-patterns** (used within sections as needed):
 
-- **Block quote / key insight** — Playfair Display italic; left border `2px` accent color, `pl-4`
+- **Block quote / key insight** — `tiemposText` italic; left border `2px` accent color, `pl-4`
 - **Two-column callout cards** — `flex-col md:flex-row gap-6`; each card: short bold label + supporting sentence; Geist
 - **Media + caption** — `grid-cols-1 md:grid-cols-[60%_auto]`; image/placeholder left (`border border-foreground/10`), caption text right (Geist 14px, bottom-aligned on desktop)
 - **Full-width image** — `w-full h-auto object-contain`, `border border-foreground/10`
 
 **Font assignments:**
 
-- Playfair Display → `h1`, `h2`, block quote text
+- `tiemposText` → `h1`, `h2`, block quote text
 - Geist → all other text (labels, body, metadata, nav, captions)
 
 ---
