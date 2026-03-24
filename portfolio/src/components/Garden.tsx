@@ -213,8 +213,13 @@ export default function Garden() {
       const wandInBounds = wx >= 0 && wx <= r.width;
       let tx: number, ty: number;
       if (wandInBounds) {
-        tx = (wx / r.width) * 100;
-        ty = Math.max(yMin, Math.min(yMax, wy));
+        // Offset the target so Fufu stops at the bottom-left of the wand 
+        // Fufu's sprite is ~52px. To place her to the left and below the wand tip (wx, wy),
+        // we shift the target position (which represents Fufu's bottom-left corner).
+        const targetWx = wx - 45; 
+        const targetWy = wy - 105;
+        tx = (targetWx / r.width) * 100;
+        ty = Math.max(yMin, Math.min(yMax, targetWy));
         if (crabActiveRef.current) {
           crabActiveRef.current = false;
           setCrabActive(false);
