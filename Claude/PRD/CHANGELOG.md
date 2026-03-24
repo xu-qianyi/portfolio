@@ -5,7 +5,7 @@ Format: `[YYYY-MM-DD · Session X · <commit-hash>]` — machine-readable date +
 
 ---
 
-## [2026-03-24 · Session R] — JS cursor system + paranoid audit fixes
+## [2026-03-24 · Session R · ff57f4c] — JS cursor system + paranoid audit fixes
 
 ### Added
 
