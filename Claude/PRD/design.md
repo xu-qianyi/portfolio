@@ -1,7 +1,7 @@
 # design.md — Martta Xu Portfolio
 
-*Last updated: March 2026*
-*Keep this file under 150 lines. When updating, refine — don't just add.*
+*Last updated: March 25, 2026*
+*Keep this file tight. When updating, refine — don't just add.*
 
 ---
 
@@ -34,13 +34,15 @@ These are hard constraints. If a decision pushes toward any of these, it's the w
 --color-ink:       #1A1A1A   /* Primary text, borders */
 --color-surface:   #FFFFFF   /* Page background */
 --color-subtle:    #F5F5F5   /* Card backgrounds, subtle dividers */
---color-muted:     #999999   /* Captions, meta text, footer */
---color-accent:    #EC4523   /* Interaction only: hero link hover states, ✦ star, numbered badges */
+--color-muted:     #999999   /* Captions, meta text */
+--color-accent:    #EC4523   /* Interaction: hero / nav link hovers, superscript badges, footer copy success */
 ```
 
 **Rules:**
 
-- Accent appears on hero link hover states (text + underline), and numbered badges on company links (1–5) and footer links — all via CSS `::after`, `font-size: 10px`, `opacity: 0.8`.
+- **Bio company links** (`.hero-company-link`): badge = `attr(data-num)` in `::after`, **absolute** (`top` / `right`), **10px**, accent, `opacity: 0.8`.
+- **Home hero external links** (`.hero-nav-link`): badge = **`↗`** via `data-num`; `::after` is **inline superscript** (`vertical-align: super`, **8px**, `margin-left: 0.12em`), accent, `opacity: 0.8` — no absolute positioning.
+- **Footer** default copy + copy icon: **`rgba(26,26,26,0.5)`**; **hover** copy icon and **success** checkmark: **solid** `var(--color-accent)` (no alpha on accent for those states).
 - Accent never appears as: decorative backgrounds, section dividers, illustration color.
 - When in doubt, use `--color-ink` at reduced opacity rather than reaching for a new color.
 
@@ -52,14 +54,15 @@ These are hard constraints. If a decision pushes toward any of these, it's the w
 **Geist** — UI, body, card metadata, navigation, footer. Anything read as interface/content.
 
 ```
-Hero text:            tiemposText, 48px, weight 500, line-height 52px, letter-spacing 0.96px, color #1A1A1A
+Home / About intro:   Geist, 16px, weight 500, line-height 150%, color #1A1A1A
 Project metadata:     Geist, 14px, weight 500, color rgba(26,26,26,0.5); dot separators between company · industry · date · type
 Project headline:     tiemposText, 20px, weight 400, line-height 130%, color #1A1A1A
 Section heading:      Geist, 1.25rem, weight 500, line-height 1.3
 Body / narrative:     Geist, 1rem, weight 400, line-height 1.7
 Caption / meta:       Geist, 0.875rem, weight 400, color --color-muted
-Nav:                  Geist, 16px, weight 500, color #1a1a1a; opacity 0.7 on hover (200ms ease); no underline; 12-col grid-layout; logo col-span-1, links col-start-7 col-span-4, clock col-start-11 col-span-2 (lg only)
-Footer (Animal Garden): Geist, 16px, weight 500; text row: flex-row space-between; left: Fufu CTA #1A1A1A + CatEars SVG; right col: CHANGELOG/LinkedIn/X as hero-nav-link, flex-col items-end, gap 4px
+Nav:                  Geist, 15px, weight 500, #1a1a1a; `.nav-tab` opacity 0.4 on hover; no underline; grid-layout; logo md:col-span-1; links md:col-start-2 md:col-span-11, gap 24px
+Home hero externals:  Geist, 15px, weight 500; CHANGELOG / LinkedIn / X as `.hero-nav-link`, flex-col items-end, gap 4px (right of headline from lg)
+Footer:               Geist, 15px, weight 500; flex space-between wrap; left: Boston time; right: email + copy/check icon (see §3)
 ```
 
 **Rules:**
@@ -77,19 +80,18 @@ Footer (Animal Garden): Geist, 16px, weight 500; text row: flex-row space-betwee
 ```
 Page horizontal pad:   24px mobile, 72px desktop (lg+); shared via `.grid-layout` class (repeat(12, 1fr), col-gap 24px)
 Navbar:               12px vertical; grid-layout class; no left padding (grid column 1 is logo); right padding 72px lg
-Hero padding:         desktop 52px top / 64px bottom, 72px horizontal; tablet 28px top / 40px bottom; mobile 64px top/bottom, 24px horizontal; text spans left half (lg:grid-cols-2, col 1 only)
-Project section:      grid-layout class; cards in col-start-1 col-end-13 inner div; masonry columns-1 lg:columns-2; 24px col-gap; 80px bottom
-Footer padding:       16px 72px (desktop/tablet); 12px 72px (mobile)
-Section gap:          5rem–7rem vertical
+Hero padding:         desktop 52px top / 64px bottom, 72px horizontal; tablet 28px top / 40px bottom; mobile 64px vertical, 24px horizontal; hero is flex row lg (headline + link column), not a 2-col grid
+Project section:      grid-layout; masonry columns-1 lg:columns-2; 24px col-gap; pb-20
+Footer padding:       pt-5 pb-7; px-6 lg:px-[72px]; border-top rgba(26,26,26,0.14)
+About garden wrap:    px-[24px] lg:px-[72px] (match hero), no double horizontal padding inside Garden tip row
+Section gap:          5rem–7rem vertical (case studies / large sections)
 ```
 
-**Footer garden:** First element aligns with footer text; layout uses a horizontal content band (6%–94% of footer width via `gardenX`), no padding wrapper.
+**About Garden:** Scene uses `gardenX` horizontal band inside the padded wrapper — align with page margins above.
 
-**Border color:** `rgba(26,26,26,0.08)` for footer (and any remaining dividers), not `#E5E5E5`.
+**Breakpoint:** Below lg: single-column project stack. lg+: 2-column masonry.
 
-**Breakpoint:** Tablet and below (<1024px): projects stack in a single column. From 1024px (lg): 2-column masonry.
-
-**Rules:** Never crowd cards — reduce columns before reducing padding. Negative space is a design element. Hero text spans the left half of the page; nav links live in the navbar, not the hero.
+**Rules:** Never crowd cards. External links live in the **home hero** (right), not the footer. Navbar has no clock / no copy-email.
 
 ---
 
@@ -131,24 +133,17 @@ Headline:              tiemposText, 20px, weight 400, line-height 130%, #1A1A1A;
 
 **"In Their Eyes" Testimonials:** Profile cards appear/disappear quietly — felt discovered, not announced.
 
-**Navigation:** Sticky, 12-col grid. Logo col-span-1 col-start-1. Links col-start-7. Clock col-start-11 (lg only).
+**Navigation:** Sticky; `grid-layout`; logo + link row as above; mobile hamburger + drawer.
 
 ```
-Logo:                  "Martta XU"; Geist, 16px, weight 500, color #1a1a1a; opacity 0.7 on hover
-Links:                 Work / About / Extras / Resume; same style as logo; gap 24px
-Clock:                 live Boston time (no am/pm) + "Boston, MA"; same style, static opacity 1
+Logo / links:          Geist 15px, weight 500, #1a1a1a; active tab indicator: small accent triangle under link
 ```
 
-**Hero inline links:** Two classes, same base style (dotted underline, accent hover, `::after` badge via `position: absolute; top: 0.65em; right: -0.85em; font-size: 10px; opacity: 0.8`):
+**Hero inline links:** Dotted underline, accent hover, light accent tint on hover background.
 
 ```
-.hero-company-link     Company names in bio; badge content: attr(data-num) → "1"–"5"; always visible
-.hero-nav-link         CHANGELOG/LinkedIn/X (footer); badge content: attr(data-num)
-
-Color:                  #1A1A1A
-Hover color:            var(--color-accent)
-Hover underline:        dotted, var(--color-accent)
-Hover background:       rgba(236, 69, 35, 0.02)
+.hero-company-link     Home **bio** companies; numeric data-num 1–6; ::after absolute, 10px, accent
+.hero-nav-link         Home **CHANGELOG / LinkedIn / X**; data-num "↗"; ::after superscript, 8px, accent (see §3)
 ```
 
 ---
@@ -165,8 +160,5 @@ Hover background:       rgba(236, 69, 35, 0.02)
 
 ## 9. How to Update This File
 
-When a design decision is made during development, update this file as follows:
-
-1. **Refine, don't append.** If a new rule makes an old one redundant, replace it.
-2. Log decision reason in `CHANGELOG.md`, not here. All codes should be in code block, not in text
-
+1. **Refine, don't append.** Replace stale rules instead of stacking.
+2. Log rationale in `CHANGELOG.md`, not here. Put code tokens in backticks or code blocks.

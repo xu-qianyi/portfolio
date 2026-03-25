@@ -132,7 +132,8 @@ export default function Garden() {
   rCVisualRef.current = rCVisual;
   const catSizeRef = useRef(catSize);
   catSizeRef.current = catSize;
-  const padding  = isMobile ? "12px 16px" : isTablet ? "16px 24px 0px" : "16px 72px";
+  /** Horizontal inset comes from About page wrapper; keep vertical only here */
+  const padding = isMobile ? "12px 0" : isTablet ? "16px 0 0px" : "16px 0";
 
   // ── Walk GIF resolver ───────────────────────────────────────────────────────
   const getWalkSrc = useCallback((dx: number, dy: number, gardenW: number): string => {

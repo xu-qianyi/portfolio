@@ -1,7 +1,7 @@
 # gPRD.md — Martta Xu Portfolio (2026)
 
-*Version: 2.3*
-*Last updated: March 23, 2026*
+*Version: 2.4*
+*Last updated: March 25, 2026*
 *Author: Martta Xu*
 
 > For all visual and interaction decisions, refer to `design.md`. No design spec belongs in this file.
@@ -33,10 +33,11 @@
 
 **Navbar (sticky)** — See `design.md §7` for visual and layout spec.
 
-- 12-column grid layout (`grid-layout` class, `px-[72px]` lg); Geist 16px, weight 500, color `#1a1a1a`, opacity 0.7 on hover; no underline.
-- Logo "Martta XU": col-span-1 → `/`
-- Nav links (Work / About / Extras / Resume): `md:col-start-2`, `md:col-span-8` (desktop)
-- Live Boston clock (no am/pm): col-start-11, col-span-2, right-aligned; hidden on tablet and below
+- 12-column grid layout (`grid-layout` class; horizontal padding 24px mobile / 72px lg). Geist **15px**, weight 500, color `#1a1a1a`; `.nav-tab` opacity 0.4 on hover; no underline.
+- Logo "Martta XU": `col-start-1`, `col-span-6` (mobile) / `md:col-span-1` → `/`
+- Nav links (Work / About / Extras / Resume): desktop row `md:col-start-2`, `md:col-span-11`, gap 24px; small orange triangle indicator under the active link (animated `left`).
+- Mobile: hamburger opens slide-down menu with the same links + Resume.
+- **No** live clock and **no** copy-email control in the navbar (both live in the footer).
 
 **Custom Cursor**
 
@@ -47,10 +48,10 @@
 
 **Footer - Site Footer**
 
-- Normal-flow footer on all pages (not fixed/sticky).
-- Left side: live Boston time.
-- Right side: vertically stacked links `CHANGELOG`, `LinkedIn`, and `X`.
-- `CHANGELOG` points to GitHub Releases.
+- Normal-flow footer on all pages (not fixed/sticky). Border-top `rgba(26,26,26,0.14)`; horizontal padding `24px` / `72px` (lg), vertical `pt-5` / `pb-7`.
+- **Left:** Live Boston time (America/New_York), formatted without am/pm prefix + `"Boston, MA"`.
+- **Right:** Email `martta.xu@outlook.com` (Geist 15px, **50% opacity** ink) + icon button: copy SVG → on success, checkmark SVG (**solid** `var(--color-accent)`); default icon ink at 50% opacity; **hover** icon uses **solid** accent. No pill border on the icon button.
+- **External profile links** (`CHANGELOG`, `LinkedIn`, `X`) were moved to the **home hero** (right column). Data: `src/data/footerLinks.ts`. `CHANGELOG` → GitHub Releases.
 
 ---
 
@@ -62,15 +63,14 @@
 
 **Hero** — See `design.md` for layout and typography.
 
-The entry point. Single-column hero text spanning the left half of the page (`grid lg:grid-cols-2`, text in col 1). Nav links (Work/About/Extras/Resume) live in the navbar, not the hero.
+The entry point. **Flex row** from `lg`: headline block on the **left** (roughly half width, `max-w` capped), **external links** on the **right** — same stack as the old footer: `CHANGELOG`, `LinkedIn`, `X` (Geist 15px, `hero-nav-link`, vertical column, `items-end`). Below `lg`, links sit under the headline (still right-aligned in their row). Navbar holds Work / About / Extras / Resume only.
 
-Headline copy:
+Headline copy (inline links use `hero-company-link` with numbered `data-num` **1–6**):
 
-> "My design practice lives in the making - through .fig files, code, and increasingly AI. And in the curating - knowing where to linger, and where to let go. Right now I'm at Datalign¹, building in wealth management.
->
-> Previously: engineering at Thoughtworks², user research at LookLook³, strategy at PwC⁴ and JLL⁵."
+> "My design practice lives in the making - through .fig files, code, and increasingly AI. And in the curating - knowing where to linger, and where to let go. Right now I'm at **Datalign**¹, building in wealth management. Previously: design(contract) at **ARK7**², engineering at **Thoughtworks**³, user research at **Looklook**⁴, strategy at **PwC**⁵ and **JLL**⁶."
 
-Company names are `hero-company-link` — dotted underline, numbered badge (1–5 via `data-num`), accent red hover.
+- Bio companies: `hero-company-link` — dotted underline, **numeric** badge via `::after` (`data-num` 1–6), accent on hover.
+- Hero external links: `hero-nav-link` — badge character **`↗`** for each (external link affordance); see `design.md` for `::after` rules.
 
 **Project Grid**
 The work. Uses `grid-layout` class (12-col); project cards wrapped in a `col-start-1 col-end-13` inner div with CSS masonry (`columns-1 lg:columns-2`). Each card: cover image, metadata row (company · industry · date · type), one-line headline. Collapses to single column below lg (1024px). See `design.md §7` for spacing.
@@ -81,27 +81,17 @@ Data sourced from `src/data/projects.json`. Each entry requires: `id`, `company`
 
 ### 4.2 About (`/about`)
 
-**Layout:** Flex-column section with responsive polaroid area. Text sits at the top (limited to left 50% on `lg` via `lg:max-w-[50%]`); the section stretches to fill available vertical space (`flex: 1`).
+**Layout:** Flex-column page: hero **section** (`flex-1`) + Garden wrapper. Text at top (`lg:max-w-[50%]`); polaroids share the section; extra vertical slack is absorbed by the hero section so the Garden sits flush above the global footer (no dead flex gap).
 
-**Headline style:** No separate display headline. The page shows two body paragraphs using the same text style as the home hero (`HERO_TEXT`: Geist, 16px, weight 500, line-height 150%, max-width 600px).
+**Headline style:** No separate display headline. **Three** body paragraphs, same style as home hero (`HERO_TEXT`: Geist, 16px, weight 500, line-height 150%, max-width 600px, 16px gap between paragraphs).
 
-**Copy:**
+**Copy (summary):** (1) Northeastern + Boston College + lens on product. (2) Swing + improv line. (3) Fufu + digitized cat.
 
-> "I studied design and engineering at Northeastern, finance at Boston College. I practice Swing - a dance with no routine, just feeling and responding to what you're given."
->
-> "Fufu is my five-year-old brave boy who loves chasing toys around the house and bird watching. I digitized him so you can enjoy your time with him too."
+`Northeastern`, `Boston College`, and `Swing` use `hero-company-link` with `data-num` 1–3.
 
-`Northeastern`, `Boston College`, and `Swing` use `hero-company-link` treatment with numbered badges (`data-num` 1-3), matching the interaction style used on the home hero.
+**Draggable polaroids:** 7 photos; `DraggablePolaroids.tsx`. Separate **pose sets** for tablet vs desktop (`POSES_TABLET` / `POSES_DESKTOP`); desktop uses wider X/Y spread so cards do not clump. **Smaller frame** on tablet (`md`–`lg`) vs `lg+`. Desktop: absolute right half; tablet: below copy with min-height; mobile: hidden.
 
-**Draggable polaroids:** 7 personal photos (`/images/about/`) displayed as polaroid-style cards (white border, thicker bottom padding, subtle shadow, slight rotation). Each polaroid is freely draggable; clicking brings it to the front (z-index stacking). Component: `DraggablePolaroids.tsx` (client component).
-
-- **Desktop (`lg`):** Polaroids are absolutely positioned over the right half of the section, scattered across the space. Text is constrained to the left 50%.
-- **Tablet (`md`):** Polaroids appear below the text in a relative-positioned container that fills remaining flex space.
-- **Mobile (below `md`):** Polaroids are hidden.
-
-Initial positions are defined as percentage-based coordinates and converted to pixels based on container dimensions at mount time.
-
-**Garden section:** The interactive Garden component appears as a full-width section at the bottom of the About page content (not the global site footer).
+**Garden section:** Same **horizontal padding** as the about hero: `24px` / `72px` (lg) on the wrapper around `Garden` (Garden tip row no longer adds duplicate horizontal padding).
 
 ---
 
@@ -136,10 +126,7 @@ The side nav renders a flat list of section labels sourced from the project's da
 
 **Content Layout**
 
-The case study uses a 3-column page grid: sticky side nav on the left, bounded main content in the center, empty gutter on the right for visual breathing room.
-
-- Page grid: `grid-cols-1 md:grid-cols-[220px_1fr_220px]`
-- Center content: `max-w-3xl` on md, `max-w-4xl` on lg; `py-12`; `flex flex-col gap-12 md:gap-24`
+Three-column intent: sticky side nav (md+), main column, optional gutter. Implementation should keep the **center column fluid** on mid-width viewports (avoid a fixed pixel width that forces horizontal overflow); use `minmax(0, …)` and `min-w-0` where needed.
 
 **Hero block** (top of content, before first section):
 
@@ -186,7 +173,7 @@ But don’t worry, every detour is just a chance to connect the dots in a new wa
 
 ⚠️ All project descriptions, essay copy, and testimonials are placeholder. Use Lorem Ipsum freely during the build — do not wait for final copy to unblock UI work.
 
-- Four-pointed star icons (✦) next to company names in the home hero are a visual detail only; they do not indicate separate footnotes or references. See `design.md` for visual spec.
+- Home hero company callouts use **numbered** superscripts via `data-num`, not ✦ stars.
 
 **Project preview asset sources:**
 
@@ -199,9 +186,9 @@ But don’t worry, every detour is just a chance to connect the dots in a new wa
 
 |           |                                                             |
 | --------- | ----------------------------------------------------------- |
-| Framework | Next.js 16 (App Router)                                     |
-| Styling   | Tailwind CSS                                                |
-| Animation | Framer Motion                                               |
+| Framework | Next.js 15 (App Router)                                       |
+| Styling   | Tailwind CSS v4                                               |
+| Animation | (lightweight CSS / component logic; Lottie where needed)     |
 | Fonts     | See `design.md` §4                                          |
 | Viewport  | Tablet + desktop + mobile. See `design.md` for breakpoints. |
 

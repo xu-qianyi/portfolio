@@ -22,20 +22,11 @@ const RESUME_HREF = "https://drive.google.com";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [copied,        setCopied]        = useState(false);
   const [indicatorLeft, setIndicatorLeft] = useState<number | null>(null);
   const [menuOpen,      setMenuOpen]      = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const linkRefs     = useRef<(HTMLAnchorElement | null)[]>([]);
-
-  const handleCopyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText("martta.xu@outlook.com");
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch { /* clipboard unavailable (insecure context / permission denied) */ }
-  };
 
   useEffect(() => {
     const activeIdx = NAV_ITEMS.findIndex(item =>
@@ -76,7 +67,7 @@ export default function Navbar() {
         {/* Desktop nav links */}
         <div
           ref={containerRef}
-          className="col-start-7 col-span-4 md:col-start-2 md:col-span-8 hidden md:flex items-center"
+          className="col-start-7 col-span-4 md:col-start-2 md:col-span-11 hidden md:flex items-center"
           style={{ position: "relative", gap: "24px" }}
         >
           {NAV_ITEMS.map((item, i) => (
@@ -117,16 +108,6 @@ export default function Navbar() {
               }}
             />
           )}
-        </div>
-
-        {/* Desktop copy email */}
-        <div className="col-start-11 col-span-2 hidden lg:flex justify-end">
-          <button
-            onClick={handleCopyEmail}
-            className="copy-email-nav-btn"
-          >
-            {copied ? "Copied" : "Copy email"}
-          </button>
         </div>
 
         {/* Mobile hamburger button */}

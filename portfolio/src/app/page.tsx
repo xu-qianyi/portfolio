@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import Image from "next/image";
 import projects from "@/data/projects.json";
+import { FOOTER_EXTERNAL_LINKS } from "@/data/footerLinks";
 import LottiePreview from "@/components/LottiePreview";
 
 const HERO_TEXT: CSSProperties = {
@@ -11,6 +12,17 @@ const HERO_TEXT: CSSProperties = {
   lineHeight: "150%",
   letterSpacing: "0px",
   margin: 0,
+};
+
+/** Matches former footer link stack (SiteFooter nav) */
+const HERO_NAV_STYLE: CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-end",
+  gap: "4px",
+  fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
+  fontSize: 15,
+  fontWeight: 500,
 };
 
 const PROJECT_META: CSSProperties = {
@@ -100,56 +112,84 @@ export default function Home() {
     <>
       {/* Hero */}
       <section
-        className="grid lg:grid-cols-2 py-[64px] px-[24px] sm:pt-[28px] sm:pb-[40px] lg:pt-[52px] lg:pb-[64px] lg:px-[72px]"
+        className="py-[64px] px-[24px] sm:pt-[28px] sm:pb-[40px] lg:pt-[52px] lg:pb-[64px] lg:px-[72px]"
         style={{ alignSelf: "stretch" }}
       >
-        <p style={HERO_TEXT}>
-          My design practice lives in the making - through .fig files, code, and increasingly AI. And in the curating - knowing where to linger, and where to let go. Right now I&apos;m at{" "}
-          <span className="hero-company-link" data-num="1">
-            Datalign
-          </span>
-          , building in wealth management. Previously: engineering at{" "}
-          <a
-            href="https://www.thoughtworks.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hero-company-link"
-            data-num="2"
+        <div className="flex w-full min-w-0 flex-col gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-12">
+          <p className="min-w-0 max-w-full lg:max-w-[min(100%,calc(50%-1.5rem))]" style={HERO_TEXT}>
+            My design practice lives in the making - through .fig files, code, and increasingly AI. And in the curating - knowing where to linger, and where to let go. Right now I&apos;m at{" "}
+            <span className="hero-company-link" data-num="1">
+              Datalign
+            </span>
+            , building in wealth management. Previously: design(contract) at{" "}
+            <a
+              href="/work/ark7"
+              className="hero-company-link"
+              data-num="2"
+            >
+              ARK7
+            </a>
+            , engineering at{" "}
+            <a
+              href="https://www.thoughtworks.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hero-company-link"
+              data-num="3"
+            >
+              Thoughtworks
+            </a>
+            , user research at{" "}
+            <a
+              href="https://looklook.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hero-company-link"
+              data-num="4"
+            >
+              Looklook
+            </a>
+            , strategy at{" "}
+            <a
+              href="https://www.pwc.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hero-company-link"
+              data-num="5"
+            >
+              PwC
+            </a>{" "}
+            and{" "}
+            <a
+              href="https://www.jll.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hero-company-link"
+              data-num="6"
+            >
+              JLL
+            </a>
+            .
+          </p>
+          <nav
+            style={HERO_NAV_STYLE}
+            className="shrink-0 self-end lg:self-auto"
+            aria-label="External links"
           >
-            Thoughtworks
-          </a>
-          , user research at{" "}
-          <a
-            href="https://looklook.app/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hero-company-link"
-            data-num="3"
-          >
-            Looklook
-          </a>
-          , strategy at{" "}
-          <a
-            href="https://www.pwc.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hero-company-link"
-            data-num="4"
-          >
-            PwC
-          </a>{" "}
-          and{" "}
-          <a
-            href="https://www.jll.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hero-company-link"
-            data-num="5"
-          >
-            JLL
-          </a>
-          .
-        </p>
+            {FOOTER_EXTERNAL_LINKS.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hero-nav-link"
+                data-num={item.dataNum}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+        </div>
       </section>
 
       {/* Project grid */}

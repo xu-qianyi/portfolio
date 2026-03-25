@@ -14,13 +14,13 @@ const HERO_TEXT: CSSProperties = {
 
 export default function About() {
   return (
-    <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+    <div className="flex min-h-0 min-w-0 w-full flex-1 flex-col overflow-x-clip">
       <section
-        className="flex flex-col lg:relative py-[64px] px-[24px] sm:pt-[28px] sm:pb-[40px] lg:pt-[52px] lg:pb-[64px] lg:px-[72px]"
-        style={{ alignSelf: "stretch", flex: 1 }}
+        className="flex min-h-0 min-w-0 w-full flex-1 flex-col items-start justify-start overflow-x-clip lg:relative py-[64px] px-[24px] sm:pt-[28px] sm:pb-[40px] lg:pt-[52px] lg:pb-[64px] lg:px-[72px]"
+        style={{ alignSelf: "stretch" }}
         aria-label="About"
       >
-        <div className="lg:max-w-[50%]">
+        <div className="min-w-0 max-w-full lg:max-w-[50%]">
           <p style={{ ...HERO_TEXT, maxWidth: 600 }}>
             I studied design and engineering at{" "}
             <a
@@ -42,7 +42,10 @@ export default function About() {
             >
               Boston College
             </a>
-            . One lens never felt like enough. I practice{" "}
+            . My education gives me more than one lens to see a product through.
+          </p>
+          <p style={{ ...HERO_TEXT, maxWidth: 600, marginTop: 16 }}>
+            I practice{" "}
             <a
               href="https://en.wikipedia.org/wiki/Swing_(dance)"
               target="_blank"
@@ -53,7 +56,7 @@ export default function About() {
               Swing
             </a>{" "}
             - a dance with no routine, just feeling and responding to what you&apos;re
-            given.
+            given. Jam with the flow, improvise with the rhythm.
           </p>
           <p style={{ ...HERO_TEXT, maxWidth: 600, marginTop: 16 }}>
             Fufu is my five-year-old brave boy who loves chasing toys around the
@@ -63,7 +66,7 @@ export default function About() {
         </div>
         <DraggablePolaroids />
       </section>
-      <div style={{ flexShrink: 0 }}>
+      <div className="min-w-0 w-full shrink-0 grow-0 overflow-x-clip px-[24px] lg:px-[72px]">
         <Garden />
       </div>
     </div>

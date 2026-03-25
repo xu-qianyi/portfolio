@@ -3,46 +3,71 @@
 import { useRef, useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 
-interface PolaroidData {
+interface PhotoAsset {
   src: string;
   alt: string;
-  rotate: number;
-  x: number;
-  y: number;
 }
 
-const PHOTOS: PolaroidData[] = [
-  { src: "/images/about/graduation.webp", alt: "Graduation", rotate: -4, x: 2, y: 18 },
-  { src: "/images/about/martta-fufu.webp", alt: "Martta & Fufu", rotate: 3, x: 58, y: 10 },
-  { src: "/images/about/swing.webp", alt: "Swing dancing", rotate: -2, x: 22, y: 42 },
-  { src: "/images/about/cat-sleep.webp", alt: "Cat sleeping", rotate: 4, x: 68, y: 36 },
-  { src: "/images/about/fufu.webp", alt: "Fufu", rotate: 5, x: 0, y: 68 },
-  { src: "/images/about/swing-2.webp", alt: "Swing 2", rotate: -6, x: 42, y: 62 },
-  { src: "/images/about/commencement.webp", alt: "Commencement", rotate: 2, x: 72, y: 72 },
+const PHOTOS: PhotoAsset[] = [
+  { src: "/images/about/graduation.webp", alt: "Graduation" },
+  { src: "/images/about/martta-fufu.webp", alt: "Martta & Fufu" },
+  { src: "/images/about/swing.webp", alt: "Swing dancing" },
+  { src: "/images/about/cat-sleep.webp", alt: "Cat sleeping" },
+  { src: "/images/about/fufu.webp", alt: "Fufu" },
+  { src: "/images/about/swing-2.webp", alt: "Swing 2" },
+  { src: "/images/about/commencement.webp", alt: "Commencement" },
 ];
 
-const POLAROID_W = 180;
-const POLAROID_PAD = 12;
-const POLAROID_BOT = 36;
+/** md–lg — staggered zones so frames don’t bunch in the same corner */
+const POSES_TABLET = [
+  { rotate: -8, x: 8, y: 10 },
+  { rotate: 7, x: 76, y: 6 },
+  { rotate: -11, x: 4, y: 48 },
+  { rotate: 10, x: 70, y: 42 },
+  { rotate: -5, x: 16, y: 84 },
+  { rotate: 13, x: 42, y: 60 },
+  { rotate: -7, x: 68, y: 74 },
+] as const;
+
+/** lg+ — wider separation: alternate left/right bands and different Y bands */
+const POSES_DESKTOP = [
+  { rotate: -13, x: 5, y: 8 },
+  { rotate: 12, x: 86, y: 6 },
+  { rotate: -16, x: 2, y: 48 },
+  { rotate: 15, x: 90, y: 44 },
+  { rotate: -10, x: 10, y: 86 },
+  { rotate: 18, x: 44, y: 64 },
+  { rotate: -12, x: 80, y: 80 },
+] as const;
+
+/** lg+ — full size */
+const LAYOUT_LG = { w: 180, pad: 12, bot: 36 } as const;
+/** md–lg (tablet) — slightly smaller */
+const LAYOUT_MD = { w: 148, pad: 10, bot: 30 } as const;
+
+type PolaroidLayout = typeof LAYOUT_LG | typeof LAYOUT_MD;
 
 function Polaroid({
   photo,
+  dims,
   onPointerDown,
   style,
   zIndex,
 }: {
-  photo: PolaroidData;
+  photo: PhotoAsset;
+  dims: PolaroidLayout;
   onPointerDown: (e: React.PointerEvent) => void;
   style: React.CSSProperties;
   zIndex: number;
 }) {
+  const { w, pad, bot } = dims;
   return (
     <div
       onPointerDown={onPointerDown}
       style={{
         position: "absolute",
-        padding: POLAROID_PAD,
-        paddingBottom: POLAROID_BOT,
+        padding: pad,
+        paddingBottom: bot,
         background: "#fff",
         boxShadow: "0 2px 12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.1)",
         borderRadius: 2,
@@ -55,11 +80,11 @@ function Polaroid({
       <Image
         src={photo.src}
         alt={photo.alt}
-        width={POLAROID_W}
-        height={POLAROID_W}
+        width={w}
+        height={w}
         style={{
-          width: POLAROID_W,
-          height: POLAROID_W,
+          width: w,
+          height: w,
           objectFit: "cover",
           display: "block",
           pointerEvents: "none",
@@ -72,6 +97,7 @@ function Polaroid({
 
 export default function DraggablePolaroids() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [dims, setDims] = useState<PolaroidLayout>(LAYOUT_LG);
   const [positions, setPositions] = useState<{ x: number; y: number; rotate: number }[]>([]);
   const [zIndices, setZIndices] = useState<number[]>(() => {
     const indices = PHOTOS.map((_, i) => i);
@@ -94,17 +120,28 @@ export default function DraggablePolaroids() {
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
-    const rect = container.getBoundingClientRect();
-    const totalW = POLAROID_W + POLAROID_PAD * 2;
-    const totalH = POLAROID_W + POLAROID_PAD + POLAROID_BOT;
 
-    setPositions(
-      PHOTOS.map((p) => ({
-        x: (p.x / 100) * Math.max(rect.width - totalW, 0),
-        y: (p.y / 100) * Math.max(rect.height - totalH, 0),
-        rotate: p.rotate,
-      }))
-    );
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const applyLayout = () => {
+      const d = mq.matches ? LAYOUT_LG : LAYOUT_MD;
+      const poses = mq.matches ? POSES_DESKTOP : POSES_TABLET;
+      const rect = container.getBoundingClientRect();
+      const totalW = d.w + d.pad * 2;
+      const totalH = d.w + d.pad + d.bot;
+
+      setDims(d);
+      setPositions(
+        poses.map((p) => ({
+          x: (p.x / 100) * Math.max(rect.width - totalW, 0),
+          y: (p.y / 100) * Math.max(rect.height - totalH, 0),
+          rotate: p.rotate,
+        }))
+      );
+    };
+
+    applyLayout();
+    mq.addEventListener("change", applyLayout);
+    return () => mq.removeEventListener("change", applyLayout);
   }, []);
 
   const handlePointerDown = useCallback(
@@ -145,19 +182,24 @@ export default function DraggablePolaroids() {
     });
   }, []);
 
-  const handlePointerUp = useCallback((e: React.PointerEvent) => {
+  const handlePointerUp = useCallback(() => {
     if (!dragging.current) return;
     dragging.current = null;
   }, []);
 
   if (positions.length === 0) {
-    return <div ref={containerRef} className="hidden md:block relative flex-1 mt-8 lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 lg:mt-0" />;
+    return (
+      <div
+        ref={containerRef}
+        className="relative hidden min-h-[min(480px,55vh)] w-full min-w-0 max-w-full grow-0 md:block md:min-h-[min(520px,60vh)] lg:absolute lg:inset-y-0 lg:right-0 lg:min-h-0 lg:w-1/2 lg:max-w-[50%]"
+      />
+    );
   }
 
   return (
     <div
       ref={containerRef}
-      className="hidden md:block relative flex-1 mt-8 lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 lg:mt-0"
+      className="relative hidden min-h-[min(480px,55vh)] w-full min-w-0 max-w-full grow-0 md:block md:min-h-[min(520px,60vh)] lg:absolute lg:inset-y-0 lg:right-0 lg:min-h-0 lg:w-1/2 lg:max-w-[50%]"
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
     >
@@ -165,6 +207,7 @@ export default function DraggablePolaroids() {
         <Polaroid
           key={photo.src}
           photo={photo}
+          dims={dims}
           zIndex={zIndices[i]}
           onPointerDown={handlePointerDown(i)}
           style={{

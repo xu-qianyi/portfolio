@@ -132,7 +132,6 @@ body {
 }
 
 .hero-nav-link {
-  position: relative;
   margin-right: 0.45em;
   color: #1A1A1A;
   text-decoration-line: underline;
@@ -144,14 +143,14 @@ body {
 
 .hero-nav-link::after {
   content: attr(data-num);
-  position: absolute;
-  top: 0.65em;
-  right: -0.85em;
   font-size: 8px;
   line-height: 0;
+  vertical-align: super;
+  margin-left: 0.12em;
   color: var(--color-accent);
   opacity: 0.8;
   user-select: none;
+  pointer-events: none;
 }
 
 .hero-nav-link:hover {
