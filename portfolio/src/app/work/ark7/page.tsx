@@ -160,8 +160,8 @@ export default function Ark7CaseStudyPage() {
 
   return (
     <div className="min-h-screen px-6 lg:px-[72px] py-12">
-      <main className="grid mx-auto grid-cols-1 md:grid-cols-[1fr_min(800px,100%)_1fr] gap-0">
-        <aside className="md:sticky md:top-20 md:h-fit pb-8 md:pb-0">
+      <main className="grid max-w-[1800px] mx-auto grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-0 md:gap-8">
+        <aside className="md:sticky md:top-20 md:h-fit pb-8 md:pb-0 min-w-0 md:min-w-40">
           <nav className="hidden md:block mt-4">
             <div ref={navListRef} className="relative pl-5">
               <div className="absolute left-0 top-0.5 bottom-0.5 w-[6px] rounded-full bg-black/[0.06]">
@@ -212,7 +212,7 @@ export default function Ark7CaseStudyPage() {
           </nav>
         </aside>
 
-        <div className="flex flex-col gap-12 md:gap-12">
+        <div className="w-full min-w-0 max-w-[800px] flex flex-col gap-12 md:gap-12">
           <header className="flex flex-col gap-8">
             <div className="flex flex-col gap-4">
               <p
