@@ -6,7 +6,7 @@ import Clawd from "./Clawd";
 import CatEars from "./CatEars";
 import {
   ASSETS, type AssetKey,
-  ROW_A, ROW_B, ROW_C, ROW_D, INTERACTIVE_BOTTOM_AREA,
+  ROW_A, ROW_B, ROW_C, ROW_D, INTERACTIVE_BOTTOM_AREA, REF_WIDTH,
   GARDEN_LEFT_PCT, GARDEN_RIGHT_PCT, gardenX, rowC_x,
   FLOWERS, PROPS,
   CATB_POS_X, BUNNY_POS_X, EXTRA_PLANT,
@@ -91,12 +91,14 @@ export default function Garden() {
     return () => ro.disconnect();
   }, [isMobile]);
 
-  // ── Inject garden keyframes once (avoids re-injecting every render) ────────
+  // ── Inject garden keyframes once (persists across remounts) ────────
   useEffect(() => {
+    const STYLE_ID = "garden-keyframes";
+    if (document.getElementById(STYLE_ID)) return;
     const el = document.createElement("style");
+    el.id = STYLE_ID;
     el.textContent = GARDEN_KEYFRAMES;
     document.head.appendChild(el);
-    return () => { document.head.removeChild(el); };
   }, []);
 
   // ── Cleanup all timers on unmount ───────────────────────────────────────────
@@ -160,6 +162,7 @@ export default function Garden() {
       const r = gardenRef.current.getBoundingClientRect();
       if (r.width === 0) return;
       const { x: wx, y: wy } = wandPos.current;
+      const scale = r.width / REF_WIDTH;
       const yMin = 0;
       const yMax = r.height;
 
@@ -173,9 +176,9 @@ export default function Garden() {
       const wandNearCatB  =
         wx >= 0 &&
         wx <= r.width &&
-        Math.abs(wx - catBPixelX) < 60 &&
-        Math.abs(wy - rowCY) < 80;
-      const fufuNearCatB  = Math.abs(fufuPixelX - catBPixelX) < 60;
+        Math.abs(wx - catBPixelX) < 60 * scale &&
+        Math.abs(wy - rowCY) < 80 * scale;
+      const fufuNearCatB  = Math.abs(fufuPixelX - catBPixelX) < 60 * scale;
       const fufuJustEntered = fufuNearCatB && !wasFufuNearCatB.current;
       const wandJustEntered = wandNearCatB && !wasWandNearCatB.current;
       wasFufuNearCatB.current = fufuNearCatB;
@@ -194,8 +197,8 @@ export default function Garden() {
       const wandNearChick =
         wx >= 0 &&
         wx <= r.width &&
-        Math.abs(wx - chickPixelX) < 60 &&
-        Math.abs(wy - rowCY) < 80;
+        Math.abs(wx - chickPixelX) < 60 * scale &&
+        Math.abs(wy - rowCY) < 80 * scale;
       const chickJustEntered = wandNearChick && !wasWandNearChick.current;
       wasWandNearChick.current = wandNearChick;
       if (chickJustEntered && !chickWobbleRef.current) {
@@ -222,8 +225,8 @@ export default function Garden() {
         // Offset the target so Fufu stops at the bottom-left of the wand 
         // Fufu's sprite is ~52px. To place her to the left and below the wand tip (wx, wy),
         // we shift the target position (which represents Fufu's bottom-left corner).
-        const targetWx = wx - 45; 
-        const targetWy = wy - 105;
+        const targetWx = wx - 30 * scale;
+        const targetWy = wy - 70 * scale;
         tx = (targetWx / r.width) * 100;
         ty = Math.max(yMin, Math.min(yMax, targetWy));
         if (crabActiveRef.current) {
@@ -250,13 +253,13 @@ export default function Garden() {
         const dyToCrabPx = crabVisualYRef.current - cy;
         const distToCrabPx = Math.sqrt(dxToCrabPx * dxToCrabPx + dyToCrabPx * dyToCrabPx);
 
-        // Hysteresis: lock when very close (<50px), unlock when clearly apart (>60px).
+        // Hysteresis: lock when very close, unlock when clearly apart (scaled).
         if (crabCloseRef.current) {
-          if (distToCrabPx > 60) {
+          if (distToCrabPx > 60 * scale) {
             crabCloseRef.current = false;
             crabPinnedRef.current = null;
           }
-        } else if (distToCrabPx < 50) {
+        } else if (distToCrabPx < 50 * scale) {
           crabCloseRef.current = true;
           crabPinnedRef.current = {
             x: crabVisualXRef.current,
@@ -282,9 +285,11 @@ export default function Garden() {
       const dx = tx - x;
       const dy = ty - y;
 
-      // All distance/direction math in pixel space to avoid mixed-unit bias
+      // All distance/direction math in pixel space to avoid mixed-unit bias.
+      // dx is in %-of-width → convert to px. dy is already in px (garden bottom-offset).
       const dxPx = (dx / 100) * r.width;
-      const distPx = Math.sqrt(dxPx * dxPx + dy * dy);
+      const dyPx = dy;
+      const distPx = Math.sqrt(dxPx * dxPx + dyPx * dyPx);
 
       // If chasing crab and inside the close-range lock → crab evades, Fufu may say "gotcha!"
       if (!wandInBounds && crabActiveRef.current && crabCloseRef.current) {
@@ -302,7 +307,7 @@ export default function Garden() {
           }
           const oldCx = crabTargetXRef.current;
           const oldCy = crabTargetYRef.current;
-          const np = randomCrabPos(oldCx, oldCy);
+          const np = randomCrabPosRef.current(oldCx, oldCy);
           crabTargetXRef.current = np.x;
           crabTargetYRef.current = np.y;
           crabMoveTime.current = Date.now();
@@ -313,7 +318,7 @@ export default function Garden() {
         return;
       }
 
-      const stopDistPx = wandInBounds ? 20 : 30;
+      const stopDistPx = wandInBounds ? 10 * scale : 30 * scale;
       if (distPx < stopDistPx) { setCatAState("arrive"); return; }
 
       // Distance‑adaptive speed: farther targets → faster, close‑in → slower
@@ -474,6 +479,8 @@ export default function Garden() {
     );
     return { x, y };
   }, [gardenInteractiveArea, gardenH]);
+  const randomCrabPosRef = useRef(randomCrabPos);
+  randomCrabPosRef.current = randomCrabPos;
 
   // Start / stop the rest-run cycle together with the crab
   const startRestCycle = useCallback(() => {
@@ -551,16 +558,17 @@ export default function Garden() {
   // gardenWidthRef.current is always fresh (written by ResizeObserver); avoids the one-frame
   // stale value that gardenWidth state would have immediately after a resize.
   const pxFrom = (pct: number) => Math.abs(catAPos.x - pct) / 100 * gardenWidthRef.current;
-  const isNearFood    = pxFrom(FOOD_CSS_X)    < 25 && Math.abs(catAPos.y - rCVisual) < 30;
-  const isNearCatBB   = pxFrom(CATB_CSS_X)    < 40;
-  const isNearChick   = pxFrom(CHICK_CSS_X)   < 40;
-  const isNearChicken = pxFrom(CHICKEN_CSS_X) < 40;
-  const isNearBunny   = pxFrom(BUNNY_CSS_X)   < 40;
-  const isNearFlower  = catAPos.y > rBVisual - 30 && FLOWER_CSS_XS.some(fx => pxFrom(fx) < 30);
+  const bubbleScale = gardenWidthRef.current / REF_WIDTH;
+  const isNearFood    = pxFrom(FOOD_CSS_X)    < 25 * bubbleScale && Math.abs(catAPos.y - rCVisual) < 30 * bubbleScale;
+  const isNearCatBB   = pxFrom(CATB_CSS_X)    < 40 * bubbleScale;
+  const isNearChick   = pxFrom(CHICK_CSS_X)   < 40 * bubbleScale;
+  const isNearChicken = pxFrom(CHICKEN_CSS_X) < 40 * bubbleScale;
+  const isNearBunny   = pxFrom(BUNNY_CSS_X)   < 40 * bubbleScale;
+  const isNearFlower  = catAPos.y > rBVisual - 30 * bubbleScale && FLOWER_CSS_XS.some(fx => pxFrom(fx) < 30 * bubbleScale);
   // Both axes are in screen-pixels: pxFrom converts % X → px; catAPos.y / crabY are "bottom px"
   // (fixed-height garden), which is also pixels — so Euclidean distance is valid here.
   const crabDist      = crabActive ? Math.sqrt(pxFrom(crabX) ** 2 + (catAPos.y - crabY) ** 2) : Infinity;
-  const isNearCrab    = crabDist < 50;
+  const isNearCrab    = crabDist < 50 * bubbleScale;
 
   const fufuBubble = (() => {
     if (isNearBed)         return "zzz";
@@ -568,7 +576,7 @@ export default function Garden() {
     if (crabActive && chaseRestRef.current) return "ふぅ";
     if (fufuIdle && !crabActive) return fufuIdlePhrase;
     if (isNearCrab)        return "!!";
-    if (crabActive && catAState === "walk") return crabDist < 120 ? "!" : "...";
+    if (crabActive && catAState === "walk") return crabDist < 120 * bubbleScale ? "!" : "...";
     if (isNearFood)        return "~yum";
     if (isNearChick)       return "!";
     if (isNearChicken)     return "hmm";
@@ -635,14 +643,14 @@ export default function Garden() {
                   fontFamily: "monospace",
                   fontSize: 12,
                   fontWeight: 400,
-                  color: "#333",
+                  color: "var(--color-ink)",
                   margin: 0,
                   lineHeight: 1.4,
                 }}
               >
                 <span>
                   Tip: Move your mouse (cat teaser) here.{" "}
-                  <CatEars size={32} color="#333" />
+                  <CatEars size={32} color="var(--color-ink)" />
                 </span>
               </p>
             </div>
@@ -653,7 +661,7 @@ export default function Garden() {
                 position: "relative",
                 width: "100%",
                 height: gardenH + gardenInteractiveArea,
-                background: "#f8f8f8",
+                background: "var(--color-subtle)",
                 overflow: "visible",
               }}
             >
@@ -776,12 +784,12 @@ export default function Garden() {
                     }}
                   >
                     <div style={{
-                      background: "#fff",
-                      border: "2px solid #555",
+                      background: "var(--color-surface)",
+                      border: "2px solid var(--color-muted)",
                       padding: "1px 5px",
                       fontSize: 10,
                       fontFamily: "monospace",
-                      color: "#333",
+                      color: "var(--color-ink)",
                       whiteSpace: "nowrap",
                       lineHeight: 1.4,
                       imageRendering: "pixelated",
@@ -793,7 +801,7 @@ export default function Garden() {
                       height: 0,
                       borderLeft: "4px solid transparent",
                       borderRight: "4px solid transparent",
-                      borderTop: "4px solid #555",
+                      borderTop: "4px solid var(--color-muted)",
                     }} />
                   </div>
                 )}

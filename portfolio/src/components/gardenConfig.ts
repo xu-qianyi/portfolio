@@ -39,6 +39,7 @@ export const ROW_B = 90;
 export const ROW_C = 8;
 export const ROW_D = 230;
 export const INTERACTIVE_BOTTOM_AREA = 44;
+export const REF_WIDTH = 1280;
 
 export const GARDEN_LEFT_PCT = 6;
 export const GARDEN_RIGHT_PCT = 94;
