@@ -58,6 +58,9 @@ const Polaroid = forwardRef<HTMLDivElement, {
   return (
     <div
       ref={ref}
+      role="img"
+      aria-label={photo.alt}
+      tabIndex={0}
       onPointerDown={onPointerDown}
       style={{
         position: "absolute",
@@ -69,12 +72,13 @@ const Polaroid = forwardRef<HTMLDivElement, {
         touchAction: "none",
         userSelect: "none",
         zIndex,
+        outline: "none",
         ...style,
       }}
     >
       <Image
         src={photo.src}
-        alt={photo.alt}
+        alt=""
         width={w}
         height={w}
         style={{
@@ -211,38 +215,78 @@ export default function DraggablePolaroids() {
     });
   }, []);
 
-  if (positions.length === 0) {
-    return (
-      <div
-        ref={containerRef}
-        className="relative hidden min-h-[min(480px,55vh)] w-full min-w-0 max-w-full grow-0 md:block md:min-h-[min(400px,48vh)] lg:absolute lg:inset-y-0 lg:right-0 lg:min-h-0 lg:w-1/2 lg:max-w-[50%]"
-      />
-    );
-  }
+  const mobilePad = 8;
+  const mobileW = 140;
+  const mobileBot = 28;
 
   return (
-    <div
-      ref={containerRef}
-      className="relative hidden min-h-[min(480px,55vh)] w-full min-w-0 max-w-full grow-0 md:block md:min-h-[min(400px,48vh)] lg:absolute lg:inset-y-0 lg:right-0 lg:min-h-0 lg:w-1/2 lg:max-w-[50%]"
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerCancel={handlePointerUp}
-    >
-      {PHOTOS.map((photo, i) => (
-        <Polaroid
-          key={photo.src}
-          ref={(el) => { cardRefs.current[i] = el; }}
-          photo={photo}
-          dims={dims}
-          zIndex={zIndices[i]}
-          onPointerDown={handlePointerDown(i)}
-          style={{
-            left: positions[i].x,
-            top: positions[i].y,
-            transform: `rotate(${positions[i].rotate}deg)`,
-          }}
+    <>
+      {/* Mobile-only: horizontal scroll strip */}
+      <div
+        className="md:hidden w-full mt-6 -mx-6 px-6"
+        style={{ overflowX: "auto", overflowY: "visible", paddingBottom: 16 }}
+      >
+        <div style={{ display: "flex", gap: 16, width: "max-content", paddingBottom: 8 }}>
+          {PHOTOS.map((photo, i) => {
+            const rotate = POSES_DESKTOP[i % POSES_DESKTOP.length].rotate;
+            return (
+              <div
+                key={photo.src}
+                style={{
+                  padding: mobilePad,
+                  paddingBottom: mobileBot,
+                  background: "#fff",
+                  boxShadow: "0 2px 12px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.1)",
+                  borderRadius: 2,
+                  transform: `rotate(${rotate}deg)`,
+                  flexShrink: 0,
+                }}
+              >
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  width={mobileW}
+                  height={mobileW}
+                  style={{ width: mobileW, height: mobileW, objectFit: "cover", display: "block" }}
+                  draggable={false}
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* md+ draggable area */}
+      {positions.length === 0 ? (
+        <div
+          ref={containerRef}
+          className="relative hidden min-h-[min(480px,55vh)] w-full min-w-0 max-w-full grow-0 md:block md:min-h-[min(400px,48vh)] lg:absolute lg:inset-y-0 lg:right-0 lg:min-h-0 lg:w-1/2 lg:max-w-[50%]"
         />
-      ))}
-    </div>
+      ) : (
+        <div
+          ref={containerRef}
+          className="relative hidden min-h-[min(480px,55vh)] w-full min-w-0 max-w-full grow-0 md:block md:min-h-[min(400px,48vh)] lg:absolute lg:inset-y-0 lg:right-0 lg:min-h-0 lg:w-1/2 lg:max-w-[50%]"
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
+        >
+          {PHOTOS.map((photo, i) => (
+            <Polaroid
+              key={photo.src}
+              ref={(el) => { cardRefs.current[i] = el; }}
+              photo={photo}
+              dims={dims}
+              zIndex={zIndices[i]}
+              onPointerDown={handlePointerDown(i)}
+              style={{
+                left: positions[i].x,
+                top: positions[i].y,
+                transform: `rotate(${positions[i].rotate}deg)`,
+              }}
+            />
+          ))}
+        </div>
+      )}
+    </>
   );
 }

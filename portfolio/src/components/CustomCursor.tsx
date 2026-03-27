@@ -12,6 +12,8 @@ export default function CustomCursor() {
     if (typeof window === "undefined") return;
     // 触屏设备不启用自定义光标
     if (window.matchMedia("(pointer: coarse)").matches) return;
+    // Respect reduced-motion preference
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const el = cursorRef.current;
     if (!el) return;
@@ -41,13 +43,17 @@ export default function CustomCursor() {
       }
     };
 
+    const checkGarden = (x: number, y: number) => {
+      const target = document.elementFromPoint(x, y);
+      const overGarden = !!target?.closest("[data-garden-section]");
+      overGarden ? hide() : show();
+    };
+
     const onMove = (e: PointerEvent) => {
       if (e.pointerType === "touch") return;
       latestPos.current = { x: e.clientX, y: e.clientY };
 
-      const target = e.target as Element | null;
-      const overGarden = !!target?.closest("[data-garden-section]");
-      overGarden ? hide() : show();
+      checkGarden(e.clientX, e.clientY);
 
       if (rafRef.current !== null) return;
       rafRef.current = requestAnimationFrame(() => {
@@ -57,12 +63,24 @@ export default function CustomCursor() {
       });
     };
 
+    const onScroll = () => {
+      const { x, y } = latestPos.current;
+      if (x === 0 && y === 0) return;
+      checkGarden(x, y);
+    };
+
+    const onLeave = (e: MouseEvent) => {
+      if (!e.relatedTarget) hide();
+    };
+
     document.addEventListener("pointermove", onMove);
-    document.documentElement.addEventListener("mouseleave", hide);
+    document.addEventListener("scroll", onScroll, { passive: true });
+    document.documentElement.addEventListener("mouseleave", onLeave);
 
     return () => {
       document.removeEventListener("pointermove", onMove);
-      document.documentElement.removeEventListener("mouseleave", hide);
+      document.removeEventListener("scroll", onScroll);
+      document.documentElement.removeEventListener("mouseleave", onLeave);
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
       styleEl.remove();
       document.documentElement.style.removeProperty("cursor");

@@ -6,7 +6,7 @@ const HERO_TEXT: CSSProperties = {
   fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
   fontSize: "16px",
   fontWeight: 500,
-  color: "#1A1A1A",
+  color: "var(--color-ink)",
   lineHeight: "150%",
   letterSpacing: "0px",
   margin: 0,

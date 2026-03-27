@@ -4,8 +4,16 @@
   --color-ink:     #1A1A1A;
   --color-surface: #FFFFFF;
   --color-subtle:  #F5F5F5;
-  --color-muted:   #b0b0b0;
+  --color-muted:   #737373;
   --color-accent:  #EC4523;
+  --color-ink-90:  rgba(26, 26, 26, 0.9);
+  --color-ink-80:  rgba(26, 26, 26, 0.8);
+  --color-ink-70:  rgba(26, 26, 26, 0.7);
+  --color-ink-65:  rgba(26, 26, 26, 0.65);
+  --color-ink-14:  rgba(26, 26, 26, 0.14);
+  --color-ink-06:  rgba(26, 26, 26, 0.06);
+  --color-border:  rgba(26, 26, 26, 0.2);
+  --color-accent-green: #3F7A66;
 }
 
 @theme inline {
@@ -43,13 +51,8 @@ nav button:focus-visible {
   color: var(--color-muted);
 }
 
-html,
-body,
-*,
-*::before,
-*::after {
-  cursor: none !important;
-}
+/* Custom cursor is applied via JS in CustomCursor.tsx only for pointer devices.
+   Never hide the native cursor in CSS — it breaks keyboard/assistive-tech users. */
 
 body {
   background-color: var(--color-surface);
@@ -63,10 +66,10 @@ body {
 
 .hero-company-link {
   margin-right: 0.12em;
-  color: #1A1A1A;
+  color: var(--color-ink);
   text-decoration-line: underline;
   text-decoration-style: dotted;
-  text-decoration-color: #1A1A1A;
+  text-decoration-color: var(--color-ink);
   text-underline-offset: 2px;
   transition: color 200ms ease, text-decoration-color 200ms ease;
   cursor: inherit;
@@ -79,7 +82,7 @@ body {
 }
 
 .project-card-link {
-  cursor: none;
+  cursor: pointer;
 }
 
 .project-card-media {
@@ -96,20 +99,7 @@ body {
   transform: translateY(-1px) scale(1.01);
 }
 
-.project-card-link * {
-  cursor: none;
-}
-
-.project-card-link:hover,
-.project-card-link:focus,
-.project-card-link:focus-visible,
-.project-card-link:active,
-.project-card-link *:hover,
-.project-card-link *:focus,
-.project-card-link *:focus-visible,
-.project-card-link *:active {
-  cursor: none;
-}
+/* cursor:none is handled by CustomCursor.tsx at runtime for pointer devices only */
 
 /* Real <span.hero-company-link-badge> after link text — flows with wrapping; no ::after (avoids overlap + zero-height bugs). */
 .hero-company-link .hero-company-link-badge {
@@ -136,10 +126,10 @@ body {
 
 .hero-nav-link {
   margin-right: 0.45em;
-  color: #1A1A1A;
+  color: var(--color-ink);
   text-decoration-line: underline;
   text-decoration-style: dotted;
-  text-decoration-color: #1A1A1A;
+  text-decoration-color: var(--color-ink);
   text-underline-offset: 2px;
   transition: color 200ms ease, text-decoration-color 200ms ease;
 }
@@ -164,10 +154,10 @@ body {
 }
 
 .case-inline-link {
-  color: #1A1A1A;
+  color: var(--color-ink);
   text-decoration-line: underline;
   text-decoration-style: dotted;
-  text-decoration-color: #1A1A1A;
+  text-decoration-color: var(--color-ink);
   text-underline-offset: 2px;
   transition: color 200ms ease, text-decoration-color 200ms ease, background-color 200ms ease;
 }
@@ -185,10 +175,10 @@ body {
 }
 
 .copy-email-btn {
-  color: #1A1A1A;
+  color: var(--color-ink);
   text-decoration: underline;
   text-decoration-style: dotted;
-  text-decoration-color: #1A1A1A;
+  text-decoration-color: var(--color-ink);
   text-underline-offset: 2px;
   background: none;
   border: none;
@@ -205,9 +195,9 @@ body {
 }
 
 .copy-email-nav-btn {
-  color: #1A1A1A;
-  background-color: #ffffff;
-  border: 1px solid rgba(26, 26, 26, 0.2);
+  color: var(--color-ink);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
   border-radius: 999px;
   padding: 4px 12px;
   font-family: var(--font-geist-sans), system-ui, sans-serif;
@@ -274,4 +264,18 @@ body {
 
 main {
   animation: page-in 0.45s ease-out both;
+}
+
+/* ── Reduced-motion: disable all non-essential animation ─────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  main {
+    animation: none;
+  }
 }

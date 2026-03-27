@@ -76,9 +76,10 @@ export default function Garden() {
 
   useEffect(() => {
     setVw(window.innerWidth);
-    const onResize = () => setVw(window.innerWidth);
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    const onResize = () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => setVw(window.innerWidth), 150); };
     window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    return () => { window.removeEventListener("resize", onResize); clearTimeout(resizeTimer); };
   }, []);
 
   useEffect(() => {
@@ -616,6 +617,8 @@ export default function Garden() {
       <section
         ref={sectionRef}
         data-garden-section
+        role="img"
+        aria-label="Interactive pixel garden with animated cat Fufu chasing a crab, flowers, and other critters"
         style={{
           borderTop: "none",
           fontFamily: "var(--font-geist-sans), system-ui, sans-serif",

@@ -4,7 +4,7 @@ const HEADLINE: CSSProperties = {
   fontFamily: "tiemposText, 'Tiempos Text', Georgia, serif",
   fontSize: "48px",
   fontWeight: 500,
-  color: "#1A1A1A",
+  color: "var(--color-ink)",
   lineHeight: "52px",
   letterSpacing: "0.96px",
   margin: 0,
@@ -39,9 +39,9 @@ export default function NotFound() {
         <span
           style={{
             fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-            fontSize: "12rem",
+            fontSize: "clamp(6rem, 20vw, 12rem)",
             fontWeight: 700,
-            color: "rgba(26,26,26,0.06)",
+            color: "var(--color-ink-06)",
             lineHeight: 1,
           }}
         >

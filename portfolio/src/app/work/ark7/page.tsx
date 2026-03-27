@@ -152,19 +152,21 @@ export default function Ark7CaseStudyPage() {
     };
 
     updateDotPosition();
-    window.addEventListener("resize", updateDotPosition);
-    return () => window.removeEventListener("resize", updateDotPosition);
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    const onResize = () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(updateDotPosition, 150); };
+    window.addEventListener("resize", onResize);
+    return () => { window.removeEventListener("resize", onResize); clearTimeout(resizeTimer); };
   }, [activeId]);
 
   return (
     <div className="min-h-screen px-6 lg:px-[72px] py-12">
-      <main className="grid mx-auto grid-cols-1 md:grid-cols-[1fr_800px_1fr] gap-0">
+      <main className="grid mx-auto grid-cols-1 md:grid-cols-[1fr_min(800px,100%)_1fr] gap-0">
         <aside className="md:sticky md:top-20 md:h-fit pb-8 md:pb-0">
           <nav className="hidden md:block mt-4">
             <div ref={navListRef} className="relative pl-5">
               <div className="absolute left-0 top-0.5 bottom-0.5 w-[6px] rounded-full bg-black/[0.06]">
                 <div
-                  className="absolute left-1/2 w-[5px] h-[5px] rounded-full bg-[#1a1a1a] transition-all duration-300 ease-out"
+                  className="absolute left-1/2 w-[5px] h-[5px] rounded-full bg-[var(--color-ink)] transition-all duration-300 ease-out"
                   style={{
                     top: dotY,
                     transform: "translate(-50%, -50%)",
@@ -186,19 +188,20 @@ export default function Ark7CaseStudyPage() {
                         fontSize: "15px",
                         lineHeight: "160%",
                         fontWeight: 500,
-                        color: "#1A1A1A",
+                        color: "var(--color-ink)",
                         opacity: isActive ? 1 : 0.4,
                         background: "transparent",
                         border: 0,
                         padding: 0,
                         cursor: "inherit",
                       }}
-                      onClick={() =>
+                      onClick={() => {
+                        const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
                         sectionRefs.current[section.id]?.scrollIntoView({
-                          behavior: "smooth",
+                          behavior: prefersReduced ? "auto" : "smooth",
                           block: "start",
-                        })
-                      }
+                        });
+                      }}
                     >
                       {section.label}
                     </button>
@@ -212,24 +215,24 @@ export default function Ark7CaseStudyPage() {
         <div className="flex flex-col gap-12 md:gap-12">
           <header className="flex flex-col gap-8">
             <div className="flex flex-col gap-4">
-              <h4
+              <p
                 style={{
                   fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
                   fontSize: "14px",
                   fontWeight: 500,
-                  color: "rgba(26,26,26,0.65)",
+                  color: "var(--color-muted)",
                   margin: 0,
                 }}
               >
                 ARK7 • FinTech
-              </h4>
+              </p>
               <h1
                 style={{
                   fontFamily: "tiemposText, 'Tiempos Text', Georgia, serif",
                   fontSize: "28px",
                   lineHeight: "110%",
                   fontWeight: 500,
-                  color: "#1A1A1A",
+                  color: "var(--color-ink)",
                   margin: 0,
                 }}
               >
@@ -251,24 +254,23 @@ export default function Ark7CaseStudyPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {META_ITEMS.map((item) => (
                 <div key={item.label} className="flex flex-col gap-2">
-                  <h4
+                  <p
                     style={{
                       fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
                       fontSize: "14px",
                       fontWeight: 500,
-                      color: "#1A1A1A",
+                      color: "var(--color-ink)",
                       margin: 0,
                     }}
                   >
                     {item.label}
-                  </h4>
+                  </p>
                   <p
                     style={{
                       fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
                       fontSize: "16px",
                       lineHeight: "150%",
-                      color: "#1A1A1A",
-                      opacity: 0.8,
+                      color: "var(--color-ink-80)",
                       margin: 0,
                     }}
                   >
@@ -289,19 +291,19 @@ export default function Ark7CaseStudyPage() {
                 }}
                 className="flex flex-col gap-4 scroll-mt-24"
               >
-                <h4
+                <p
                   style={{
                     fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
                     fontSize: "13px",
                     fontWeight: 500,
                     letterSpacing: "0.02em",
                     textTransform: "uppercase",
-                    color: "rgba(26,26,26,0.7)",
+                    color: "var(--color-ink-70)",
                     margin: 0,
                   }}
                 >
                   {section.label}
-                </h4>
+                </p>
 
                 <h2
                   style={{
@@ -309,8 +311,8 @@ export default function Ark7CaseStudyPage() {
                     fontSize: "24px",
                     lineHeight: "120%",
                     fontWeight: 400,
-                    color: "#1A1A1A",
-                    borderLeft: "2px solid #3F7A66",
+                    color: "var(--color-ink)",
+                    borderLeft: "2px solid var(--color-accent-green)",
                     paddingLeft: "12px",
                     margin: 0,
                   }}
@@ -325,7 +327,7 @@ export default function Ark7CaseStudyPage() {
                       fontSize: "20px",
                       lineHeight: "130%",
                       fontWeight: 500,
-                      color: "rgba(26,26,26,0.9)",
+                      color: "var(--color-ink-90)",
                       margin: "16px 0 0",
                     }}
                   >
@@ -340,8 +342,7 @@ export default function Ark7CaseStudyPage() {
                       fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
                       fontSize: "16px",
                       lineHeight: "160%",
-                      color: "#1A1A1A",
-                      opacity: 0.8,
+                      color: "var(--color-ink-80)",
                       margin: 0,
                     }}
                   >
@@ -393,7 +394,7 @@ export default function Ark7CaseStudyPage() {
                         fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
                         fontSize: "14px",
                         lineHeight: "150%",
-                        color: "rgba(26,26,26,0.7)",
+                        color: "var(--color-ink-70)",
                         margin: 0,
                       }}
                     >
@@ -412,7 +413,7 @@ export default function Ark7CaseStudyPage() {
                       borderLeft: "2px solid var(--color-accent)",
                       paddingLeft: "16px",
                       margin: "8px 0 0",
-                      color: "#1A1A1A",
+                      color: "var(--color-ink)",
                     }}
                   >
                     {section.quote}

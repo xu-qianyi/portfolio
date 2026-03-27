@@ -40,8 +40,10 @@ export default function Navbar() {
       setIndicatorLeft(elRect.left - containerRect.left + elRect.width / 2);
     };
     recalc();
-    window.addEventListener("resize", recalc);
-    return () => window.removeEventListener("resize", recalc);
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    const onResize = () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(recalc, 150); };
+    window.addEventListener("resize", onResize);
+    return () => { window.removeEventListener("resize", onResize); clearTimeout(resizeTimer); };
   }, [pathname]);
 
   // Close menu on navigation
@@ -170,7 +172,7 @@ function HamburgerIcon({ open }: { open: boolean }) {
     left: 0,
     width: 22,
     height: 1.5,
-    backgroundColor: "#1a1a1a",
+    backgroundColor: "var(--color-ink)",
     borderRadius: 1,
   };
   return (
