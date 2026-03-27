@@ -3,14 +3,23 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 
+const SECTION_EYEBROW_STYLE = {
+  fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
+  fontSize: "13px",
+  fontWeight: 500,
+  letterSpacing: "0.02em",
+  textTransform: "uppercase" as const,
+  color: "var(--color-ink-70)",
+  margin: 0,
+};
+
 type Section = {
   id: string;
   label: string;
   title: string;
   body: string[];
-  subheading?: string;
-  mediaCaption: string;
-  quote: string;
+  continuationTitle?: string;
+  continuationBody?: string[];
 };
 
 const SECTIONS: Section[] = [
@@ -22,23 +31,12 @@ const SECTIONS: Section[] = [
       "ARK7 is a platform that simplifies real estate investment by offering fractional shares for as little as $20 per share in premium residential properties across the United States.",
       "The product vision was to make real estate feel as approachable as buying a stock: transparent listings, clear expected returns, and a guided path from exploration to first investment.",
     ],
-    mediaCaption:
-      "A redesigned landing experience that introduces ARK7's value proposition in under 30 seconds.",
-    quote: "",
-  },
-  {
-    id: "current-challenge",
-    label: "Current challenge",
-    title: "How to retain existing investors and convert new users into regular investors.",
-    body: [
-      "While awareness was growing, many first-time visitors still hesitated before making a first investment. They could see attractive returns, but they were not yet sure how to evaluate property quality, risk, and timing in a way that felt personally trustworthy.",
-      "The key challenge was to reduce cognitive load without oversimplifying important financial details. We needed an experience that guided users toward confident action while still preserving transparency and control.",
+    continuationTitle:
+      "Current challenge: how to retain existing investors and convert new users into regular investors?",
+    continuationBody: [
+      "ARK7 faces a challenge to retain existing investors and to convert new users into regular investors. Despite attracting new users with its referral rewards system, these users often fail to continue investing.",
+      "Additionally, many existing investors withdraw their funds post-freeze period and cease further investment.",
     ],
-    subheading: "Problem framing",
-    mediaCaption:
-      "Challenge map showing where users paused between property discovery and funding.",
-    quote:
-      "The product did not need louder promises. It needed clearer signals users could trust quickly.",
   },
   {
     id: "research",
@@ -48,11 +46,6 @@ const SECTIONS: Section[] = [
       "Through interviews, support tickets, and session recordings, we found that users loved the low entry barrier but struggled to judge risk. They wanted simple answers to: How safe is this property? How soon can I exit? How is rental income distributed?",
       "Competitor audits showed that most platforms overloaded users with financial terms before establishing confidence. This led us to prioritize progressive disclosure: first communicate trust signals, then expand into deeper metrics for advanced investors.",
     ],
-    subheading: "Marketing analysis",
-    mediaCaption:
-      "Early funnel analysis highlighting where confidence dropped before account funding.",
-    quote:
-      "People did not ask for more data first. They asked for clearer meaning and context.",
   },
   {
     id: "design",
@@ -62,11 +55,6 @@ const SECTIONS: Section[] = [
       "We introduced a modular property detail structure that surfaces three key trust anchors first: ownership model, projected cash flow, and risk notes. Secondary details such as neighborhood trends and legal docs were grouped in expandable panels.",
       "Onboarding was reworked into a guided journey with lightweight education moments and status indicators. Users could understand what to do next without losing momentum, while still feeling in control of financial decisions.",
     ],
-    subheading: "Feature prioritization",
-    mediaCaption:
-      "New information architecture for property pages, balancing depth with readability.",
-    quote:
-      "We optimized not for clicks, but for confident decisions users can explain back to themselves.",
   },
   {
     id: "summary",
@@ -76,11 +64,6 @@ const SECTIONS: Section[] = [
       "After launch, the new case-study-backed product narrative improved engagement quality: more users completed property deep dives and reached funding steps with fewer support-related detours.",
       "The project also gave the team a reusable framework for future launches, aligning product, marketing, and engineering around one shared story: make fractional real-estate investing understandable and trustworthy from first glance to first transaction.",
     ],
-    subheading: "Impact",
-    mediaCaption:
-      "Cross-functional rollout playbook used to scale future campaign and product updates.",
-    quote:
-      "Great fintech UX turns complexity into confidence without hiding the truth.",
   },
 ];
 
@@ -291,20 +274,7 @@ export default function Ark7CaseStudyPage() {
                 }}
                 className="flex flex-col gap-4 scroll-mt-24"
               >
-                <p
-                  style={{
-                    fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-                    fontSize: "13px",
-                    fontWeight: 500,
-                    letterSpacing: "0.02em",
-                    textTransform: "uppercase",
-                    color: "var(--color-ink-70)",
-                    margin: 0,
-                  }}
-                >
-                  {section.label}
-                </p>
-
+                <p style={SECTION_EYEBROW_STYLE}>{section.label}</p>
                 <h2
                   style={{
                     fontFamily: "tiemposText, 'Tiempos Text', Georgia, serif",
@@ -319,21 +289,6 @@ export default function Ark7CaseStudyPage() {
                 >
                   {section.title}
                 </h2>
-
-                {section.subheading ? (
-                  <h3
-                    style={{
-                      fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-                      fontSize: "20px",
-                      lineHeight: "130%",
-                      fontWeight: 500,
-                      color: "var(--color-ink-90)",
-                      margin: "16px 0 0",
-                    }}
-                  >
-                    {section.subheading}
-                  </h3>
-                ) : null}
 
                 {section.body.map((paragraph, paragraphIndex) => (
                   <p
@@ -378,46 +333,39 @@ export default function Ark7CaseStudyPage() {
                       />
                     </div>
                   </div>
-                ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-[60%_auto] md:items-end gap-6 my-4">
-                    <div className="w-full border border-black/10 bg-[#f5f5f5] overflow-hidden">
-                      <Image
-                        src="/images/preview/website-placeholder.svg"
-                        alt={`${section.label} placeholder`}
-                        width={1200}
-                        height={800}
-                        className="w-full h-auto object-cover"
-                      />
-                    </div>
-                    <p
+                ) : null}
+
+                {section.continuationTitle && section.continuationBody ? (
+                  <>
+                    <h2
                       style={{
-                        fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
-                        fontSize: "14px",
-                        lineHeight: "150%",
-                        color: "var(--color-ink-70)",
+                        fontFamily: "tiemposText, 'Tiempos Text', Georgia, serif",
+                        fontSize: "24px",
+                        lineHeight: "120%",
+                        fontWeight: 400,
+                        color: "var(--color-ink)",
+                        borderLeft: "2px solid var(--color-accent-green)",
+                        paddingLeft: "12px",
                         margin: 0,
                       }}
                     >
-                      {section.mediaCaption}
-                    </p>
-                  </div>
-                )}
-
-                {section.quote ? (
-                  <blockquote
-                    style={{
-                      fontFamily: "tiemposText, 'Tiempos Text', Georgia, serif",
-                      fontSize: "clamp(20px, 2.8vw, 28px)",
-                      lineHeight: "135%",
-                      fontStyle: "italic",
-                      borderLeft: "2px solid var(--color-accent)",
-                      paddingLeft: "16px",
-                      margin: "8px 0 0",
-                      color: "var(--color-ink)",
-                    }}
-                  >
-                    {section.quote}
-                  </blockquote>
+                      {section.continuationTitle}
+                    </h2>
+                    {section.continuationBody.map((paragraph) => (
+                      <p
+                        key={paragraph}
+                        style={{
+                          fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
+                          fontSize: "16px",
+                          lineHeight: "160%",
+                          color: "var(--color-ink-80)",
+                          margin: 0,
+                        }}
+                      >
+                        {paragraph}
+                      </p>
+                    ))}
+                  </>
                 ) : null}
 
                 {index < SECTIONS.length - 1 ? <div className="h-px w-full bg-black/10 mt-8" /> : null}
