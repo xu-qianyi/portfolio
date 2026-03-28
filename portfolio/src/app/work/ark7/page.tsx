@@ -149,6 +149,29 @@ const BODY_TEXT_STYLE = {
   margin: 0,
 } as const;
 
+const ARK7_DESIGN_AUDIT_FINDINGS = [
+  {
+    image: "/images/ARK7/different_shades_of_greens.png",
+    title: "Different shades of green",
+    body: "In our design audit, we discovered that 12 different shades of green are used throughout our platform, adding unnecessary cognitive load for users.",
+  },
+  {
+    image: "/images/ARK7/font_a11y.png",
+    title: "Font usage and accessibility",
+    body: "The style guide lists 14 fonts but gives no guidance on when to use them - resulting in poor visual hierarchy and up to 5 different fonts on a single card. Some are too small to meet WCAG standards.",
+  },
+  {
+    image: "/images/ARK7/inconsistent_card_layout.png",
+    title: "Inconsistent card layout",
+    body: "The platform lacks clear design guidelines for card usage, resulting in varied CTA placements—some on the left, some on the right—and mixed placement of images and text. This slows down users' interactions and reduces overall task efficiency.",
+  },
+  {
+    image: "/images/ARK7/cramped_spacing.png",
+    title: "Cramped spacing",
+    body: "Inconsistent spacing between fonts of the same hierarchy within the same card can lead to visual clutter and confusion, making it difficult for users to quickly process and understand the information presented.",
+  },
+] as const;
+
 const ARK7_STORE_REVIEW_QUOTES = [
   {
     source: "Google Play",
@@ -185,6 +208,42 @@ function ark7StoreQuoteInner(text: string): ReactNode {
       </span>
       {parts.slice(1).join(glyph)}
     </>
+  );
+}
+
+function Ark7DesignAuditGrid() {
+  return (
+    <div className="mt-2 grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
+      {ARK7_DESIGN_AUDIT_FINDINGS.map((item) => (
+        <div key={item.title} className="flex flex-col gap-3">
+          <div className="relative rounded-lg p-3" style={{ backgroundColor: "#f8f8f8" }}>
+            <div className="relative h-96 w-full overflow-hidden rounded-md">
+              <Image
+                src={item.image}
+                alt={item.title}
+                fill
+                className="object-contain object-top"
+              />
+            </div>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <p
+              style={{
+                fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
+                fontSize: "15px",
+                lineHeight: "150%",
+                fontWeight: 600,
+                color: "var(--color-ink)",
+                margin: 0,
+              }}
+            >
+              {item.title}
+            </p>
+            <p style={{ ...BODY_TEXT_STYLE }}>{item.body}</p>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -1033,6 +1092,8 @@ export default function Ark7CaseStudyPage() {
                       level.
                     </p>
                     <Ark7IterationStoreQuotes />
+                    <p style={{ ...BODY_TEXT_STYLE }}>Our design audit revealed:</p>
+                    <Ark7DesignAuditGrid />
                   </div>
                 ) : null}
 
