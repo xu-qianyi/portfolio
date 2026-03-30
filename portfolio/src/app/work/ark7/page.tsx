@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import Image from "next/image";
 import CaseScrollReveal from "@/components/CaseScrollReveal";
+import LottiePreview from "@/components/LottiePreview";
 
 const SECTION_EYEBROW_STYLE = {
   fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
@@ -66,7 +67,9 @@ const SECTIONS: Section[] = [
     id: "final-solution",
     label: "Final solution",
     title: "Ian's journey - from hesitation to confidence",
-    body: [],
+    body: [
+      "With the card foundation stable, we built the four community features on top of it. Here's how they landed for each user.",
+    ],
   },
   {
     id: "summary",
@@ -154,22 +157,22 @@ const BODY_TEXT_STYLE = {
 
 const ARK7_DESIGN_AUDIT_FINDINGS = [
   {
-    image: "/images/ARK7/different_shades_of_greens.png",
+    image: "/images/ARK7/different_shades_of_greens.webp",
     title: "Different shades of green",
     body: "In our design audit, we discovered that 12 different shades of green are used throughout our platform, adding unnecessary cognitive load for users.",
   },
   {
-    image: "/images/ARK7/font_a11y.png",
+    image: "/images/ARK7/font_a11y.webp",
     title: "Font usage and accessibility",
     body: "The style guide lists 14 fonts but gives no guidance on when to use them - resulting in poor visual hierarchy and up to 5 different fonts on a single card. Some are too small to meet WCAG standards.",
   },
   {
-    image: "/images/ARK7/inconsistent_card_layout.png",
+    image: "/images/ARK7/inconsistent_card_layout.webp",
     title: "Inconsistent card layout",
     body: "The platform lacks clear design guidelines for card usage, resulting in varied CTA placements - some on the left, some on the right - and mixed placement of images and text. This slows down users' interactions and reduces overall task efficiency.",
   },
   {
-    image: "/images/ARK7/cramped_spacing.png",
+    image: "/images/ARK7/cramped_spacing.webp",
     title: "Cramped spacing",
     body: "Inconsistent spacing between fonts of the same hierarchy within the same card can lead to visual clutter and confusion, making it difficult for users to quickly process and understand the information presented.",
   },
@@ -569,7 +572,7 @@ const ARK7_LAYOUT_OPTIONS: Ark7LayoutOption[] = [
   {
     id: "information-home",
     tabLabel: "Option 1",
-    imageSrc: "/images/ARK7/option1.png",
+    imageSrc: "/images/ARK7/option1.webp",
     imageWidth: 1002,
     imageHeight: 2214,
     imageAlt: "Mobile wireframe: information cards and feature tiles on the home tab",
@@ -595,7 +598,7 @@ const ARK7_LAYOUT_OPTIONS: Ark7LayoutOption[] = [
   {
     id: "feed-home",
     tabLabel: "Option 2",
-    imageSrc: "/images/ARK7/option2.png",
+    imageSrc: "/images/ARK7/option2.webp",
     imageWidth: 1040,
     imageHeight: 2214,
     imageAlt: "Mobile wireframe: home and feed tabs with a vertical content feed",
@@ -623,7 +626,7 @@ const ARK7_LAYOUT_OPTIONS: Ark7LayoutOption[] = [
   {
     id: "feed-new-tab",
     tabLabel: "Option 3",
-    imageSrc: "/images/ARK7/option3.png",
+    imageSrc: "/images/ARK7/option3.webp",
     imageWidth: 1040,
     imageHeight: 2215,
     imageAlt: "Mobile wireframe: dedicated news feed tab with bottom navigation",
@@ -648,10 +651,10 @@ const ARK7_LAYOUT_OPTIONS: Ark7LayoutOption[] = [
 ];
 
 const ARK7_CARD_REVAMP_TABS = [
-  { id: "overall",  label: "Overall",    src: "/images/ARK7/design_revamp_overall.png", alt: "Card revamp overall before and after" },
-  { id: "anatomy",  label: "Anatomy",    src: "/images/ARK7/atonomy.png",               alt: "Card anatomy breakdown" },
-  { id: "cta",      label: "CTA button", src: "/images/ARK7/CTA.png",                   alt: "CTA button changes before and after" },
-  { id: "content",  label: "Content",    src: "/images/ARK7/content.png",               alt: "Content changes before and after" },
+  { id: "overall",  label: "Overall",    src: "/images/ARK7/design_revamp_overall.webp", alt: "Card revamp overall before and after" },
+  { id: "anatomy",  label: "Anatomy",    src: "/images/ARK7/atonomy.webp",               alt: "Card anatomy breakdown" },
+  { id: "cta",      label: "CTA button", src: "/images/ARK7/CTA.webp",                   alt: "CTA button changes before and after" },
+  { id: "content",  label: "Content",    src: "/images/ARK7/content.webp",               alt: "Content changes before and after" },
 ] as const;
 
 function Ark7CardRevampTabs() {
@@ -1079,15 +1082,8 @@ export default function Ark7CaseStudyPage() {
               </h1>
             </CaseScrollReveal>
 
-            <CaseScrollReveal className="w-full aspect-[16/9] border border-[var(--color-ink-14)] bg-[var(--color-subtle)] overflow-hidden">
-              <Image
-                src="/images/ARK7/ARK7_big.png"
-                alt="ARK7 case study hero"
-                width={1920}
-                height={1080}
-                className="w-full h-full object-cover"
-                priority
-              />
+            <CaseScrollReveal className="w-full aspect-[16/9] border border-[var(--color-ink-14)] bg-[var(--color-subtle)] overflow-hidden relative">
+              <LottiePreview src="/images/ARK7/ARK7_Case study_Preview.json" loop={false} />
             </CaseScrollReveal>
 
             <CaseScrollReveal className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3 lg:gap-6">
@@ -1293,7 +1289,7 @@ export default function Ark7CaseStudyPage() {
                     ))}
                   </div>
                   <Image
-                    src="/images/ARK7/news.png"
+                    src="/images/ARK7/news.webp"
                     alt="News feature screens - short news, property detail, long article, comment, and notification"
                     width={1600}
                     height={900}
@@ -1347,7 +1343,7 @@ export default function Ark7CaseStudyPage() {
                     ))}
                   </div>
                   <Image
-                    src="/images/ARK7/voting.png"
+                    src="/images/ARK7/voting.webp"
                     alt="Voting feature screens"
                     width={1600}
                     height={900}
@@ -1364,7 +1360,7 @@ export default function Ark7CaseStudyPage() {
                         author: "Ian",
                       },
                       {
-                        quote: "Voting empowers me to directly influence key aspects and stay actively involved in our investment community.",
+                        quote: "I rely on the webinar for deep market insights and quarterly reviews, perfect for refining strategies and learning from industry leaders.",
                         author: "Lisa",
                       },
                     ].map((item) => (
@@ -1401,7 +1397,7 @@ export default function Ark7CaseStudyPage() {
                     ))}
                   </div>
                   <Image
-                    src="/images/ARK7/webinar.png"
+                    src="/images/ARK7/webinar.webp"
                     alt="Webinar feature screens"
                     width={1600}
                     height={900}
@@ -1455,7 +1451,7 @@ export default function Ark7CaseStudyPage() {
                     ))}
                   </div>
                   <Image
-                    src="/images/ARK7/discussion.png"
+                    src="/images/ARK7/discussion.webp"
                     alt="Discussion feature screens"
                     width={1600}
                     height={900}
@@ -1518,7 +1514,7 @@ export default function Ark7CaseStudyPage() {
                       </p>
                       <div className="mt-6 mb-3 w-full overflow-hidden md:mt-8 md:mb-5">
                         <Image
-                          src="/images/ARK7/user%20flow.png"
+                          src="/images/ARK7/user%20flow.webp"
                           alt="User flow diagram mapping entry through feed interactions in the ARK7 app"
                           width={4432}
                           height={1956}
@@ -1591,12 +1587,12 @@ export default function Ark7CaseStudyPage() {
                         fontFamily: "var(--font-geist-sans), system-ui, sans-serif",
                         fontSize: "15px",
                         lineHeight: "150%",
-                        fontWeight: 600,
+                        fontWeight: 400,
                         color: "var(--color-ink)",
                         margin: 0,
                       }}
                     >
-                      Navigating the space between user needs and business caution
+                      <mark className="case-text-highlight">Navigating the space between user needs and business caution</mark>
                     </p>
                     <p style={{ ...BODY_TEXT_STYLE }}>
                       The client was nervous about opening the platform to unfiltered investor commentary - they'd seen community features go wrong before. My instinct was to push back. But sitting with their concern longer, I realized the better question wasn't "how open?" but "what conditions make openness feel safe enough to ship?" That reframe changed the conversation. Time-limited discussions and moderated formats weren't watered-down compromises - they were the constraints that made the design real.
@@ -1610,7 +1606,7 @@ export default function Ark7CaseStudyPage() {
                     <div className="my-4 grid grid-cols-1 gap-6 md:my-6 md:grid-cols-2 md:gap-8 lg:gap-10">
                       <div className="w-full overflow-hidden">
                         <Image
-                          src="/images/ARK7/ARK7-market%20analysis.png"
+                          src="/images/ARK7/ARK7-market%20analysis.webp"
                           alt="ARK7 marketing analysis across mobile app, website, and social channels"
                           width={3494}
                           height={1462}
@@ -1621,7 +1617,7 @@ export default function Ark7CaseStudyPage() {
                       </div>
                       <div className="w-full overflow-hidden">
                         <Image
-                          src="/images/ARK7/Arrived-market%20analysis.png"
+                          src="/images/ARK7/Arrived-market%20analysis.webp"
                           alt="Arrived marketing analysis across mobile app, website, and social channels"
                           width={3498}
                           height={1468}
@@ -1753,7 +1749,7 @@ export default function Ark7CaseStudyPage() {
                       </p>
                       <div className="my-3 w-full overflow-hidden md:my-5">
                         <Image
-                          src="/images/ARK7/ark7_competitors.png"
+                          src="/images/ARK7/ark7_competitors.webp"
                           alt="Competitive audit: similar apps and broader financial sector companies"
                           width={2589}
                           height={822}
@@ -1791,7 +1787,7 @@ export default function Ark7CaseStudyPage() {
                 {section.id === "overview" ? (
                   <div className="w-full overflow-hidden">
                     <Image
-                      src="/images/ARK7/ARK7_official_site.png"
+                      src="/images/ARK7/ARK7_official_site.webp"
                       alt="ARK7 official website homepage"
                       width={1500}
                       height={988}
@@ -1842,6 +1838,7 @@ export default function Ark7CaseStudyPage() {
           </div>
 
           <div className="mt-12 pt-8 md:mt-16">
+            <hr style={{ border: "none", borderTop: "1px solid var(--color-border)", marginBottom: "2rem" }} />
             <a href="#" className="group flex flex-col gap-1.5 no-underline">
               <p
                 style={{
@@ -1860,13 +1857,16 @@ export default function Ark7CaseStudyPage() {
                   fontSize: "18px",
                   lineHeight: "140%",
                   fontWeight: 400,
-                  color: "var(--color-ink-80)",
                   margin: 0,
-                  transition: "color 200ms ease-out",
                 }}
-                className="group-hover:text-[var(--color-ink)]"
+                className="text-[var(--color-muted)] transition-colors duration-200 ease-out group-hover:text-[#1A1A1A]"
               >
-                Making wealth management approachable for everyone →
+                Making wealth management approachable for everyone{" "}
+                <span
+                  className="inline-block transition-transform duration-200 ease-out group-hover:translate-x-1"
+                >
+                  →
+                </span>
               </p>
             </a>
           </div>

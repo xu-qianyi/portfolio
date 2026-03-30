@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Lottie from "lottie-react";
 
-export default function LottiePreview({ src }: { src: string }) {
+export default function LottiePreview({ src, loop = true }: { src: string; loop?: boolean }) {
   const [animationData, setAnimationData] = useState<object | null>(null);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ export default function LottiePreview({ src }: { src: string }) {
   return (
     <Lottie
       animationData={animationData}
-      loop
+      loop={loop}
       autoplay
       style={{ width: "100%", height: "100%", position: "absolute", top: 0, left: 0 }}
     />
