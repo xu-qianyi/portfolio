@@ -66,7 +66,7 @@ Caption / meta:       Geist, 0.875rem, weight 400, color --color-muted
 Nav:                  Geist, 15px, weight 500, #1a1a1a; desktop `.nav-tab` **color** → `var(--color-muted)` on hover (200ms ease); no underline; grid-layout; logo md:col-span-1; links md:col-start-2 md:col-span-11, gap 24px
 Home hero externals:  Geist, 15px, weight 500; CHANGELOG / LinkedIn / X as `.hero-nav-link`, flex-col items-end, gap 4px (right of headline from lg)
 Footer:               Geist, 15px, weight 500; flex space-between wrap; left: Boston time; right: email + copy/check icon (see §3)
-Work case study:      Eyebrow Geist 13px uppercase muted; section title tiemposText 24px + 2px left `var(--color-accent-green)`; body Geist 16px / 160% `var(--color-ink-80)`; hero H1 tiemposText 28px; data tables tiemposText ~15px. Pull-quotes reuse title rule. Links in prose: `.case-inline-link` (dotted underline, accent hover).
+Work case study:      Eyebrow Geist 13px uppercase muted; section title tiemposText 24px + 2px left `var(--color-accent-green)` + pl-3; subsection h3 same style + marginTop 2rem; body Geist 16px / 160% `var(--color-ink-80)`; hero H1 tiemposText 28px weight 500; data tables tiemposText ~15px. Pull-quotes reuse title rule. Links in prose: `.case-inline-link` (dotted underline, accent hover). Image containers in audit grids: `rounded-lg p-3 bg-[#f8f8f8]`, inner div `h-96 object-contain object-top`.
 ```
 
 **Rules:**
@@ -171,6 +171,7 @@ Logo / links:          Geist 15px, weight 500, #1a1a1a; active tab indicator: sm
 - First person where appropriate ("I design access") - direct, not performative.
 - No buzzwords: no "passionate," "innovative," "leverage," "synergy."
 - Descriptions of work answer: *what was the problem, what changed because of the design* - not what tools were used.
+- **Dashes:** always use ` - ` (spaced hyphen). Never use `—` (em dash).
 
 ---
 

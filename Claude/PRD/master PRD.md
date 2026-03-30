@@ -105,54 +105,41 @@ Data sourced from `src/data/tools.json`.
 
 ### 4.4 Case Study Template (`/work/[slug]`)
 
-The case study page is designed as a reusable template. The first implementation is the Ark7 project (`/work/ark7`); future projects reuse the same layout and components.
+The case study page is a reusable template. First implementation: `/work/ark7`. Future case studies copy the layout and component patterns.
 
-**Layout:** Two-column on desktop - a fixed side navigation on the left, scrollable content on the right. On mobile, the side nav collapses (details TBD).
+**Layout:** Three-column grid on desktop - sticky side nav left, content column center (`max-w-[800px]`), empty gutter right. Single column on mobile. Use `minmax(0,…)` and `min-w-0` to prevent horizontal overflow.
 
 **Side Navigation**
 
-Inspired by Are.na's filter menu interaction. The mechanism:
+Vertical rail with a sliding dot tracking the active section via `IntersectionObserver`. The dot moves via `transform: translateY(…)` - no jump cuts. Clicking a label smoothly scrolls to the section. Sections are defined in a `SECTIONS` array (id, label, title, body[]); the nav renders from that array.
 
-- A vertical list of section names is rendered in the left column (e.g. Overview, Problem, Process, Solution, Results).
-- A vertical rail runs alongside the list. A small filled dot sits on this rail and tracks the active section.
-- The dot moves via `transform: translateY(...)`, animating smoothly whenever the active section changes - no jump cuts.
-- The active section's label is also visually highlighted (bold or color change).
-- Active section is determined by `IntersectionObserver` watching each content section as the user scrolls.
-- Clicking a nav item smoothly scrolls the page to the corresponding section.
+**Hero block**
 
-The overall effect: the dot slides up and down the rail like a needle, giving the reader a clear, unobtrusive sense of where they are in the narrative.
+- Eyebrow: project + domain (`ARK7 • FinTech`); Geist 14px weight 500 muted
+- `h1`: tiemposText 28px weight 500
+- Full-width `16:9` cover image with `border border-[var(--color-ink-14)]`
+- Metadata row: Role / Timeline / Team - 3 cols desktop, stacked mobile
 
-The side nav renders a flat list of section labels sourced from the project's data. The number and names of sections vary per project and are defined in project data, not in this template. Each content section carries an `id` that matches its nav entry.
+**Section rhythm** (repeats per section, separated by `1px` rule + `mt-10 md:mt-12`):
 
-**Content Layout**
+- Eyebrow: Geist 13px uppercase muted
+- `h2`: tiemposText 24px weight 400 + `2px solid var(--color-accent-green)` left border, `pl-3` - the section argument
+- Body: Geist 16px / 160% `var(--color-ink-80)`
+- Subsection `h3`: same style as `h2` but with `marginTop: 2rem` to signal new idea within a section
 
-Three-column intent: sticky side nav (md+), main column, optional gutter. Implementation should keep the **center column fluid** on mid-width viewports (avoid a fixed pixel width that forces horizontal overflow); use `minmax(0, …)` and `min-w-0` where needed.
+**Established content sub-patterns** (copy from ARK7 as needed):
 
-**Hero block** (top of content, before first section):
-
-- Small label - project + domain (e.g. `ARK7 • FinTech`); Geist, 14px, weight 500, muted
-- Large headline (`h1`) - `tiemposText`, currently set to 28px in ARK7
-- Full-width `16:9` cover image below the headline
-- Metadata row: Role / Timeline / Team - 3 columns on desktop, stacked on mobile; Geist; label weight 500
-
-**Section rhythm** (repeats for each content section):
-
-- Section label (`h4`): Geist, 12–13px, weight 500, uppercase, muted - matches the nav item label
-- Section headline (`h2`): `tiemposText`, large - the key argument or question of that section
-- Body paragraphs (`p`): Geist, 16px, weight 400, line-height 1.6
-- Optional `1px` full-width horizontal rule (`foreground/10` opacity) between major sections
-
-**Content sub-patterns** (used within sections as needed):
-
-- **Block quote / key insight** - `tiemposText` italic; left border `2px` accent color, `pl-4`
-- **Two-column callout cards** - `flex-col md:flex-row gap-6`; each card: short bold label + supporting sentence; Geist
-- **Media + caption** - `grid-cols-1 md:grid-cols-[60%_auto]`; image/placeholder left (`border border-foreground/10`), caption text right (Geist 14px, bottom-aligned on desktop)
-- **Full-width image** - `w-full h-auto object-contain`, `border border-foreground/10`
+- **2×2 image audit grid** - `grid-cols-1 md:grid-cols-2 gap-5 md:gap-6`; each cell: image container (`rounded-lg p-3 bg-[#f8f8f8]`, fixed `h-96` inner div, `object-contain object-top`) + title (Geist 15px weight 600) + body
+- **Tab switcher** - tablist right-aligned (`justify-end`); underline tabs (active: `border-[var(--color-ink)]`); panel: `rounded-lg border border-[var(--color-ink-14)] p-5 md:p-8`; image only or image + text layout; switch animation via `ark7-layout-tab-panel-enter`
+- **2-column persona journey** - `grid-cols-1 md:grid-cols-2 gap-8 md:gap-10`; each col: `h3` subsection title + body
+- **Feature reveal** - `<mark className="case-text-highlight">Feature name</mark>` label → 2-col quote grid (no frames; tiemposText 15px italic) → full-width image (`w-full h-auto`, no frame)
+- **Metrics bullet list** - `list-none flex-col gap-3`; each item: left `2px solid var(--color-ink-14)` border, `pl-4`; bold numbers via inline `font-weight: 600 color: var(--color-ink)` span
+- **Next project link** - inside content column, `mt-12 md:mt-16`; no border; small muted meta line + tiemposText 18px `var(--color-ink-80)` headline with `→`; color darkens on hover
 
 **Font assignments:**
 
-- `tiemposText` → `h1`, `h2`, block quote text
-- Geist → all other text (labels, body, metadata, nav, captions)
+- `tiemposText` → h1, h2, h3 section titles, pull-quote text, next-project headline
+- Geist → all other text (labels, body, metadata, nav, captions, bullets)
 
 ---
 
